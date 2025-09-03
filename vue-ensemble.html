@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue d'Ensemble - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link-ok">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link active">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>Architecture Trifide 360</h1>
+                
+                <div class="card">
+                    <h2>Description Générale</h2>
+                    <p><strong>Trifide 360</strong> est une plateforme géomatique professionnelle intégrée développée en C# avec WPF. Elle combine cartographie avancée, visualisation 3D et outils d'arpentage dans une solution multi-processus sophistiquée.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>WPF + Syncfusion</h4>
+                            <p>Interface utilisateur</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ArcGIS Runtime</h4>
+                            <p>Cartographie</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Unity Engine</h4>
+                            <p>Visualisation 3D</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>GISMind</h4>
+                            <p>Bibliothèque géométrique</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Caractéristiques Techniques</h2>
+                    <ul>
+                        <li><span class="badge">Version</span> 2.0.5</li>
+                        <li><span class="badge">Langage</span> C# / WPF</li>
+                        <li><span class="badge">Architecture</span> Multi-processus avec IPC</li>
+                        <li><span class="badge">Domaine</span> Géomatique, SIG, Arpentage</li>
+                        <li><span class="badge">Communication</span> TCP + Memory-Mapped Files (60 FPS)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>Domaines d'Application</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>Arpentage</h4>
+                            <p>Outils de mesure précis, gestion des coordonnées géodésiques</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Topographie</h4>
+                            <p>Traitement de nuages de points, modélisation terrain</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Cartographie Mobile</h4>
+                            <p>Intégration données GPS, navigation panoramique</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Traitement LiDAR</h4>
+                            <p>Visualisation et analyse de nuages de points massifs</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2> Navigation Rapide</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="vue-ensemble.html">⬅️Vue d'Ensemble</a></h4>
+                            <p>Architecture générale, technologies utilisées et domaines d'application</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="fonctionnalites-metier.html">➡️ Fonctionnalités Métier</a></h4>
+                            <p>Capacités géomatiques, données, visualisation et édition</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">➡️Structure du Code</a></h4>
+                            <p>Organisation des fichiers, responsabilités et dépendances</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="mapping-fonctions-code.html">➡️ Mapping Fonctions ↔ Code</a></h4>
+                            <p>Correspondances entre fonctionnalités utilisateur et code source</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="flux-donnees.html">➡️ Flux de Données</a></h4>
+                            <p>Architecture des flux de données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">➡️ Hiérarchie des Classes</a></h4>
+                            <p>Organisation orientée objet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
+                            <p>Architecture IPC détaillée</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="catalogue-methodes.html">➡️ Catalogue des méthodes</a></h4>
+                            <p>Liste des principales méthodes de la plateforme</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="patterns-anti-patterns-system.html">➡️ Patterns & Anti-Patterns</a></h4>
+                            <p>Meilleures pratiques et pièges à éviter</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="recommendations.html">➡️ Recommandations</a></h4>
+                            <p>Refactoring Prioritaires - Architecture Cible - Séparation des Responsabilités</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
