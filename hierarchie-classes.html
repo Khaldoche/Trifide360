@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiérarchie des Classes - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link active">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>🏛️ Hiérarchie des Classes</h1>
+                
+                <div class="card">
+                    <h2>Architecture Orientée Objet</h2>
+                    <p>Trifide 360 s'appuie sur une hiérarchie de classes structurée permettant l'extensibilité et la maintenance du code géomatique complexe. L'architecture privilégie l'héritage pour les géométries et la composition pour les fonctionnalités métier.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>📐 Geometry</h4>
+                            <p>Classes géométriques de base</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📊 Data</h4>
+                            <p>Gestion données spatiales</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🖥️ UI</h4>
+                            <p>Composants interface utilisateur</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🔧 IO</h4>
+                            <p>Lecture/écriture fichiers</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🌐 Unity</h4>
+                            <p>Communication inter-processus</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>⚙️ Utilities</h4>
+                            <p>Classes utilitaires transversales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Hiérarchies Détaillées par Domaine</h2>
+                    <p>Chaque domaine fonctionnel possède sa propre hiérarchie de classes optimisée pour ses besoins spécifiques. Cliquez sur les liens ci-dessous pour explorer en détail chaque partie de l'architecture.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-geometry.html">📐 Classes Géométriques</a></h4>
+                            <p><strong>GISMind.Geometry</strong> - Hiérarchie complète des géométries</p>
+                            <ul>
+                                <li>Geometry (classe abstraite)</li>
+                                <li>Point, Polyline, Polygon</li>
+                                <li>MultiPoint, MultiLineString</li>
+                                <li>GeometryEngine, SpatialReference</li>
+                            </ul>
+                            <p><em>→ Opérateurs surchargés, validation topologique</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">📊 Gestion des Données</a></h4>
+                            <p><strong>Data Management</strong> - Classes de gestion des données spatiales</p>
+                            <ul>
+                                <li>DataManager, LayerData</li>
+                                <li>FeatureTable, Feature</li>
+                                <li>Renderers (Simple, UniqueValue, ClassBreaks)</li>
+                                <li>FeatureSchema, FieldInfo</li>
+                            </ul>
+                            <p><em>→ Gestion états, validation, persistance</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-ui.html">🖥️ Interface Utilisateur</a></h4>
+                            <p><strong>WPF Controls</strong> - Composants interface utilisateur</p>
+                            <ul>
+                                <li>MainWindow, MapViewControl</li>
+                                <li>LayerTreeView, AttributeEditor</li>
+                                <li>Dialogs (Import, Export, Settings)</li>
+                                <li>ToolbarControls, Themes</li>
+                            </ul>
+                            <p><em>→ MVVM, événements, personnalisation</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-io.html">🔧 Entrées/Sorties</a></h4>
+                            <p><strong>IO Classes</strong> - Lecture et écriture de fichiers</p>
+                            <ul>
+                                <li>IDataReader, IDataWriter</li>
+                                <li>ShapeFileReader, LASReader</li>
+                                <li>UniversalWriter, ReportGenerator</li>
+                                <li>FileValidator, FormatDetector</li>
+                            </ul>
+                            <p><em>→ Multi-formats, validation, streaming</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-unity.html">🌐 Communication Unity</a></h4>
+                            <p><strong>Unity Integration</strong> - Communication inter-processus</p>
+                            <ul>
+                                <li>UnityController, IPCManager</li>
+                                <li>MemoryMappedCommunication</li>
+                                <li>UnityCommand, DataSynchronizer</li>
+                                <li>CameraPosition, Unity3DCommands</li>
+                            </ul>
+                            <p><em>→ TCP, Memory-Mapped Files, 60 FPS</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-utilities.html">⚙️ Utilitaires</a></h4>
+                            <p><strong>Infrastructure</strong> - Classes utilitaires et support</p>
+                            <ul>
+                                <li>Extensions, Helpers</li>
+                                <li>ConfigurationManager, Logger</li>
+                                <li>PerformanceMonitor, SecurityManager</li>
+                                <li>ValidationEngine, ErrorHandler</li>
+                            </ul>
+                            <p><em>→ Logging, config, sécurité, performance</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📊 Vue d'Ensemble Statistique</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📈 Métriques Générales</h4>
+                            <ul>
+                                <li><strong>Total classes :</strong> ~85 classes principales</li>
+                                <li><strong>Interfaces :</strong> ~20 contrats d'abstraction</li>
+                                <li><strong>Classes abstraites :</strong> ~8 bases d'héritage</li>
+                                <li><strong>Enums :</strong> ~15 énumérations</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Répartition par Domaine</h4>
+                            <ul>
+                                <li><strong>Geometry :</strong> 12 classes (14%)</li>
+                                <li><strong>Data Management :</strong> 18 classes (21%)</li>
+                                <li><strong>UI Components :</strong> 25 classes (29%)</li>
+                                <li><strong>IO Operations :</strong> 15 classes (18%)</li>
+                                <li><strong>Unity Integration :</strong> 8 classes (9%)</li>
+                                <li><strong>Utilities :</strong> 7 classes (8%)</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔗 Relations et Couplage</h4>
+                            <ul>
+                                <li><strong>Héritage :</strong> Principalement Geometry</li>
+                                <li><strong>Composition :</strong> UI et Data layers</li>
+                                <li><strong>Interfaces :</strong> IO et Communication</li>
+                                <li><strong>Couplage fort :</strong> MainWindow → Tous</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Complexité</h4>
+                            <ul>
+                                <li><strong>Complexité élevée :</strong> MainWindow, GeometryEngine</li>
+                                <li><strong>Complexité moyenne :</strong> Readers, DataManager</li>
+                                <li><strong>Complexité faible :</strong> Utilities, Simple UI</li>
+                                <li><strong>Points chauds :</strong> Main.xaml.cs (7000+ lignes)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="flux-donnees.html">⬅️ Flux de Données</a></h4>
+                            <p>Architecture des flux</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
+                            <p>IPC et communication détaillée</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-geometry.html">🎯 Commencer par Geometry</a></h4>
+                            <p>Classes géométriques fondamentales</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
+                            <p>Organisation fichiers source</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

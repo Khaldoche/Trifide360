@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Validation - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>5. Système de Validation - Contrôles et Qualité</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système de Validation</h2>
+                    <p>Le système de validation de Trifide 360 assure l'intégrité et la qualité des données géospatiales à travers des contrôles multicouches. Il combine validation de schéma, règles métier, contrôles topologiques et vérifications de cohérence pour garantir des données fiables.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>ValidationEngine</h4>
+                            <p>Moteur validation central</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ValidationRule</h4>
+                            <p>Règles métier configurables</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>QualityAssurance</h4>
+                            <p>Contrôle qualité automatisé</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>TopologyValidator</h4>
+                            <p>Validation topologique</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ErrorReporting</h4>
+                            <p>Rapports d'erreurs détaillés</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>DataCorrection</h4>
+                            <p>Correction automatique</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- validation-engine-detail.html -->
+<div class="card">
+                    <h2>ValidationEngine - Moteur Central de Validation</h2>
+                    
+                    <div class="file-structure"><strong>ValidationEngine : IDisposable</strong> - Moteur central orchestrant toutes les validations
+├── <strong>Properties Core :</strong>
+│   ├── ValidationLevel Level { get; set; } - Niveau de validation global
+│   ├── ValidationScope Scope { get; set; } - Portée validation
+│   ├── bool ContinueOnError { get; set; } - Poursuite sur erreur
+│   ├── int MaxErrors { get; set; } - Nombre maximum d'erreurs
+│   ├── TimeSpan Timeout { get; set; } - Timeout validation
+│   └── CultureInfo Culture { get; set; } - Culture pour validations
+├── <strong>Properties Configuration :</strong>
+│   ├── bool EnableSchemaValidation { get; set; } - Validation schéma
+│   ├── bool EnableBusinessRules { get; set; } - Règles métier
+│   ├── bool EnableTopologyValidation { get; set; } - Validation topologique
+│   ├── bool EnableCrossTableValidation { get; set; } - Validation inter-tables
+│   ├── bool EnableGeometryValidation { get; set; } - Validation géométrique
+│   ├── bool AutoCorrectErrors { get; set; } - Correction automatique
+│   └── Dictionary&lt;ValidationLevel, ValidationConfiguration&gt; Configurations { get; } - Config par niveau
+├── <strong>Properties Processeurs :</strong>
+│   ├── List&lt;IValidationProcessor&gt; Processors { get; } - Processeurs validation
+│   ├── SchemaValidator SchemaValidator { get; } - Validateur schéma
+│   ├── BusinessRuleEngine BusinessRules { get; } - Moteur règles métier
+│   ├── TopologyValidator TopologyValidator { get; } - Validateur topologie
+│   ├── GeometryValidator GeometryValidator { get; } - Validateur géométrie
+│   └── CrossTableValidator CrossTableValidator { get; } - Validateur inter-tables
+├── <strong>Properties Statistiques :</strong>
+│   ├── ValidationStatistics Statistics { get; } - Statistiques validation
+│   ├── PerformanceMetrics Performance { get; } - Métriques performance
+│   ├── ErrorStatistics ErrorStats { get; } - Statistiques erreurs
+│   └── ValidationHistory History { get; } - Historique validations
+├── <strong>Constructors :</strong>
+│   ├── ValidationEngine() - Moteur par défaut
+│   ├── ValidationEngine(ValidationLevel level) - Avec niveau
+│   ├── ValidationEngine(ValidationConfiguration config) - Avec configuration
+│   └── ValidationEngine(IServiceProvider services) - Avec injection dépendances
+├── <strong>Methods - Validation Principale :</strong>
+│   ├── Task&lt;ValidationResult&gt; ValidateAsync(Feature feature, FeatureSchema schema) - Validation feature async
+│   ├── ValidationResult Validate(Feature feature, FeatureSchema schema) - Validation feature sync
+│   ├── Task&lt;ValidationResult&gt; ValidateCollectionAsync(FeatureCollection features, FeatureSchema schema) - Collection async
+│   ├── ValidationResult ValidateCollection(FeatureCollection features, FeatureSchema schema) - Collection sync
+│   ├── Task&lt;ValidationResult&gt; ValidateTableAsync(FeatureTable table) - Table complète async
+│   ├── ValidationResult ValidateTable(FeatureTable table) - Table complète sync
+│   └── Task&lt;ValidationResult&gt; ValidateSchemaAsync(FeatureSchema schema) - Schéma async
+├── <strong>Methods - Validation Spécialisée :</strong>
+│   ├── ValidationResult ValidateField(object value, FieldInfo field) - Champ individuel
+│   ├── ValidationResult ValidateGeometry(Geometry geometry, GeometryType expectedType) - Géométrie
+│   ├── ValidationResult ValidateTopology(FeatureCollection features) - Topologie
+│   ├── ValidationResult ValidateBusinessRules(Feature feature, RuleSet rules) - Règles métier
+│   ├── ValidationResult ValidateCrossReferences(Feature feature, Dictionary&lt;string, FeatureTable&gt; referenceTables) - Références croisées
+│   └── ValidationResult ValidateConstraints(Dictionary&lt;string, object&gt; values, List&lt;SchemaConstraint&gt; constraints) - Contraintes
+├── <strong>Methods - Configuration Processeurs :</strong>
+│   ├── void AddProcessor(IValidationProcessor processor) - Ajout processeur
+│   ├── void RemoveProcessor(IValidationProcessor processor) - Suppression processeur
+│   ├── void ConfigureProcessor&lt;T&gt;(Action&lt;T&gt; configuration) where T : IValidationProcessor - Configuration processeur
+│   ├── T GetProcessor&lt;T&gt;() where T : IValidationProcessor - Récupération processeur
+│   ├── void EnableProcessor(Type processorType) - Activation processeur
+│   └── void DisableProcessor(Type processorType) - Désactivation processeur
+├── <strong>Methods - Gestion Erreurs :</strong>
+│   ├── void RegisterErrorHandler(IValidationErrorHandler handler) - Enregistrement gestionnaire erreurs
+│   ├── void UnregisterErrorHandler(IValidationErrorHandler handler) - Suppression gestionnaire
+│   ├── ValidationError[] GetErrors(ValidationResult result) - Extraction erreurs
+│   ├── ValidationError[] GetErrorsByType(ValidationResult result, ErrorType type) - Erreurs par type
+│   ├── void LogError(ValidationError error) - Journalisation erreur
+│   └── Task&lt;bool&gt; TryCorrectErrorAsync(ValidationError error) - Tentative correction
+├── <strong>Methods - Performance et Monitoring :</strong>
+│   ├── void StartPerformanceMonitoring() - Début monitoring performance
+│   ├── void StopPerformanceMonitoring() - Arrêt monitoring
+│   ├── ValidationStatistics GetStatistics() - Récupération statistiques
+│   ├── void ResetStatistics() - Remise à zéro statistiques
+│   ├── PerformanceReport GeneratePerformanceReport() - Rapport performance
+│   └── void OptimizeForPerformance() - Optimisation performance
+├── <strong>Events :</strong>
+│   ├── ValidationStarted - Début validation
+│   ├── ValidationCompleted - Fin validation
+│   ├── ErrorDetected - Détection erreur
+│   ├── ErrorCorrected - Correction erreur
+│   ├── ProcessorExecuting - Exécution processeur
+│   └── ValidationFailed - Échec validation critique
+└── <strong>Static Factory :</strong>
+    ├── ValidationEngine CreateDefault() - Moteur par défaut
+    ├── ValidationEngine CreateStrict() - Moteur strict
+    ├── ValidationEngine CreatePerformance() - Optimisé performance
+    └── ValidationEngine CreateCustom(ValidationProfile profile) - Personnalisé
+
+<strong>ValidationContext : class</strong> - Contexte validation complet
+├── <strong>Properties :</strong>
+│   ├── Feature CurrentFeature { get; set; } - Feature en cours validation
+│   ├── FeatureSchema Schema { get; set; } - Schéma référence
+│   ├── FeatureCollection ParentCollection { get; set; } - Collection parente
+│   ├── Dictionary&lt;string, FeatureTable&gt; ReferenceTables { get; } - Tables référence
+│   ├── ValidationLevel Level { get; set; } - Niveau validation
+│   ├── ValidationScope Scope { get; set; } - Portée validation
+│   ├── CancellationToken CancellationToken { get; set; } - Token annulation
+│   └── Dictionary&lt;string, object&gt; CustomProperties { get; } - Propriétés personnalisées
+├── <strong>Properties État :</strong>
+│   ├── int ErrorCount { get; set; } - Nombre erreurs
+│   ├── int WarningCount { get; set; } - Nombre avertissements
+│   ├── bool HasCriticalErrors { get; } - Erreurs critiques présentes
+│   ├── bool ShouldContinue { get; } - Doit continuer validation
+│   └── List&lt;ValidationError&gt; Errors { get; } - Liste erreurs
+├── <strong>Methods :</strong>
+│   ├── void AddError(ValidationError error) - Ajout erreur
+│   ├── void AddWarning(ValidationWarning warning) - Ajout avertissement
+│   ├── void AddInfo(ValidationInfo info) - Ajout information
+│   ├── bool CanContinue() - Test continuation possible
+│   ├── ValidationContext CreateChildContext() - Contexte enfant
+│   └── void Reset() - Remise à zéro
+
+<strong>IValidationProcessor : interface</strong> - Processeur validation spécialisé
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom processeur
+│   ├── ValidationScope SupportedScope { get; } - Portée supportée
+│   ├── int Priority { get; } - Priorité exécution
+│   ├── bool IsEnabled { get; set; } - Processeur activé
+│   └── TimeSpan ExecutionTimeout { get; set; } - Timeout exécution
+├── <strong>Methods :</strong>
+│   ├── bool CanProcess(ValidationContext context) - Test capacité traitement
+│   ├── Task&lt;ValidationResult&gt; ProcessAsync(ValidationContext context) - Traitement async
+│   ├── ValidationResult Process(ValidationContext context) - Traitement sync
+│   ├── void Configure(ValidationConfiguration config) - Configuration
+│   └── void Reset() - Remise à zéro
+
+<strong>ValidationProcessor : IValidationProcessor</strong> - Implémentation base processeur
+├── <strong>Properties :</strong>
+│   ├── ValidationEngine Engine { get; } - Moteur parent
+│   ├── ProcessorStatistics Statistics { get; } - Statistiques processeur
+│   ├── bool LogVerbose { get; set; } - Log détaillé
+│   └── Dictionary&lt;string, object&gt; Configuration { get; } - Configuration
+├── <strong>Methods :</strong>
+│   ├── virtual void Initialize() - Initialisation processeur
+│   ├── virtual void Cleanup() - Nettoyage processeur
+│   ├── protected void LogProcessorEvent(string message) - Log événement
+│   ├── protected ValidationError CreateError(string message, ErrorSeverity severity) - Création erreur
+│   └── protected bool ShouldSkipValidation(ValidationContext context) - Test bypass
+
+<strong>SchemaValidator : ValidationProcessor</strong> - Validateur schéma
+├── <strong>Properties :</strong>
+│   ├── bool ValidateFieldTypes { get; set; } - Validation types champs
+│   ├── bool ValidateConstraints { get; set; } - Validation contraintes
+│   ├── bool ValidateReferences { get; set; } - Validation références
+│   └── bool StrictModeEnabled { get; set; } - Mode strict
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateFieldValue(object value, FieldInfo field) - Validation valeur champ
+│   ├── ValidationResult ValidateConstraint(SchemaConstraint constraint, Dictionary&lt;string, object&gt; values) - Validation contrainte
+│   ├── ValidationResult ValidateReference(string foreignKey, FeatureTable referenceTable) - Validation référence
+│   └── ValidationResult ValidateSchemaCompliance(Feature feature, FeatureSchema schema) - Conformité schéma
+
+<strong>GeometryValidator : ValidationProcessor</strong> - Validateur géométrie
+├── <strong>Properties :</strong>
+│   ├── bool ValidateTopology { get; set; } - Validation topologique
+│   ├── bool ValidatePrecision { get; set; } - Validation précision
+│   ├── double ToleranceDistance { get; set; } - Distance tolérance
+│   ├── bool AutoRepairGeometry { get; set; } - Réparation automatique
+│   └── GeometryValidationRules Rules { get; set; } - Règles validation
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateGeometryStructure(Geometry geometry) - Structure géométrie
+│   ├── ValidationResult ValidateGeometryPrecision(Geometry geometry) - Précision
+│   ├── ValidationResult ValidateGeometryTopology(Geometry geometry) - Topologie
+│   ├── Geometry RepairGeometry(Geometry geometry) - Réparation géométrie
+│   └── bool IsGeometryValid(Geometry geometry) - Test validité
+
+<strong>BusinessRuleProcessor : ValidationProcessor</strong> - Processeur règles métier
+├── <strong>Properties :</strong>
+│   ├── RuleEngine RuleEngine { get; } - Moteur règles
+│   ├── List&lt;BusinessRule&gt; ActiveRules { get; } - Règles actives
+│   ├── bool CacheRuleResults { get; set; } - Cache résultats règles
+│   └── Dictionary&lt;string, object&gt; RuleContext { get; } - Contexte règles
+├── <strong>Methods :</strong>
+│   ├── void AddRule(BusinessRule rule) - Ajout règle
+│   ├── void RemoveRule(BusinessRule rule) - Suppression règle
+│   ├── ValidationResult EvaluateRules(Feature feature, ValidationContext context) - Évaluation règles
+│   ├── void EnableRule(string ruleName) - Activation règle
+│   └── void DisableRule(string ruleName) - Désactivation règle</div>
+                </div>
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- validation-rules-detail.html -->
+<div class="card">
+                    <h2>Système de Règles Métier Configurables</h2>
+                    
+                    <div class="file-structure"><strong>ValidationRule : abstract class</strong> - Règle de validation de base
+├── <strong>Properties Core :</strong>
+│   ├── string Name { get; set; } - Nom unique de la règle
+│   ├── string Description { get; set; } - Description de la règle
+│   ├── RuleType Type { get; } - Type de règle
+│   ├── ErrorSeverity Severity { get; set; } - Sévérité erreur
+│   ├── bool IsEnabled { get; set; } - Règle activée
+│   ├── int Priority { get; set; } - Priorité d'exécution
+│   └── string ErrorMessage { get; set; } - Message d'erreur personnalisé
+├── <strong>Properties Configuration :</strong>
+│   ├── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres règle
+│   ├── string[] ApplicableFields { get; set; } - Champs applicables
+│   ├── FeatureType[] ApplicableTypes { get; set; } - Types entités applicables
+│   ├── ValidationScope Scope { get; set; } - Portée validation
+│   ├── bool StopOnFailure { get; set; } - Arrêt sur échec
+│   └── TimeSpan ExecutionTimeout { get; set; } - Timeout exécution
+├── <strong>Properties Métadonnées :</strong>
+│   ├── string Category { get; set; } - Catégorie règle
+│   ├── string Version { get; set; } - Version règle
+│   ├── DateTime CreatedDate { get; } - Date création
+│   ├── string CreatedBy { get; set; } - Créateur règle
+│   ├── List&lt;string&gt; Tags { get; } - Étiquettes classification
+│   └── Dictionary&lt;string, string&gt; Metadata { get; } - Métadonnées étendues
+├── <strong>Methods Abstraites :</strong>
+│   ├── abstract ValidationResult Evaluate(object target, ValidationContext context) - Évaluation règle
+│   ├── abstract bool IsApplicable(object target, ValidationContext context) - Test applicabilité
+│   ├── abstract ValidationRule Clone() - Copie règle
+│   └── abstract string GetRuleDescription() - Description détaillée
+├── <strong>Methods Configuration :</strong>
+│   ├── void SetParameter(string name, object value) - Définition paramètre
+│   ├── T GetParameter&lt;T&gt;(string name, T defaultValue) - Récupération paramètre
+│   ├── bool HasParameter(string name) - Test existence paramètre
+│   ├── void RemoveParameter(string name) - Suppression paramètre
+│   ├── void ClearParameters() - Suppression tous paramètres
+│   └── ValidationResult ValidateConfiguration() - Validation configuration
+├── <strong>Methods Utilitaires :</strong>
+│   ├── protected ValidationError CreateError(string message) - Création erreur
+│   ├── protected ValidationWarning CreateWarning(string message) - Création avertissement
+│   ├── protected bool CheckFieldApplicability(string fieldName) - Test applicabilité champ
+│   ├── protected object GetFieldValue(object target, string fieldName) - Récupération valeur champ
+│   └── protected void LogRuleExecution(string message) - Log exécution
+└── <strong>Events :</strong>
+    ├── RuleEvaluating - Début évaluation
+    ├── RuleEvaluated - Fin évaluation
+    └── RuleError - Erreur dans règle
+
+<strong>BusinessRule : ValidationRule</strong> - Règle métier spécialisée
+├── <strong>Properties :</strong>
+│   ├── string BusinessDomain { get; set; } - Domaine métier
+│   ├── RuleComplexity Complexity { get; } - Complexité règle
+│   ├── bool RequiresCrossTables { get; set; } - Nécessite tables multiples
+│   ├── string[] RequiredFields { get; set; } - Champs obligatoires
+│   ├── BusinessRuleExpression Expression { get; set; } - Expression règle
+│   └── Dictionary&lt;string, BusinessRuleAction&gt; Actions { get; } - Actions règle
+├── <strong>Methods :</strong>
+│   ├── void SetExpression(string expression) - Définition expression
+│   ├── ValidationResult EvaluateExpression(object target, ValidationContext context) - Évaluation expression
+│   ├── void AddAction(BusinessRuleAction action) - Ajout action
+│   ├── void RemoveAction(string actionName) - Suppression action
+│   └── BusinessRuleResult ExecuteActions(object target, ValidationContext context) - Exécution actions
+
+<strong>RuleEngine : class, IDisposable</strong> - Moteur d'exécution des règles
+├── <strong>Properties :</strong>
+│   ├── List&lt;ValidationRule&gt; Rules { get; } - Collection de règles
+│   ├── RuleExecutionMode Mode { get; set; } - Mode d'exécution
+│   ├── bool ContinueOnFailure { get; set; } - Continuation sur échec
+│   ├── int MaxConcurrentRules { get; set; } - Règles parallèles maximum
+│   ├── TimeSpan GlobalTimeout { get; set; } - Timeout global
+│   ├── RuleEngineStatistics Statistics { get; } - Statistiques moteur
+│   └── IRuleCache Cache { get; set; } - Cache résultats règles
+├── <strong>Properties Configuration :</strong>
+│   ├── RuleExecutionOrder ExecutionOrder { get; set; } - Ordre exécution
+│   ├── bool EnableRuleCaching { get; set; } - Cache activé
+│   ├── bool EnableParallelExecution { get; set; } - Exécution parallèle
+│   ├── LogLevel RuleLogLevel { get; set; } - Niveau log règles
+│   └── Dictionary&lt;string, object&gt; GlobalContext { get; } - Contexte global
+├── <strong>Constructors :</strong>
+│   ├── RuleEngine() - Moteur par défaut
+│   ├── RuleEngine(RuleEngineConfiguration config) - Avec configuration
+│   └── RuleEngine(IEnumerable&lt;ValidationRule&gt; rules) - Avec règles initiales
+├── <strong>Methods - Gestion Règles :</strong>
+│   ├── void AddRule(ValidationRule rule) - Ajout règle
+│   ├── bool RemoveRule(string ruleName) - Suppression règle
+│   ├── bool RemoveRule(ValidationRule rule) - Suppression règle
+│   ├── ValidationRule GetRule(string name) - Récupération règle
+│   ├── ValidationRule[] GetRulesByCategory(string category) - Règles par catégorie
+│   ├── ValidationRule[] GetRulesForTarget(object target) - Règles pour cible
+│   ├── void ClearRules() - Suppression toutes règles
+│   └── void SortRulesByPriority() - Tri par priorité
+├── <strong>Methods - Exécution :</strong>
+│   ├── Task&lt;RuleExecutionResult&gt; ExecuteRulesAsync(object target, ValidationContext context) - Exécution async
+│   ├── RuleExecutionResult ExecuteRules(object target, ValidationContext context) - Exécution sync
+│   ├── Task&lt;ValidationResult&gt; ExecuteRuleAsync(ValidationRule rule, object target, ValidationContext context) - Règle async
+│   ├── ValidationResult ExecuteRule(ValidationRule rule, object target, ValidationContext context) - Règle sync
+│   ├── RuleExecutionResult ExecuteRuleSet(RuleSet ruleSet, object target, ValidationContext context) - Ensemble règles
+│   └── void CancelExecution(Guid executionId) - Annulation exécution
+├── <strong>Methods - Configuration :</strong>
+│   ├── void EnableRule(string ruleName) - Activation règle
+│   ├── void DisableRule(string ruleName) - Désactivation règle
+│   ├── void SetRulePriority(string ruleName, int priority) - Priorité règle
+│   ├── void ConfigureRule(string ruleName, Dictionary&lt;string, object&gt; parameters) - Configuration règle
+│   └── void ApplyConfiguration(RuleEngineConfiguration config) - Application configuration
+├── <strong>Methods - Cache et Performance :</strong>
+│   ├── void ClearCache() - Vidage cache
+│   ├── void WarmupCache(object[] sampleTargets) - Préchauffage cache
+│   ├── RuleEngineStatistics GetStatistics() - Statistiques moteur
+│   ├── void OptimizeRuleOrder() - Optimisation ordre règles
+│   └── PerformanceReport GeneratePerformanceReport() - Rapport performance
+└── <strong>Events :</strong>
+    ├── RuleExecutionStarted - Début exécution
+    ├── RuleExecutionCompleted - Fin exécution
+    ├── RuleExecutionFailed - Échec exécution
+    └── RuleEngineError - Erreur moteur
+
+<strong>RuleSet : class</strong> - Ensemble cohérent de règles
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; } - Nom ensemble
+│   ├── string Description { get; set; } - Description
+│   ├── List&lt;ValidationRule&gt; Rules { get; } - Règles de l'ensemble
+│   ├── RuleSetMode Mode { get; set; } - Mode exécution (All/Any)
+│   ├── bool IsEnabled { get; set; } - Ensemble activé
+│   ├── int Priority { get; set; } - Priorité ensemble
+│   └── Dictionary&lt;string, object&gt; Context { get; } - Contexte ensemble
+├── <strong>Methods :</strong>
+│   ├── void AddRule(ValidationRule rule) - Ajout règle
+│   ├── void RemoveRule(ValidationRule rule) - Suppression règle
+│   ├── ValidationResult ExecuteAll(object target, ValidationContext context) - Toutes règles
+│   ├── ValidationResult ExecuteAny(object target, ValidationContext context) - Au moins une
+│   ├── RuleSet Clone() - Copie ensemble
+│   └── void ValidateRuleSet() - Validation cohérence
+
+<strong>ConditionalRule : ValidationRule</strong> - Règle conditionnelle
+├── <strong>Properties :</strong>
+│   ├── Func&lt;object, ValidationContext, bool&gt; Condition { get; set; } - Condition d'exécution
+│   ├── ValidationRule TrueRule { get; set; } - Règle si vrai
+│   ├── ValidationRule FalseRule { get; set; } - Règle si faux
+│   └── string ConditionExpression { get; set; } - Expression condition
+├── <strong>Methods :</strong>
+│   ├── bool EvaluateCondition(object target, ValidationContext context) - Évaluation condition
+│   ├── void SetCondition(Func&lt;object, ValidationContext, bool&gt; condition) - Définition condition
+│   └── void SetConditionExpression(string expression) - Expression textuelle
+
+<strong>CompositeRule : ValidationRule</strong> - Règle composite
+├── <strong>Properties :</strong>
+│   ├── List&lt;ValidationRule&gt; ChildRules { get; } - Règles enfants
+│   ├── LogicalOperator Operator { get; set; } - Opérateur logique
+│   ├── bool ShortCircuitEvaluation { get; set; } - Évaluation court-circuit
+│   └── int MinSuccessCount { get; set; } - Succès minimum requis
+├── <strong>Methods :</strong>
+│   ├── void AddChildRule(ValidationRule rule) - Ajout règle enfant
+│   ├── void RemoveChildRule(ValidationRule rule) - Suppression règle enfant
+│   ├── ValidationResult EvaluateWithAnd(object target, ValidationContext context) - Évaluation AND
+│   ├── ValidationResult EvaluateWithOr(object target, ValidationContext context) - Évaluation OR
+│   └── void OptimizeChildRules() - Optimisation règles enfants
+
+<strong>ExpressionRule : ValidationRule</strong> - Règle basée expression
+├── <strong>Properties :</strong>
+│   ├── string Expression { get; set; } - Expression règle
+│   ├── ExpressionLanguage Language { get; set; } - Langage expression
+│   ├── Dictionary&lt;string, object&gt; Variables { get; } - Variables expression
+│   ├── IExpressionEvaluator Evaluator { get; set; } - Évaluateur expression
+│   └── bool CompileExpression { get; set; } - Compilation expression
+├── <strong>Methods :</strong>
+│   ├── void SetExpression(string expression, ExpressionLanguage language) - Définition expression
+│   ├── void AddVariable(string name, object value) - Ajout variable
+│   ├── ValidationResult EvaluateExpression(object target, ValidationContext context) - Évaluation
+│   ├── void CompileExpressionIfNeeded() - Compilation conditionnelle
+│   └── void ValidateExpressionSyntax() - Validation syntaxe
+
+<strong>FieldValidationRule : ValidationRule</strong> - Règle validation champ
+├── <strong>Properties :</strong>
+│   ├── string FieldName { get; set; } - Nom champ cible
+│   ├── FieldType ExpectedType { get; set; } - Type attendu
+│   ├── object MinValue { get; set; } - Valeur minimale
+│   ├── object MaxValue { get; set; } - Valeur maximale
+│   ├── string[] AllowedValues { get; set; } - Valeurs autorisées
+│   ├── string Pattern { get; set; } - Motif regex
+│   └── bool AllowNull { get; set; } - Null autorisé
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateFieldValue(object value) - Validation valeur
+│   ├── ValidationResult ValidateFieldType(object value) - Validation type
+│   ├── ValidationResult ValidateFieldRange(object value) - Validation plage
+│   ├── ValidationResult ValidateFieldPattern(object value) - Validation motif
+│   └── void SetFieldConstraints(object min, object max, string[] allowed) - Contraintes
+
+<strong>CrossTableRule : ValidationRule</strong> - Règle inter-tables
+├── <strong>Properties :</strong>
+│   ├── string PrimaryTable { get; set; } - Table principale
+│   ├── string ReferenceTable { get; set; } - Table référence
+│   ├── string JoinField { get; set; } - Champ jointure
+│   ├── CrossTableOperation Operation { get; set; } - Type opération
+│   ├── string ReferenceQuery { get; set; } - Requête référence
+│   └── bool EnforceReferentialIntegrity { get; set; } - Intégrité référentielle
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateReference(object primaryValue, FeatureTable referenceTable) - Validation référence
+│   ├── ValidationResult CheckReferentialIntegrity(Feature feature, Dictionary&lt;string, FeatureTable&gt; tables) - Intégrité
+│   ├── void SetJoinConfiguration(string primaryTable, string referenceTable, string joinField) - Configuration jointure
+│   └── FeatureCollection ExecuteReferenceQuery(FeatureTable table) - Exécution requête
+
+<strong>GeometryValidationRule : ValidationRule</strong> - Règle validation géométrique
+├── <strong>Properties :</strong>
+│   ├── GeometryType ExpectedType { get; set; } - Type géométrie attendu
+│   ├── bool ValidateTopology { get; set; } - Validation topologique
+│   ├── double MinArea { get; set; } - Aire minimale
+│   ├── double MaxArea { get; set; } - Aire maximale
+│   ├── double MinLength { get; set; } - Longueur minimale
+│   ├── double MaxLength { get; set; } - Longueur maximale
+│   ├── bool AllowSelfIntersection { get; set; } - Auto-intersection autorisée
+│   └── SpatialReference RequiredSpatialReference { get; set; } - SR obligatoire
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateGeometryType(Geometry geometry) - Validation type
+│   ├── ValidationResult ValidateGeometryTopology(Geometry geometry) - Validation topologie
+│   ├── ValidationResult ValidateGeometryDimensions(Geometry geometry) - Validation dimensions
+│   ├── ValidationResult ValidateGeometrySpatialReference(Geometry geometry) - Validation SR
+│   └── void SetDimensionConstraints(double minArea, double maxArea, double minLength, double maxLength) - Contraintes dimensions</div>
+                </div>
+                <div class="card">
+                    <h2>Types de Validation et Niveaux</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>ValidationLevel : enum</h4>
+                            <ul>
+                                <li><strong>None</strong> - Pas de validation</li>
+                                <li><strong>Basic</strong> - Types et contraintes simples</li>
+                                <li><strong>Standard</strong> - Validation complète</li>
+                                <li><strong>Strict</strong> - Validation stricte + règles métier</li>
+                                <li><strong>Topology</strong> - Validation topologique</li>
+                                <li><strong>Custom</strong> - Validation personnalisée</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ValidationScope : enum</h4>
+                            <ul>
+                                <li><strong>Field</strong> - Validation champ individuel</li>
+                                <li><strong>Record</strong> - Validation enregistrement</li>
+                                <li><strong>Table</strong> - Validation table complète</li>
+                                <li><strong>Schema</strong> - Validation schéma</li>
+                                <li><strong>Topology</strong> - Relations topologiques</li>
+                                <li><strong>CrossTable</strong> - Inter-tables</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ErrorSeverity : enum</h4>
+                            <ul>
+                                <li><strong>Info</strong> - Information</li>
+                                <li><strong>Warning</strong> - Avertissement</li>
+                                <li><strong>Error</strong> - Erreur critique</li>
+                                <li><strong>Critical</strong> - Erreur bloquante</li>
+                                <li><strong>Fatal</strong> - Erreur fatale</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>CorrectionAction : enum</h4>
+                            <ul>
+                                <li><strong>None</strong> - Pas de correction</li>
+                                <li><strong>AutoFix</strong> - Correction automatique</li>
+                                <li><strong>Suggest</strong> - Suggestion correction</li>
+                                <li><strong>Manual</strong> - Correction manuelle</li>
+                                <li><strong>Skip</strong> - Ignorer erreur</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- topology-validation-detail.html -->
+<div class="card">
+                    <h2>TopologyValidator - Validation Topologique Spécialisée</h2>
+                    
+                    <div class="file-structure"><strong>TopologyValidator : ValidationProcessor</strong> - Validateur topologique spécialisé
+├── <strong>Properties Core :</strong>
+│   ├── List&lt;TopologyRule&gt; Rules { get; } - Règles topologiques
+│   ├── double Tolerance { get; set; } - Tolérance géométrique
+│   ├── SpatialReference SpatialReference { get; set; } - Système coordonnées
+│   ├── TopologyValidationMode Mode { get; set; } - Mode validation
+│   ├── bool EnableProgressReporting { get; set; } - Rapport progression
+│   └── TopologyCache Cache { get; } - Cache topologique
+├── <strong>Properties Configuration :</strong>
+│   ├── bool ValidateGeometryStructure { get; set; } - Structure géométrique
+│   ├── bool ValidateCoordinatePrecision { get; set; } - Précision coordonnées
+│   ├── bool PerformClusterTolerance { get; set; } - Tolérance groupement
+│   ├── bool EnableSpatialIndexing { get; set; } - Index spatial
+│   ├── int MaxErrorsPerRule { get; set; } - Erreurs max par règle
+│   └── TimeSpan ValidationTimeout { get; set; } - Timeout validation
+├── <strong>Properties Statistiques :</strong>
+│   ├── TopologyStatistics Statistics { get; } - Statistiques topologiques
+│   ├── int ProcessedFeatureCount { get; } - Features traitées
+│   ├── int ErrorsFound { get; } - Erreurs détectées
+│   ├── int ErrorsFixed { get; } - Erreurs corrigées
+│   └── Dictionary&lt;string, int&gt; ErrorsByRule { get; } - Erreurs par règle
+├── <strong>Constructors :</strong>
+│   ├── TopologyValidator() - Validateur par défaut
+│   ├── TopologyValidator(double tolerance) - Avec tolérance
+│   ├── TopologyValidator(TopologyValidationConfiguration config) - Avec configuration
+│   └── TopologyValidator(SpatialReference spatialRef, double tolerance) - Complet
+├── <strong>Methods - Gestion Règles :</strong>
+│   ├── void AddRule(TopologyRule rule) - Ajout règle topologique
+│   ├── void RemoveRule(TopologyRule rule) - Suppression règle
+│   ├── void AddStandardRules(GeometryType geometryType) - Règles standard par type
+│   ├── TopologyRule[] GetRulesForGeometryType(GeometryType type) - Règles par type
+│   ├── void EnableRule(string ruleName) - Activation règle
+│   ├── void DisableRule(string ruleName) - Désactivation règle
+│   └── void ClearRules() - Suppression toutes règles
+├── <strong>Methods - Validation Principale :</strong>
+│   ├── Task&lt;TopologyValidationResult&gt; ValidateTopologyAsync(FeatureCollection features) - Validation async
+│   ├── TopologyValidationResult ValidateTopology(FeatureCollection features) - Validation sync
+│   ├── Task&lt;TopologyValidationResult&gt; ValidateLayersAsync(Dictionary&lt;string, FeatureCollection&gt; layers) - Multi-couches async
+│   ├── TopologyValidationResult ValidateFeature(Feature feature, FeatureCollection context) - Feature individuelle
+│   ├── TopologyValidationResult ValidateGeometry(Geometry geometry) - Géométrie seule
+│   └── TopologyValidationResult ValidateRelationships(FeatureCollection layer1, FeatureCollection layer2) - Relations inter-couches
+├── <strong>Methods - Validation Spécialisée :</strong>
+│   ├── TopologyError[] FindSelfIntersections(Geometry geometry) - Auto-intersections
+│   ├── TopologyError[] FindGaps(FeatureCollection polygons) - Trous dans couverture
+│   ├── TopologyError[] FindOverlaps(FeatureCollection polygons) - Chevauchements
+│   ├── TopologyError[] FindDangles(FeatureCollection lines) - Segments pendants
+│   ├── TopologyError[] FindPseudoNodes(FeatureCollection lines) - Pseudo-nœuds
+│   ├── TopologyError[] FindShortSegments(FeatureCollection lines, double minLength) - Segments courts
+│   ├── TopologyError[] FindNarrowPolygons(FeatureCollection polygons, double minWidth) - Polygones étroits
+│   └── TopologyError[] FindInvalidGeometries(FeatureCollection features) - Géométries invalides
+├── <strong>Methods - Correction :</strong>
+│   ├── bool TryAutoFixError(TopologyError error) - Correction automatique
+│   ├── GeometryCorrection[] GetCorrectionSuggestions(TopologyError error) - Suggestions correction
+│   ├── Geometry ApplyCorrection(Geometry geometry, GeometryCorrection correction) - Application correction
+│   ├── void SnapToTolerance(FeatureCollection features) - Accrochage tolérance
+│   ├── void CleanGeometry(Geometry geometry) - Nettoyage géométrie
+│   └── bool ValidateAfterCorrection(Geometry correctedGeometry) - Validation post-correction
+├── <strong>Methods - Cache et Performance :</strong>
+│   ├── void BuildSpatialIndex(FeatureCollection features) - Construction index spatial
+│   ├── void UpdateCache(FeatureCollection features) - Mise à jour cache
+│   ├── void ClearCache() - Vidage cache
+│   ├── void OptimizeForLargeDatasets() - Optimisation gros volumes
+│   └── TopologyPerformanceReport GetPerformanceReport() - Rapport performance
+└── <strong>Events :</strong>
+    ├── TopologyValidationStarted - Début validation
+    ├── TopologyValidationProgress - Progression validation
+    ├── TopologyErrorFound - Erreur détectée
+    ├── TopologyErrorFixed - Erreur corrigée
+    └── TopologyValidationCompleted - Fin validation
+
+<strong>TopologyRule : abstract class</strong> - Règle topologique de base
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom règle
+│   ├── string Description { get; } - Description règle
+│   ├── TopologyRuleType Type { get; } - Type règle
+│   ├── GeometryType[] ApplicableGeometryTypes { get; } - Types géométrie applicables
+│   ├── bool RequiresSecondLayer { get; } - Nécessite seconde couche
+│   ├── double Tolerance { get; set; } - Tolérance spécifique
+│   └── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres règle
+├── <strong>Methods :</strong>
+│   ├── abstract TopologyError[] Check(Feature feature, ValidationContext context) - Vérification règle
+│   ├── abstract bool CanAutoFix(TopologyError error) - Correction auto possible
+│   ├── abstract GeometryCorrection GetAutoFixSuggestion(TopologyError error) - Suggestion correction
+│   ├── virtual bool IsApplicable(Feature feature) - Test applicabilité
+│   └── virtual void Configure(Dictionary&lt;string, object&gt; parameters) - Configuration
+
+<strong>NoSelfIntersectionRule : TopologyRule</strong> - Règle pas d'auto-intersection
+├── <strong>Properties :</strong>
+│   ├── bool AllowTouchingAtPoints { get; set; } - Contact points autorisé
+│   ├── bool CheckInteriorRings { get; set; } - Vérification trous
+│   └── double IntersectionTolerance { get; set; } - Tolérance intersection
+├── <strong>Methods :</strong>
+│   ├── Point[] FindSelfIntersectionPoints(Geometry geometry) - Points auto-intersection
+│   ├── Geometry RemoveSelfIntersections(Geometry geometry) - Suppression auto-intersections
+│   └── bool IsSelfIntersectionSignificant(Point intersection, double tolerance) - Test significatif
+
+<strong>NoGapsRule : TopologyRule</strong> - Règle pas de trous
+├── <strong>Properties :</strong>
+│   ├── double MaxGapArea { get; set; } - Aire max trou autorisé
+│   ├── bool IgnoreBoundaryGaps { get; set; } - Ignorer trous bordure
+│   └── GapDetectionMethod Method { get; set; } - Méthode détection
+├── <strong>Methods :</strong>
+│   ├── Polygon[] FindGaps(FeatureCollection polygons) - Détection trous
+│   ├── Polygon CreateGapFillPolygon(Polygon gap) - Création polygone comblement
+│   └── bool IsGapSignificant(Polygon gap) - Test significatif trou
+
+<strong>NoOverlapsRule : TopologyRule</strong> - Règle pas de chevauchement
+├── <strong>Properties :</strong>
+│   ├── double MinOverlapArea { get; set; } - Aire min chevauchement significatif
+│   ├── bool AllowTouchingBoundaries { get; set; } - Bordures communes autorisées
+│   └── OverlapResolutionMethod ResolutionMethod { get; set; } - Méthode résolution
+├── <strong>Methods :</strong>
+│   ├── Geometry[] FindOverlaps(Feature feature1, Feature feature2) - Détection chevauchements
+│   ├── Feature[] ResolveOverlap(Feature feature1, Feature feature2, OverlapResolutionMethod method) - Résolution
+│   └── bool IsOverlapSignificant(Geometry overlap) - Test significatif chevauchement
+
+<strong>ContainmentRule : TopologyRule</strong> - Règle contenance
+├── <strong>Properties :</strong>
+│   ├── string ContainerLayer { get; set; } - Couche contenante
+│   ├── string ContainedLayer { get; set; } - Couche contenue
+│   ├── ContainmentType Type { get; set; } - Type contenance
+│   └── bool AllowPartialContainment { get; set; } - Contenance partielle autorisée
+├── <strong>Methods :</strong>
+│   ├── bool CheckContainment(Feature container, Feature contained) - Test contenance
+│   ├── Feature[] FindUncontainedFeatures(FeatureCollection containers, FeatureCollection contained) - Non-contenus
+│   └── GeometryCorrection SuggestContainmentFix(Feature container, Feature contained) - Suggestion correction
+
+<strong>ConnectivityRule : TopologyRule</strong> - Règle connectivité
+├── <strong>Properties :</strong>
+│   ├── double ConnectionTolerance { get; set; } - Tolérance connexion
+│   ├── bool RequireExactConnection { get; set; } - Connexion exacte requise
+│   ├── ConnectivityType Type { get; set; } - Type connectivité
+│   └── bool AllowDangles { get; set; } - Segments pendants autorisés
+├── <strong>Methods :</strong>
+│   ├── Point[] FindConnectionPoints(Feature line1, Feature line2) - Points connexion
+│   ├── Feature[] FindDisconnectedFeatures(FeatureCollection lines) - Features déconnectées
+│   ├── void CreateConnections(FeatureCollection lines, double tolerance) - Création connexions
+│   └── bool AreConnected(Feature line1, Feature line2, double tolerance) - Test connexion
+
+<strong>TopologyError : class</strong> - Erreur topologique détectée
+├── <strong>Properties :</strong>
+│   ├── Guid ErrorId { get; } - Identifiant unique erreur
+│   ├── TopologyRuleType RuleType { get; } - Type règle violée
+│   ├── string RuleName { get; } - Nom règle
+│   ├── string Description { get; } - Description erreur
+│   ├── ErrorSeverity Severity { get; set; } - Sévérité erreur
+│   ├── Geometry ErrorGeometry { get; } - Géométrie erreur
+│   ├── Feature[] InvolvedFeatures { get; } - Features impliquées
+│   └── DateTime DetectedAt { get; } - Date détection
+├── <strong>Properties Correction :</strong>
+│   ├── bool CanAutoFix { get; } - Correction auto possible
+│   ├── CorrectionAction RecommendedAction { get; set; } - Action recommandée
+│   ├── GeometryCorrection[] PossibleCorrections { get; } - Corrections possibles
+│   ├── double CorrectionComplexity { get; } - Complexité correction
+│   └── string CorrectionNotes { get; set; } - Notes correction
+├── <strong>Methods :</strong>
+│   ├── bool ApplyAutoFix() - Application correction automatique
+│   ├── ValidationResult ApplyCorrection(GeometryCorrection correction) - Application correction manuelle
+│   ├── void MarkAsIgnored(string reason) - Marquage ignoré
+│   ├── void MarkAsFixed() - Marquage corrigé
+│   └── TopologyErrorReport GenerateReport() - Génération rapport
+
+<strong>GeometryCorrection : class</strong> - Correction géométrique
+├── <strong>Properties :</strong>
+│   ├── string CorrectionType { get; } - Type correction
+│   ├── string Description { get; } - Description correction
+│   ├── Geometry OriginalGeometry { get; } - Géométrie originale
+│   ├── Geometry CorrectedGeometry { get; } - Géométrie corrigée
+│   ├── CorrectionMethod Method { get; } - Méthode correction
+│   ├── double QualityScore { get; } - Score qualité correction
+│   └── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres correction
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Apply(Feature feature) - Application correction
+│   ├── bool Validate() - Validation correction
+│   ├── GeometryCorrection Clone() - Copie correction
+│   └── string GetCorrectionSummary() - Résumé correction
+
+<strong>TopologyValidationResult : class</strong> - Résultat validation topologique
+├── <strong>Properties Résultats :</strong>
+│   ├── bool IsValid { get; } - Topologie valide
+│   ├── int TotalFeaturesChecked { get; } - Features vérifiées
+│   ├── int TotalErrorsFound { get; } - Erreurs trouvées
+│   ├── TopologyError[] Errors { get; } - Liste erreurs
+│   ├── Dictionary&lt;TopologyRuleType, int&gt; ErrorsByRule { get; } - Erreurs par règle
+│   └── TopologyQualityScore QualityScore { get; } - Score qualité
+├── <strong>Properties Performance :</strong>
+│   ├── TimeSpan ValidationDuration { get; } - Durée validation
+│   ├── DateTime ValidationTime { get; } - Heure validation
+│   ├── int FeaturesPerSecond { get; } - Débit traitement
+│   ├── long MemoryUsed { get; } - Mémoire utilisée
+│   └── string[] IndexesUsed { get; } - Index utilisés
+├── <strong>Methods :</strong>
+│   ├── TopologyError[] GetErrorsByType(TopologyRuleType ruleType) - Erreurs par type
+│   ├── TopologyError[] GetErrorsBySeverity(ErrorSeverity severity) - Erreurs par sévérité
+│   ├── TopologyError[] GetFixableErrors() - Erreurs corrigeables
+│   ├── string GenerateReport(ReportFormat format) - Génération rapport
+│   ├── void ExportErrors(string filePath, ExportFormat format) - Export erreurs
+│   └── TopologyValidationSummary GetSummary() - Résumé validation
+
+<strong>TopologyCache : class</strong> - Cache topologique optimisé
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;Guid, SpatialIndex&gt; SpatialIndexes { get; } - Index spatiaux par couche
+│   ├── Dictionary&lt;string, TopologyError[]&gt; CachedErrors { get; } - Erreurs en cache
+│   ├── Dictionary&lt;Guid, Geometry&gt; SimplifiedGeometries { get; } - Géométries simplifiées
+│   ├── DateTime LastUpdated { get; } - Dernière mise à jour
+│   ├── long CacheSize { get; } - Taille cache
+│   └── TimeSpan CacheTTL { get; set; } - Durée de vie cache
+├── <strong>Methods :</strong>
+│   ├── void BuildCache(FeatureCollection features) - Construction cache
+│   ├── void UpdateCache(Feature feature) - Mise à jour feature
+│   ├── void InvalidateCache(Guid layerId) - Invalidation couche
+│   ├── bool TryGetCachedErrors(string key, out TopologyError[] errors) - Récupération erreurs
+│   ├── void CacheErrors(string key, TopologyError[] errors) - Mise en cache erreurs
+│   ├── void ClearCache() - Vidage cache
+│   └── void OptimizeCache() - Optimisation cache</div>
+                </div>
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- quality-assurance-detail.html -->
+<div class="card">
+                    <h2>QualityAssuranceEngine - Contrôle Qualité Automatisé</h2>
+                    
+                    <div class="file-structure"><strong>QualityAssuranceEngine : IDisposable</strong> - Moteur contrôle qualité automatisé
+├── <strong>Properties Core :</strong>
+│   ├── List&lt;IQualityCheck&gt; QualityChecks { get; } - Contrôles qualité
+│   ├── QualityStandard Standard { get; set; } - Standard qualité appliqué
+│   ├── double MinAcceptableScore { get; set; } - Score minimum acceptable
+│   ├── bool ContinueOnLowQuality { get; set; } - Continuation si qualité faible
+│   ├── QualityAssessmentMode Mode { get; set; } - Mode évaluation
+│   └── Dictionary&lt;string, double&gt; CategoryWeights { get; } - Poids par catégorie
+├── <strong>Properties Configuration :</strong>
+│   ├── bool EnableStatisticalAnalysis { get; set; } - Analyse statistique
+│   ├── bool EnableTrendAnalysis { get; set; } - Analyse tendances
+│   ├── bool GenerateRecommendations { get; set; } - Génération recommandations
+│   ├── bool EnableBenchmarking { get; set; } - Comparaison benchmarks
+│   ├── int SampleSize { get; set; } - Taille échantillon
+│   └── double ConfidenceLevel { get; set; } - Niveau confiance (%)
+├── <strong>Properties Reporting :</strong>
+│   ├── ReportFormat DefaultReportFormat { get; set; } - Format rapport par défaut
+│   ├── bool IncludeVisualizations { get; set; } - Visualisations incluses
+│   ├── bool EnableInteractiveReports { get; set; } - Rapports interactifs
+│   ├── string ReportTemplate { get; set; } - Modèle rapport
+│   └── CultureInfo ReportCulture { get; set; } - Culture rapport
+├── <strong>Constructors :</strong>
+│   ├── QualityAssuranceEngine() - Moteur par défaut
+│   ├── QualityAssuranceEngine(QualityStandard standard) - Avec standard
+│   ├── QualityAssuranceEngine(QualityAssuranceConfiguration config) - Avec configuration
+│   └── QualityAssuranceEngine(IServiceProvider services) - Avec injection dépendances
+├── <strong>Methods - Contrôles Qualité :</strong>
+│   ├── void AddQualityCheck(IQualityCheck check) - Ajout contrôle
+│   ├── void RemoveQualityCheck(IQualityCheck check) - Suppression contrôle
+│   ├── void AddStandardChecks(QualityStandard standard) - Contrôles standard
+│   ├── IQualityCheck GetCheck(string name) - Récupération contrôle
+│   ├── void ConfigureCheck(string checkName, Dictionary&lt;string, object&gt; config) - Configuration contrôle
+│   ├── void EnableCheck(string checkName) - Activation contrôle
+│   ├── void DisableCheck(string checkName) - Désactivation contrôle
+│   └── void ClearChecks() - Suppression tous contrôles
+├── <strong>Methods - Exécution Principale :</strong>
+│   ├── Task&lt;QualityReport&gt; RunQualityAssuranceAsync(FeatureCollection data) - QA async
+│   ├── QualityReport RunQualityAssurance(FeatureCollection data) - QA sync
+│   ├── Task&lt;QualityReport&gt; AssessDatasetAsync(FeatureTable dataset) - Dataset async
+│   ├── QualityReport AssessDataset(FeatureTable dataset) - Dataset sync
+│   ├── Task&lt;QualityScore&gt; CalculateQualityScoreAsync(FeatureCollection data) - Score async
+│   ├── QualityScore CalculateQualityScore(FeatureCollection data) - Score sync
+│   └── Task&lt;ComplianceReport&gt; CheckComplianceAsync(FeatureCollection data, QualityStandard standard) - Conformité async
+├── <strong>Methods - Analyse Avancée :</strong>
+│   ├── StatisticalQualityAnalysis PerformStatisticalAnalysis(FeatureCollection data) - Analyse statistique
+│   ├── QualityTrendAnalysis AnalyzeTrends(List&lt;QualityReport&gt; historicalReports) - Analyse tendances
+│   ├── QualityBenchmark CompareToBenchmark(QualityReport report, QualityBenchmark benchmark) - Comparaison benchmark
+│   ├── QualityRecommendation[] GenerateRecommendations(QualityReport report) - Génération recommandations
+│   ├── RiskAssessment AssessQualityRisks(QualityReport report) - Évaluation risques
+│   └── QualityImprovementPlan CreateImprovementPlan(QualityReport report) - Plan amélioration
+├── <strong>Methods - Échantillonnage :</strong>
+│   ├── FeatureCollection CreateRandomSample(FeatureCollection data, int sampleSize) - Échantillon aléatoire
+│   ├── FeatureCollection CreateStratifiedSample(FeatureCollection data, string stratifyField, int sampleSize) - Échantillon stratifié
+│   ├── FeatureCollection CreateSystematicSample(FeatureCollection data, int interval) - Échantillon systématique
+│   ├── double CalculateRequiredSampleSize(int populationSize, double margin, double confidence) - Taille échantillon requise
+│   └── bool IsSampleRepresentative(FeatureCollection sample, FeatureCollection population) - Test représentativité
+├── <strong>Methods - Rapports :</strong>
+│   ├── string GenerateReport(QualityReport report, ReportFormat format) - Génération rapport
+│   ├── void ExportReport(QualityReport report, string filePath, ReportFormat format) - Export rapport
+│   ├── InteractiveReport CreateInteractiveReport(QualityReport report) - Rapport interactif
+│   ├── QualityDashboard CreateDashboard(List&lt;QualityReport&gt; reports) - Tableau bord
+│   └── void ScheduleAutomaticReporting(TimeSpan interval, ReportConfiguration config) - Planification rapports
+└── <strong>Events :</strong>
+    ├── QualityCheckStarted - Début contrôle qualité
+    ├── QualityCheckCompleted - Fin contrôle qualité
+    ├── QualityThresholdExceeded - Seuil qualité dépassé
+    ├── QualityIssueDetected - Problème qualité détecté
+    └── QualityAssuranceCompleted - QA terminée
+
+<strong>IQualityCheck : interface</strong> - Contrôle qualité spécialisé
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom contrôle
+│   ├── string Description { get; } - Description contrôle
+│   ├── QualityCategory Category { get; } - Catégorie qualité
+│   ├── double Weight { get; set; } - Poids dans score global
+│   ├── bool IsEnabled { get; set; } - Contrôle activé
+│   ├── QualityCheckLevel Level { get; } - Niveau contrôle
+│   └── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres contrôle
+├── <strong>Methods :</strong>
+│   ├── bool CanCheck(FeatureCollection data) - Test capacité contrôle
+│   ├── Task&lt;QualityCheckResult&gt; CheckAsync(FeatureCollection data, QualityContext context) - Contrôle async
+│   ├── QualityCheckResult Check(FeatureCollection data, QualityContext context) - Contrôle sync
+│   ├── void Configure(Dictionary&lt;string, object&gt; parameters) - Configuration
+│   └── QualityMetrics GetSupportedMetrics() - Métriques supportées
+
+<strong>QualityCheck : IQualityCheck</strong> - Implémentation base contrôle qualité
+├── <strong>Properties :</strong>
+│   ├── QualityCheckStatistics Statistics { get; } - Statistiques contrôle
+│   ├── TimeSpan ExecutionTime { get; } - Temps exécution
+│   ├── bool LogVerbose { get; set; } - Log détaillé
+│   └── QualityThreshold[] Thresholds { get; set; } - Seuils qualité
+├── <strong>Methods :</strong>
+│   ├── protected virtual void Initialize() - Initialisation
+│   ├── protected virtual void Cleanup() - Nettoyage
+│   ├── protected QualityIssue CreateIssue(string description, QualityIssueSeverity severity) - Création problème
+│   ├── protected void LogCheckEvent(string message) - Log événement
+│   └── protected bool MeetsThreshold(double value, QualityThreshold threshold) - Test seuil
+
+<strong>CompletenessCheck : QualityCheck</strong> - Contrôle complétude
+├── <strong>Properties :</strong>
+│   ├── string[] RequiredFields { get; set; } - Champs obligatoires
+│   ├── double MinCompletenessRate { get; set; } - Taux minimum complétude
+│   ├── bool CheckGeometryPresence { get; set; } - Vérification présence géométrie
+│   └── bool AllowPartialCompleteness { get; set; } - Complétude partielle autorisée
+├── <strong>Methods :</strong>
+│   ├── double CalculateFieldCompleteness(FeatureCollection data, string fieldName) - Complétude champ
+│   ├── double CalculateOverallCompleteness(FeatureCollection data) - Complétude globale
+│   ├── Feature[] GetIncompleteFeatures(FeatureCollection data) - Features incomplètes
+│   └── CompletenessReport GenerateCompletenessReport(FeatureCollection data) - Rapport complétude
+
+<strong>AccuracyCheck : QualityCheck</strong> - Contrôle précision
+├── <strong>Properties :</strong>
+│   ├── FeatureCollection ReferenceData { get; set; } - Données référence
+│   ├── double PositionalAccuracyThreshold { get; set; } - Seuil précision positionnelle
+│   ├── Dictionary&lt;string, double&gt; AttributeAccuracyThresholds { get; } - Seuils précision attributs
+│   ├── AccuracyMeasurementMethod Method { get; set; } - Méthode mesure précision
+│   └── bool UseStatisticalSampling { get; set; } - Échantillonnage statistique
+├── <strong>Methods :</strong>
+│   ├── double CalculatePositionalAccuracy(Feature testFeature, Feature referenceFeature) - Précision positionnelle
+│   ├── double CalculateAttributeAccuracy(FeatureCollection test, FeatureCollection reference, string fieldName) - Précision attribut
+│   ├── AccuracyStatistics CalculateOverallAccuracy(FeatureCollection test, FeatureCollection reference) - Précision globale
+│   └── Feature[] GetInaccurateFeatures(FeatureCollection data, double threshold) - Features imprécises
+
+<strong>ConsistencyCheck : QualityCheck</strong> - Contrôle cohérence
+├── <strong>Properties :</strong>
+│   ├── List&lt;ConsistencyRule&gt; Rules { get; } - Règles cohérence
+│   ├── bool CheckCrossTables { get; set; } - Vérification inter-tables
+│   ├── bool CheckTemporalConsistency { get; set; } - Cohérence temporelle
+│   └── bool CheckSpatialConsistency { get; set; } - Cohérence spatiale
+├── <strong>Methods :</strong>
+│   ├── void AddConsistencyRule(ConsistencyRule rule) - Ajout règle cohérence
+│   ├── ConsistencyViolation[] FindInconsistencies(FeatureCollection data) - Détection incohérences
+│   ├── double CalculateConsistencyScore(FeatureCollection data) - Score cohérence
+│   └── ConsistencyReport GenerateConsistencyReport(FeatureCollection data) - Rapport cohérence
+
+<strong>ValidityCheck : QualityCheck</strong> - Contrôle validité
+├── <strong>Properties :</strong>
+│   ├── bool CheckGeometryValidity { get; set; } - Validité géométrique
+│   ├── bool CheckAttributeValidity { get; set; } - Validité attributs
+│   ├── bool CheckSchemaCompliance { get; set; } - Conformité schéma
+│   └── FeatureSchema TargetSchema { get; set; } - Schéma cible
+├── <strong>Methods :</strong>
+│   ├── Feature[] GetInvalidGeometries(FeatureCollection data) - Géométries invalides
+│   ├── ValidationError[] GetAttributeValidationErrors(FeatureCollection data) - Erreurs validation attributs
+│   ├── double CalculateValidityRate(FeatureCollection data) - Taux validité
+│   └── ValidityReport GenerateValidityReport(FeatureCollection data) - Rapport validité
+
+<strong>QualityReport : class</strong> - Rapport qualité complet
+├── <strong>Properties Core :</strong>
+│   ├── Guid ReportId { get; } - Identifiant rapport
+│   ├── DateTime GeneratedAt { get; } - Date génération
+│   ├── FeatureCollection AssessedData { get; } - Données évaluées
+│   ├── QualityScore OverallScore { get; } - Score global qualité
+│   ├── Dictionary&lt;string, QualityCheckResult&gt; CheckResults { get; } - Résultats contrôles
+│   └── QualityAssessmentSummary Summary { get; } - Résumé évaluation
+├── <strong>Properties Métriques :</strong>
+│   ├── QualityMetrics Metrics { get; } - Métriques qualité
+│   ├── Dictionary&lt;QualityCategory, double&gt; CategoryScores { get; } - Scores par catégorie
+│   ├── int TotalIssuesFound { get; } - Total problèmes détectés
+│   ├── Dictionary&lt;QualityIssueSeverity, int&gt; IssuesBySeverity { get; } - Problèmes par sévérité
+│   └── List&lt;QualityTrendPoint&gt; TrendData { get; } - Données tendance
+├── <strong>Properties Recommandations :</strong>
+│   ├── List&lt;QualityRecommendation&gt; Recommendations { get; } - Recommandations amélioration
+│   ├── QualityImprovementPlan ImprovementPlan { get; } - Plan amélioration
+│   ├── RiskAssessment RiskAssessment { get; } - Évaluation risques
+│   └── List&lt;QualityBestPractice&gt; BestPractices { get; } - Meilleures pratiques
+├── <strong>Methods :</strong>
+│   ├── string GenerateExecutiveSummary() - Résumé exécutif
+│   ├── QualityCheckResult GetCheckResult(string checkName) - Résultat contrôle spécifique
+│   ├── QualityIssue[] GetIssuesByCategory(QualityCategory category) - Problèmes par catégorie
+│   ├── QualityComparison CompareTo(QualityReport otherReport) - Comparaison rapports
+│   ├── void ExportToFile(string filePath, ReportFormat format) - Export fichier
+│   └── QualityReport CreateSubReport(QualityCategory category) - Sous-rapport catégorie
+
+<strong>QualityScore : class</strong> - Score qualité détaillé
+├── <strong>Properties :</strong>
+│   ├── double OverallScore { get; } - Score global (0-100)
+│   ├── QualityGrade Grade { get; } - Grade qualité (A-F)
+│   ├── Dictionary&lt;QualityCategory, double&gt; CategoryScores { get; } - Scores catégories
+│   ├── Dictionary&lt;string, double&gt; CheckScores { get; } - Scores contrôles individuels
+│   ├── double ConfidenceInterval { get; } - Intervalle confiance
+│   └── ScoreCalculationMethod Method { get; } - Méthode calcul
+├── <strong>Methods :</strong>
+│   ├── bool MeetsStandard(QualityStandard standard) - Respect standard
+│   ├── QualityScoreBreakdown GetBreakdown() - Décomposition score
+│   ├── double GetWeightedScore(Dictionary&lt;string, double&gt; weights) - Score pondéré
+│   └── string GetScoreInterpretation() - Interprétation score
+
+<strong>QualityMetrics : class</strong> - Métriques qualité détaillées
+├── <strong>Properties Complétude :</strong>
+│   ├── double CompletenessRate { get; set; } - Taux complétude
+│   ├── Dictionary&lt;string, double&gt; FieldCompletenessRates { get; } - Taux par champ
+│   ├── int MissingGeometriesCount { get; set; } - Géométries manquantes
+│   └── int MissingAttributesCount { get; set; } - Attributs manquants
+├── <strong>Properties Précision :</strong>
+│   ├── double PositionalAccuracy { get; set; } - Précision positionnelle
+│   ├── Dictionary&lt;string, double&gt; AttributeAccuracies { get; } - Précisions attributs
+│   ├── double StandardError { get; set; } - Erreur standard
+│   └── double RootMeanSquareError { get; set; } - RMSE
+├── <strong>Properties Cohérence :</strong>
+│   ├── double ConsistencyRate { get; set; } - Taux cohérence
+│   ├── int InconsistencyCount { get; set; } - Nombre incohérences
+│   ├── double TemporalConsistency { get; set; } - Cohérence temporelle
+│   └── double SpatialConsistency { get; set; } - Cohérence spatiale
+├── <strong>Properties Validité :</strong>
+│   ├── double ValidityRate { get; set; } - Taux validité
+│   ├── int InvalidGeometriesCount { get; set; } - Géométries invalides
+│   ├── int SchemaViolationsCount { get; set; } - Violations schéma
+│   └── int TopologyErrorsCount { get; set; } - Erreurs topologiques
+└── <strong>Methods :</strong>
+    ├── void CalculateAllMetrics(FeatureCollection data) - Calcul toutes métriques
+    ├── string GetMetricsSummary() - Résumé métriques
+    ├── QualityMetrics Clone() - Copie métriques
+    └── void ExportMetrics(string filePath, ExportFormat format) - Export métriques</div>
+                </div>
+                <!-- INSERTION FICHIER 5 ICI -->
+                <!-- error-reporting-detail.html -->
+<div class="card">
+                    <h2>Système de Rapport d'Erreurs et Correction</h2>
+                    
+                    <div class="file-structure"><strong>ErrorReporting : class, IDisposable</strong> - Système central rapport d'erreurs
+├── <strong>Properties Core :</strong>
+│   ├── List&lt;ValidationError&gt; Errors { get; } - Collection erreurs
+│   ├── ErrorReportingConfiguration Configuration { get; set; } - Configuration système
+│   ├── IErrorLogger Logger { get; set; } - Logger erreurs
+│   ├── IErrorNotificationService NotificationService { get; set; } - Service notifications
+│   ├── ErrorStatistics Statistics { get; } - Statistiques erreurs
+│   └── Dictionary&lt;ErrorSeverity, int&gt; MaxErrorsByLevel { get; } - Limites par niveau
+├── <strong>Properties Filtrage :</strong>
+│   ├── List&lt;ErrorFilter&gt; ActiveFilters { get; } - Filtres actifs
+│   ├── ErrorSeverity MinSeverityLevel { get; set; } - Niveau sévérité minimum
+│   ├── bool IgnoreDuplicates { get; set; } - Ignorer doublons
+│   ├── TimeSpan DuplicateTimeWindow { get; set; } - Fenêtre détection doublons
+│   └── Dictionary&lt;string, bool&gt; CategoryFilters { get; } - Filtres par catégorie
+├── <strong>Properties Export :</strong>
+│   ├── ReportFormat DefaultFormat { get; set; } - Format par défaut
+│   ├── string DefaultExportPath { get; set; } - Chemin export par défaut
+│   ├── bool AutoExportEnabled { get; set; } - Export automatique
+│   ├── TimeSpan AutoExportInterval { get; set; } - Intervalle export auto
+│   └── List&lt;string&gt; ExportTemplates { get; } - Modèles export
+├── <strong>Constructors :</strong>
+│   ├── ErrorReporting() - Système par défaut
+│   ├── ErrorReporting(ErrorReportingConfiguration config) - Avec configuration
+│   └── ErrorReporting(IErrorLogger logger, IErrorNotificationService notifier) - Avec services
+├── <strong>Methods - Collecte Erreurs :</strong>
+│   ├── void AddError(ValidationError error) - Ajout erreur
+│   ├── void AddError(string message, ErrorSeverity severity, object source) - Erreur simple
+│   ├── void AddErrors(IEnumerable&lt;ValidationError&gt; errors) - Ajout multiple
+│   ├── void AddErrorFromException(Exception exception, object source) - Depuis exception
+│   ├── bool TryAddError(ValidationError error) - Tentative ajout avec validation
+│   ├── void RemoveError(ValidationError error) - Suppression erreur
+│   └── void ClearErrors() - Suppression toutes erreurs
+├── <strong>Methods - Recherche et Filtrage :</strong>
+│   ├── ValidationError[] GetErrorsBySeverity(ErrorSeverity severity) - Par sévérité
+│   ├── ValidationError[] GetErrorsByCategory(string category) - Par catégorie
+│   ├── ValidationError[] GetErrorsBySource(object source) - Par source
+│   ├── ValidationError[] GetErrorsInTimeRange(DateTime start, DateTime end) - Par période
+│   ├── ValidationError[] FilterErrors(ErrorFilter filter) - Application filtre
+│   ├── ValidationError FindError(Guid errorId) - Recherche par ID
+│   └── ValidationError[] SearchErrors(string searchTerm) - Recherche textuelle
+├── <strong>Methods - Analyse et Statistiques :</strong>
+│   ├── ErrorAnalysisReport AnalyzeErrors() - Analyse globale
+│   ├── Dictionary&lt;string, int&gt; GetErrorCountsByCategory() - Décompte par catégorie
+│   ├── ErrorTrendAnalysis AnalyzeTrends(TimeSpan period) - Analyse tendances
+│   ├── ErrorFrequencyReport GetFrequencyReport() - Rapport fréquence
+│   ├── ErrorSeverityDistribution GetSeverityDistribution() - Répartition sévérité
+│   └── List&lt;ErrorPattern&gt; DetectErrorPatterns() - Détection patterns
+├── <strong>Methods - Génération Rapports :</strong>
+│   ├── ErrorReport GenerateReport(ReportFormat format) - Génération rapport
+│   ├── string GenerateTextReport() - Rapport texte
+│   ├── XDocument GenerateXMLReport() - Rapport XML
+│   ├── string GenerateHTMLReport() - Rapport HTML
+│   ├── byte[] GeneratePDFReport() - Rapport PDF
+│   ├── string GenerateCSVReport() - Rapport CSV
+│   └── InteractiveErrorReport GenerateInteractiveReport() - Rapport interactif
+├── <strong>Methods - Export :</strong>
+│   ├── void ExportToFile(string filePath, ReportFormat format) - Export fichier
+│   ├── void ExportToStream(Stream stream, ReportFormat format) - Export stream
+│   ├── Task ExportAsync(string filePath, ReportFormat format) - Export async
+│   ├── void ScheduleAutoExport(TimeSpan interval, string path, ReportFormat format) - Planification
+│   └── void ExportWithTemplate(string templatePath, string outputPath) - Export avec modèle
+└── <strong>Events :</strong>
+    ├── ErrorAdded - Erreur ajoutée
+    ├── ErrorRemoved - Erreur supprimée
+    ├── ErrorThresholdExceeded - Seuil erreurs dépassé
+    ├── ReportGenerated - Rapport généré
+    └── ErrorPatternDetected - Pattern erreurs détecté
+
+<strong>ValidationError : class</strong> - Erreur validation détaillée
+├── <strong>Properties Identification :</strong>
+│   ├── Guid ErrorId { get; } - Identifiant unique
+│   ├── string ErrorCode { get; set; } - Code erreur
+│   ├── string Message { get; set; } - Message erreur
+│   ├── string DetailedDescription { get; set; } - Description détaillée
+│   ├── ErrorSeverity Severity { get; set; } - Sévérité erreur
+│   └── string Category { get; set; } - Catégorie erreur
+├── <strong>Properties Source :</strong>
+│   ├── object Source { get; set; } - Objet source erreur
+│   ├── string SourceType { get; } - Type source
+│   ├── string SourceLocation { get; set; } - Localisation source
+│   ├── Feature AffectedFeature { get; set; } - Feature affectée
+│   ├── string FieldName { get; set; } - Champ concerné
+│   └── Geometry ErrorGeometry { get; set; } - Géométrie erreur
+├── <strong>Properties Context :</strong>
+│   ├── DateTime Timestamp { get; } - Horodatage
+│   ├── string ValidationRuleName { get; set; } - Règle validation
+│   ├── ValidationContext Context { get; set; } - Contexte validation
+│   ├── Dictionary&lt;string, object&gt; AdditionalData { get; } - Données additionnelles
+│   └── Exception InnerException { get; set; } - Exception interne
+├── <strong>Properties Correction :</strong>
+│   ├── bool CanAutoFix { get; set; } - Correction auto possible
+│   ├── List&lt;CorrectionSuggestion&gt; Suggestions { get; } - Suggestions correction
+│   ├── CorrectionAction RecommendedAction { get; set; } - Action recommandée
+│   ├── double CorrectionConfidence { get; set; } - Confiance correction
+│   └── string CorrectionNotes { get; set; } - Notes correction
+├── <strong>Properties État :</strong>
+│   ├── ErrorStatus Status { get; set; } - Statut erreur
+│   ├── DateTime? ResolvedAt { get; set; } - Date résolution
+│   ├── string ResolvedBy { get; set; } - Résolu par
+│   ├── string ResolutionNotes { get; set; } - Notes résolution
+│   └── bool IsIgnored { get; set; } - Erreur ignorée
+├── <strong>Methods :</strong>
+│   ├── void MarkAsResolved(string resolvedBy, string notes) - Marquage résolu
+│   ├── void MarkAsIgnored(string reason) - Marquage ignoré
+│   ├── void AddCorrectionSuggestion(CorrectionSuggestion suggestion) - Ajout suggestion
+│   ├── ValidationError Clone() - Copie erreur
+│   ├── string GetFormattedMessage() - Message formaté
+│   └── ValidationErrorReport GenerateDetailedReport() - Rapport détaillé
+
+<strong>CorrectionSuggestion : class</strong> - Suggestion correction erreur
+├── <strong>Properties :</strong>
+│   ├── Guid SuggestionId { get; } - Identifiant suggestion
+│   ├── string Title { get; set; } - Titre suggestion
+│   ├── string Description { get; set; } - Description correction
+│   ├── CorrectionType Type { get; } - Type correction
+│   ├── double ConfidenceLevel { get; set; } - Niveau confiance
+│   ├── CorrectionComplexity Complexity { get; set; } - Complexité correction
+│   ├── TimeSpan EstimatedTime { get; set; } - Temps estimé
+│   └── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres correction
+├── <strong>Properties Action :</strong>
+│   ├── Func&lt;object, ValidationResult&gt; CorrectionAction { get; set; } - Action correction
+│   ├── bool RequiresUserInput { get; set; } - Saisie utilisateur requise
+│   ├── bool IsReversible { get; set; } - Correction réversible
+│   ├── string[] Prerequisites { get; set; } - Prérequis
+│   └── string[] Warnings { get; set; } - Avertissements
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Apply(object target) - Application correction
+│   ├── bool CanApply(object target) - Test application possible
+│   ├── ValidationResult Validate() - Validation suggestion
+│   ├── CorrectionPreview GetPreview(object target) - Aperçu correction
+│   └── string GetCorrectionScript() - Script correction
+
+<strong>ErrorLogger : IErrorLogger</strong> - Logger erreurs spécialisé
+├── <strong>Properties :</strong>
+│   ├── LogLevel MinLogLevel { get; set; } - Niveau log minimum
+│   ├── string LogFilePath { get; set; } - Chemin fichier log
+│   ├── bool EnableConsoleOutput { get; set; } - Sortie console
+│   ├── int MaxLogFileSize { get; set; } - Taille max fichier log
+│   ├── int MaxLogFiles { get; set; } - Nombre max fichiers log
+│   └── LogFormat Format { get; set; } - Format log
+├── <strong>Methods :</strong>
+│   ├── void LogError(ValidationError error) - Log erreur
+│   ├── void LogInfo(string message) - Log information
+│   ├── void LogWarning(string message) - Log avertissement
+│   ├── void LogDebug(string message) - Log debug
+│   ├── void LogException(Exception exception) - Log exception
+│   ├── void FlushLogs() - Vidage buffer logs
+│   └── void ArchiveLogs() - Archivage logs
+
+<strong>ErrorNotificationService : IErrorNotificationService</strong> - Service notifications
+├── <strong>Properties :</strong>
+│   ├── List&lt;INotificationChannel&gt; Channels { get; } - Canaux notification
+│   ├── Dictionary&lt;ErrorSeverity, bool&gt; NotificationEnabled { get; } - Notifications par sévérité
+│   ├── TimeSpan NotificationDelay { get; set; } - Délai notification
+│   ├── int MaxNotificationsPerHour { get; set; } - Notifications max/heure
+│   └── NotificationTemplate DefaultTemplate { get; set; } - Modèle par défaut
+├── <strong>Methods :</strong>
+│   ├── void AddNotificationChannel(INotificationChannel channel) - Ajout canal
+│   ├── Task SendNotificationAsync(ValidationError error) - Envoi notification async
+│   ├── void SendBatchNotification(ValidationError[] errors) - Notification groupée
+│   ├── void ConfigureNotificationRules(NotificationRule[] rules) - Configuration règles
+│   └── NotificationStatus GetNotificationStatus() - Statut notifications
+
+<strong>ErrorReport : class</strong> - Rapport erreurs complet
+├── <strong>Properties Métadonnées :</strong>
+│   ├── Guid ReportId { get; } - Identifiant rapport
+│   ├── DateTime GeneratedAt { get; } - Date génération
+│   ├── string ReportTitle { get; set; } - Titre rapport
+│   ├── string GeneratedBy { get; set; } - Généré par
+│   ├── ReportFormat Format { get; } - Format rapport
+│   └── TimeSpan GenerationDuration { get; } - Durée génération
+├── <strong>Properties Contenu :</strong>
+│   ├── ErrorSummary Summary { get; } - Résumé erreurs
+│   ├── List&lt;ValidationError&gt; Errors { get; } - Liste erreurs
+│   ├── ErrorStatistics Statistics { get; } - Statistiques
+│   ├── ErrorAnalysisReport Analysis { get; } - Analyse erreurs
+│   ├── List&lt;ErrorRecommendation&gt; Recommendations { get; } - Recommandations
+│   └── Dictionary&lt;string, object&gt; CustomSections { get; } - Sections personnalisées
+├── <strong>Methods :</strong>
+│   ├── string GenerateExecutiveSummary() - Résumé exécutif
+│   ├── ErrorReport FilterByCategory(string category) - Filtre par catégorie
+│   ├── ErrorReport FilterBySeverity(ErrorSeverity severity) - Filtre par sévérité
+│   ├── void AddCustomSection(string name, object content) - Ajout section
+│   ├── void ExportSection(string sectionName, string filePath) - Export section
+│   └── ErrorComparisonReport CompareTo(ErrorReport otherReport) - Comparaison
+
+<strong>ErrorAnalysisReport : class</strong> - Analyse approfondie erreurs
+├── <strong>Properties Analyse :</strong>
+│   ├── Dictionary&lt;string, int&gt; ErrorsByCategory { get; } - Décompte par catégorie
+│   ├── Dictionary&lt;ErrorSeverity, int&gt; ErrorsBySeverity { get; } - Décompte par sévérité
+│   ├── Dictionary&lt;string, int&gt; ErrorsBySource { get; } - Décompte par source
+│   ├── List&lt;ErrorPattern&gt; DetectedPatterns { get; } - Patterns détectés
+│   ├── ErrorTrendData TrendData { get; } - Données tendances
+│   └── List&lt;ErrorCorrelation&gt; Correlations { get; } - Corrélations erreurs
+├── <strong>Properties Statistiques :</strong>
+│   ├── double AverageErrorsPerFeature { get; } - Moyenne erreurs/feature
+│   ├── TimeSpan AverageResolutionTime { get; } - Temps résolution moyen
+│   ├── double AutoFixSuccessRate { get; } - Taux succès correction auto
+│   ├── Dictionary&lt;string, double&gt; CategoryQualityScores { get; } - Scores qualité/catégorie
+│   └── ErrorDistributionAnalysis Distribution { get; } - Analyse distribution
+├── <strong>Methods :</strong>
+│   ├── List&lt;ErrorHotspot&gt; IdentifyHotspots() - Identification points chauds
+│   ├── ErrorPredictionModel CreatePredictionModel() - Modèle prédiction
+│   ├── List&lt;ErrorRecommendation&gt; GenerateRecommendations() - Génération recommandations
+│   ├── ErrorImpactAssessment AssessImpact() - Évaluation impact
+│   └── string GenerateAnalysisReport() - Génération rapport analyse
+
+<strong>CorrectionEngine : class</strong> - Moteur correction automatique
+├── <strong>Properties :</strong>
+│   ├── List&lt;ICorrectionStrategy&gt; Strategies { get; } - Stratégies correction
+│   ├── double MinConfidenceThreshold { get; set; } - Seuil confiance minimum
+│   ├── bool EnableAutomaticCorrection { get; set; } - Correction automatique
+│   ├── int MaxCorrectionsPerSession { get; set; } - Corrections max/session
+│   ├── TimeSpan CorrectionTimeout { get; set; } - Timeout correction
+│   └── CorrectionStatistics Statistics { get; } - Statistiques correction
+├── <strong>Methods :</strong>
+│   ├── Task&lt;CorrectionResult&gt; CorrectErrorAsync(ValidationError error) - Correction async
+│   ├── CorrectionResult CorrectError(ValidationError error) - Correction sync
+│   ├── CorrectionResult[] CorrectMultipleErrors(ValidationError[] errors) - Corrections multiples
+│   ├── void AddCorrectionStrategy(ICorrectionStrategy strategy) - Ajout stratégie
+│   ├── CorrectionSuggestion[] GetCorrectionSuggestions(ValidationError error) - Suggestions
+│   ├── ValidationResult ValidateCorrection(CorrectionResult result) - Validation correction
+│   └── void RollbackCorrection(CorrectionResult result) - Annulation correction</div>
+                </div>
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="examples-section">
+                        <h3>Validation Basique de Données</h3>
+                        <div class="code-block">// Configuration moteur de validation
+ValidationEngine engine = new ValidationEngine();
+engine.Level = ValidationLevel.Standard;
+engine.EnableTopologyValidation = true;
+engine.ContinueOnError = true;
+
+// Validation d'une feature
+Feature building = new Feature(buildingGeometry);
+building.SetAttribute("Name", "Centre Commercial");
+building.SetAttribute("Area", 2500.75);
+
+ValidationResult result = engine.Validate(building, buildingSchema);
+if (!result.IsValid)
+{
+    foreach (ValidationError error in result.Errors)
+    {
+        Console.WriteLine($"Erreur {error.Severity}: {error.Message}");
+        
+        // Correction automatique si possible
+        if (error.CanAutoFix)
+        {
+            error.ApplyAutoFix();
+            Console.WriteLine("Correction automatique appliquée");
+        }
+    }
+}</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Validation Topologique</h3>
+                        <div class="code-block">// Validation topologique entre couches
+TopologyValidator topoValidator = new TopologyValidator();
+topoValidator.AddRule(new NoGapsRule("Buildings"));
+topoValidator.AddRule(new NoOverlapsRule("Parcels"));
+topoValidator.AddRule(new ContainmentRule("Buildings", "Parcels"));
+
+TopologyValidationResult topoResult = topoValidator.ValidateTopology(layers);
+if (topoResult.HasErrors)
+{
+    foreach (TopologyError error in topoResult.TopologyErrors)
+    {
+        Console.WriteLine($"Erreur topologique: {error.Description}");
+        Console.WriteLine($"Géométrie: {error.ErrorGeometry}");
+    }
+}</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Contrôle Qualité Batch</h3>
+                        <div class="code-block">// Contrôle qualité sur dataset complet
+QualityAssuranceEngine qaEngine = new QualityAssuranceEngine();
+qaEngine.AddQualityCheck(new GeometryValidityCheck());
+qaEngine.AddQualityCheck(new AttributeCompletenessCheck());
+qaEngine.AddQualityCheck(new DuplicateDetectionCheck());
+
+QualityReport report = qaEngine.RunQualityAssurance(buildingDataset);
+Console.WriteLine($"Qualité globale: {report.OverallQualityScore:P2}");
+Console.WriteLine($"Erreurs trouvées: {report.TotalErrors}");
+
+// Export rapport détaillé
+report.ExportToHTML("quality_report.html");
+report.ExportToExcel("quality_report.xlsx");</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-query-filter.html">← Système de Requêtes</a></h4>
+                            <p>Filtrage et sélection</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-data-binding.html">→ Data Binding & MVVM</a></h4>
+                            <p>Liaison données-interface</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="donnees-geospatiales.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage validation dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schéma de Données - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>3. Schéma de Données - Structure et Types</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système de Schémas</h2>
+                    <p>Le système de schémas de Trifide 360 définit la structure des données géospatiales, les types de champs, les contraintes d'intégrité et les relations entre tables. Il assure la cohérence des données et facilite la validation automatique lors des opérations CRUD.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>FeatureSchema</h4>
+                            <p>Définition structure table</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>FieldInfo</h4>
+                            <p>Définition champs individuels</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>FieldType</h4>
+                            <p>Types de données supportés</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Constraints</h4>
+                            <p>Contraintes d'intégrité</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>IndexManager</h4>
+                            <p>Gestion des index</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>SchemaBuilder</h4>
+                            <p>Construction de schémas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- schema-structure-table-detail.html -->
+<div class="card">
+                    <h2>FeatureSchema - Définition Structure Table</h2>
+                    
+                    <div class="file-structure"><strong>FeatureSchema : ICloneable, IEquatable&lt;FeatureSchema&gt;</strong> - Définition complète structure table
+├── <strong>Properties Core :</strong>
+│   ├── string TableName { get; set; } - Nom de la table
+│   ├── List&lt;FieldInfo&gt; Fields { get; } - Liste des champs définis
+│   ├── GeometryType GeometryType { get; set; } - Type géométrie principal
+│   ├── SpatialReference SpatialReference { get; set; } - Système coordonnées
+│   ├── string GeometryFieldName { get; set; } - Nom champ géométrie
+│   └── string ObjectIdFieldName { get; set; } - Nom champ ID unique
+├── <strong>Properties Metadata :</strong>
+│   ├── string Description { get; set; } - Description schéma
+│   ├── string Version { get; set; } - Version schéma
+│   ├── DateTime CreatedDate { get; } - Date création
+│   ├── DateTime ModifiedDate { get; } - Dernière modification
+│   ├── string CreatedBy { get; set; } - Créateur
+│   ├── Dictionary&lt;string, object&gt; ExtendedProperties { get; } - Propriétés étendues
+│   └── List&lt;string&gt; Tags { get; } - Étiquettes classification
+├── <strong>Properties Validation :</strong>
+│   ├── bool AllowNullGeometry { get; set; } - Géométrie null autorisée
+│   ├── bool EnforceConstraints { get; set; } - Application contraintes
+│   ├── ValidationLevel ValidationLevel { get; set; } - Niveau validation
+│   ├── List&lt;SchemaConstraint&gt; Constraints { get; } - Contraintes globales
+│   └── Dictionary&lt;string, IndexDefinition&gt; Indexes { get; } - Définitions index
+├── <strong>Constructors :</strong>
+│   ├── FeatureSchema() - Schéma vide
+│   ├── FeatureSchema(string tableName) - Avec nom table
+│   ├── FeatureSchema(string tableName, GeometryType geometryType) - Complet basique
+│   └── FeatureSchema(string tableName, FieldInfo[] fields, GeometryType geometryType) - Complet
+├── <strong>Methods - Gestion Champs :</strong>
+│   ├── void AddField(FieldInfo field) - Ajout champ avec validation
+│   ├── void AddField(string name, FieldType type, int length, bool allowNull) - Ajout rapide
+│   ├── bool RemoveField(string fieldName) - Suppression champ
+│   ├── bool RenameField(string oldName, string newName) - Renommage champ
+│   ├── FieldInfo GetField(string fieldName) - Récupération champ par nom
+│   ├── bool HasField(string fieldName) - Test existence champ
+│   ├── FieldInfo[] GetFields() - Tous les champs
+│   ├── string[] GetFieldNames() - Noms de tous les champs
+│   ├── FieldInfo[] GetFieldsByType(FieldType type) - Champs par type
+│   └── void ReorderFields(string[] fieldOrder) - Réorganisation ordre champs
+├── <strong>Methods - Contraintes :</strong>
+│   ├── void AddConstraint(SchemaConstraint constraint) - Ajout contrainte
+│   ├── void RemoveConstraint(string constraintName) - Suppression contrainte
+│   ├── SchemaConstraint[] GetConstraints() - Toutes contraintes
+│   ├── SchemaConstraint[] GetConstraintsForField(string fieldName) - Contraintes champ
+│   ├── ValidationResult ValidateConstraints(Dictionary&lt;string, object&gt; values) - Validation valeurs
+│   └── void ClearConstraints() - Suppression toutes contraintes
+├── <strong>Methods - Index :</strong>
+│   ├── void AddIndex(IndexDefinition index) - Ajout index
+│   ├── void AddIndex(string fieldName, IndexType type) - Index simple
+│   ├── void AddCompositeIndex(string indexName, string[] fieldNames) - Index composite
+│   ├── bool RemoveIndex(string indexName) - Suppression index
+│   ├── IndexDefinition[] GetIndexes() - Tous les index
+│   └── bool HasIndex(string fieldName) - Test existence index sur champ
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult ValidateSchema() - Validation structure schéma
+│   ├── ValidationResult ValidateFieldDefinition(FieldInfo field) - Validation champ
+│   ├── ValidationResult ValidateAgainstData(FeatureCollection data) - Validation contre données
+│   ├── bool IsCompatibleWith(FeatureSchema other) - Test compatibilité schémas
+│   ├── CompatibilityReport CompareWith(FeatureSchema other) - Rapport compatibilité
+│   └── string[] GetValidationErrors() - Erreurs validation courantes
+├── <strong>Methods - Transformation :</strong>
+│   ├── FeatureSchema Clone() - Copie profonde schéma
+│   ├── FeatureSchema CreateSubset(string[] fieldNames) - Sous-ensemble champs
+│   ├── FeatureSchema Merge(FeatureSchema other) - Fusion schémas
+│   ├── void ApplyChanges(SchemaChangeSet changes) - Application changements
+│   └── SchemaChangeSet GetChangesFrom(FeatureSchema baseSchema) - Différences
+├── <strong>Methods - Sérialisation :</strong>
+│   ├── string ToXML() - Export XML
+│   ├── void FromXML(string xml) - Import XML
+│   ├── string ToJSON() - Export JSON  
+│   ├── void FromJSON(string json) - Import JSON
+│   ├── void SaveToFile(string filePath) - Sauvegarde fichier
+│   └── static FeatureSchema LoadFromFile(string filePath) - Chargement fichier
+├── <strong>Static Factory :</strong>
+│   ├── FeatureSchema CreateEmpty(string tableName) - Schéma vide
+│   ├── FeatureSchema CreateDefault(GeometryType geometryType) - Schéma par défaut
+│   ├── FeatureSchema CreateFromShapefile(string shapefilePath) - Depuis Shapefile
+│   ├── FeatureSchema CreateFromCSV(string csvPath, bool hasHeaders) - Depuis CSV
+│   └── FeatureSchema CreateFromDataTable(DataTable dataTable) - Depuis DataTable
+└── <strong>Events :</strong>
+    ├── FieldAdded, FieldRemoved, FieldRenamed - Changements champs
+    ├── ConstraintAdded, ConstraintRemoved - Changements contraintes
+    ├── IndexAdded, IndexRemoved - Changements index
+    └── SchemaChanged - Changement global schéma</div>
+                </div>                
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- schema-field-definition-detail.html -->
+<div class="card">
+                    <h2>FieldInfo - Définition Champ Individuel</h2>
+                    
+                    <div class="file-structure"><strong>FieldInfo : ICloneable, IEquatable&lt;FieldInfo&gt;</strong> - Définition complète d'un champ
+├── <strong>Properties Core :</strong>
+│   ├── string Name { get; set; } - Nom du champ (unique dans table)
+│   ├── FieldType Type { get; set; } - Type de données
+│   ├── int Length { get; set; } - Longueur maximale (texte/chaînes)
+│   ├── int Precision { get; set; } - Précision (nombres décimaux)
+│   ├── int Scale { get; set; } - Échelle (nombres décimaux)
+│   ├── bool AllowNull { get; set; } - Valeurs null autorisées
+│   └── object DefaultValue { get; set; } - Valeur par défaut
+├── <strong>Properties Validation :</strong>
+│   ├── List&lt;FieldConstraint&gt; Constraints { get; } - Contraintes spécifiques champ
+│   ├── string ValidationExpression { get; set; } - Expression validation
+│   ├── object MinValue { get; set; } - Valeur minimale (si applicable)
+│   ├── object MaxValue { get; set; } - Valeur maximale (si applicable)
+│   ├── string[] AllowedValues { get; set; } - Liste valeurs autorisées
+│   └── string ValidationMessage { get; set; } - Message erreur personnalisé
+├── <strong>Properties Metadata :</strong>
+│   ├── string Alias { get; set; } - Nom d'affichage convivial
+│   ├── string Description { get; set; } - Description du champ
+│   ├── bool IsVisible { get; set; } - Visibilité dans interface
+│   ├── bool IsEditable { get; set; } - Champ modifiable
+│   ├── bool IsRequired { get; set; } - Champ obligatoire
+│   ├── int DisplayOrder { get; set; } - Ordre affichage
+│   ├── string Category { get; set; } - Catégorie regroupement
+│   └── Dictionary&lt;string, object&gt; ExtendedProperties { get; } - Propriétés étendues
+├── <strong>Properties Index :</strong>
+│   ├── bool IsPrimaryKey { get; set; } - Clé primaire
+│   ├── bool IsUnique { get; set; } - Valeurs uniques
+│   ├── bool IsIndexed { get; set; } - Index simple
+│   ├── IndexType IndexType { get; set; } - Type d'index
+│   └── string IndexName { get; set; } - Nom index personnalisé
+├── <strong>Constructors :</strong>
+│   ├── FieldInfo() - Champ vide (Text par défaut)
+│   ├── FieldInfo(string name, FieldType type) - Basique
+│   ├── FieldInfo(string name, FieldType type, int length) - Avec longueur
+│   ├── FieldInfo(string name, FieldType type, bool allowNull) - Avec contrainte null
+│   └── FieldInfo(string name, FieldType type, int length, bool allowNull, object defaultValue) - Complet
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult ValidateValue(object value) - Validation valeur contre champ
+│   ├── bool IsValidValue(object value) - Test rapide validité
+│   ├── object ConvertValue(object value) - Conversion type approprié
+│   ├── object GetTypedDefaultValue() - Valeur défaut typée
+│   ├── ValidationResult ValidateConstraints(object value) - Validation contraintes
+│   └── string GetValidationSummary() - Résumé règles validation
+├── <strong>Methods - Contraintes :</strong>
+│   ├── void AddConstraint(FieldConstraint constraint) - Ajout contrainte
+│   ├── void RemoveConstraint(string constraintName) - Suppression contrainte
+│   ├── FieldConstraint[] GetConstraints() - Toutes contraintes
+│   ├── void SetRange(object minValue, object maxValue) - Contrainte plage
+│   ├── void SetAllowedValues(params object[] values) - Valeurs autorisées
+│   └── void ClearConstraints() - Suppression toutes contraintes
+├── <strong>Methods - Utilitaires :</strong>
+│   ├── FieldInfo Clone() - Copie profonde champ
+│   ├── bool IsCompatibleWith(FieldInfo other) - Test compatibilité
+│   ├── bool IsNumeric() - Test type numérique
+│   ├── bool IsText() - Test type texte
+│   ├── bool IsDate() - Test type date
+│   ├── Type GetDotNetType() - Type .NET équivalent
+│   ├── string GetSQLType() - Type SQL équivalent
+│   └── int GetMaxDisplayLength() - Longueur affichage optimale
+├── <strong>Static Factory :</strong>
+│   ├── FieldInfo CreateObjectID(string name) - Champ ID auto-incrémenté
+│   ├── FieldInfo CreateText(string name, int maxLength, bool allowNull) - Champ texte
+│   ├── FieldInfo CreateInteger(string name, bool allowNull) - Champ entier
+│   ├── FieldInfo CreateDouble(string name, int precision, int scale) - Champ décimal
+│   ├── FieldInfo CreateDate(string name, bool allowNull) - Champ date
+│   ├── FieldInfo CreateBoolean(string name, bool defaultValue) - Champ booléen
+│   └── FieldInfo CreateFromType(string name, Type dotNetType) - Depuis type .NET
+└── <strong>Methods - Sérialisation :</strong>
+    ├── XElement ToXML() - Export XML
+    ├── void FromXML(XElement element) - Import XML
+    ├── Dictionary&lt;string, object&gt; ToDictionary() - Export dictionnaire
+    └── void FromDictionary(Dictionary&lt;string, object&gt; dict) - Import dictionnaire</div>
+                </div>
+                <div class="card">
+                    <h2>Types et Enumerations</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>FieldType : enum</h4>
+                            <ul>
+                                <li><strong>Text</strong> - Chaîne de caractères variable</li>
+                                <li><strong>Integer</strong> - Nombre entier 32-bit</li>
+                                <li><strong>Long</strong> - Nombre entier 64-bit</li>
+                                <li><strong>Float</strong> - Nombre décimal simple précision</li>
+                                <li><strong>Double</strong> - Nombre décimal double précision</li>
+                                <li><strong>Decimal</strong> - Nombre décimal haute précision</li>
+                                <li><strong>Boolean</strong> - Valeur booléenne</li>
+                                <li><strong>DateTime</strong> - Date et heure</li>
+                                <li><strong>Date</strong> - Date uniquement</li>
+                                <li><strong>Time</strong> - Heure uniquement</li>
+                                <li><strong>Guid</strong> - Identifiant unique global</li>
+                                <li><strong>Binary</strong> - Données binaires</li>
+                                <li><strong>Geometry</strong> - Géométrie spatiale</li>
+                                <li><strong>Json</strong> - Données JSON structurées</li>
+                                <li><strong>Xml</strong> - Données XML</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>IndexType : enum</h4>
+                            <ul>
+                                <li><strong>None</strong> - Pas d'index</li>
+                                <li><strong>BTree</strong> - Index B-Tree standard</li>
+                                <li><strong>Hash</strong> - Index de hachage</li>
+                                <li><strong>Spatial</strong> - Index spatial (R-Tree)</li>
+                                <li><strong>FullText</strong> - Index recherche textuelle</li>
+                                <li><strong>Unique</strong> - Index avec contrainte unicité</li>
+                                <li><strong>Composite</strong> - Index multi-colonnes</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ValidationLevel : enum</h4>
+                            <ul>
+                                <li><strong>None</strong> - Pas de validation</li>
+                                <li><strong>Basic</strong> - Types et contraintes simples</li>
+                                <li><strong>Standard</strong> - Validation complète</li>
+                                <li><strong>Strict</strong> - Validation stricte + règles métier</li>
+                                <li><strong>Custom</strong> - Validation personnalisée</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ConstraintType : enum</h4>
+                            <ul>
+                                <li><strong>NotNull</strong> - Valeur obligatoire</li>
+                                <li><strong>Unique</strong> - Valeur unique</li>
+                                <li><strong>Range</strong> - Plage de valeurs</li>
+                                <li><strong>Length</strong> - Longueur min/max</li>
+                                <li><strong>Pattern</strong> - Expression régulière</li>
+                                <li><strong>ForeignKey</strong> - Clé étrangère</li>
+                                <li><strong>Custom</strong> - Validation personnalisée</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- schema-constraints-system-detail.html -->
+<div class="card">
+                    <h2>Système de Contraintes</h2>
+                    
+                    <div class="file-structure"><strong>SchemaConstraint : abstract class</strong> - Contrainte de base au niveau schéma
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; } - Nom unique contrainte
+│   ├── ConstraintType Type { get; } - Type de contrainte
+│   ├── string Description { get; set; } - Description contrainte
+│   ├── bool IsEnabled { get; set; } - Contrainte activée
+│   ├── string ErrorMessage { get; set; } - Message erreur personnalisé
+│   └── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres contrainte
+├── <strong>Methods :</strong>
+│   ├── abstract ValidationResult Validate(Dictionary&lt;string, object&gt; values) - Validation
+│   ├── abstract SchemaConstraint Clone() - Copie contrainte
+│   ├── virtual string GetDescription() - Description détaillée
+│   └── virtual void Configure(Dictionary&lt;string, object&gt; config) - Configuration
+
+<strong>FieldConstraint : SchemaConstraint</strong> - Contrainte niveau champ
+├── <strong>Properties :</strong>
+│   ├── string FieldName { get; set; } - Champ cible
+│   ├── object Value { get; set; } - Valeur référence (si applicable)
+│   ├── object MinValue { get; set; } - Valeur minimale
+│   ├── object MaxValue { get; set; } - Valeur maximale
+│   └── string Pattern { get; set; } - Motif regex
+├── <strong>Implementations :</strong>
+│   ├── NotNullConstraint - Valeur non-null obligatoire
+│   ├── UniqueConstraint - Unicité valeur dans table
+│   ├── RangeConstraint - Valeur dans plage définie
+│   ├── LengthConstraint - Longueur texte min/max
+│   ├── PatternConstraint - Correspondance expression régulière
+│   └── CustomConstraint - Validation par fonction personnalisée
+
+<strong>ReferentialConstraint : SchemaConstraint</strong> - Contrainte référentielle
+├── <strong>Properties :</strong>
+│   ├── string ReferencedTable { get; set; } - Table référencée
+│   ├── string ReferencedField { get; set; } - Champ référencé
+│   ├── string LocalField { get; set; } - Champ local
+│   ├── ReferentialAction OnUpdate { get; set; } - Action mise à jour
+│   ├── ReferentialAction OnDelete { get; set; } - Action suppression
+│   └── bool AllowNullReference { get; set; } - Référence null autorisée
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ValidateReference(object value) - Validation référence
+│   ├── bool ReferenceExists(object value) - Test existence référence
+│   └── void SetCascadeActions(ReferentialAction update, ReferentialAction delete) - Actions cascade
+
+<strong>NotNullConstraint : FieldConstraint</strong> - Contrainte valeur non-null
+├── <strong>Properties :</strong>
+│   ├── bool TreatEmptyStringAsNull { get; set; } - Chaîne vide = null
+│   ├── bool TreatWhitespaceAsNull { get; set; } - Espaces = null
+│   └── object[] NullEquivalents { get; set; } - Valeurs équivalentes à null
+├── <strong>Methods :</strong>
+│   ├── bool IsNullOrEquivalent(object value) - Test valeur null ou équivalent
+│   └── ValidationResult Validate(object value) - Validation spécialisée
+
+<strong>UniqueConstraint : FieldConstraint</strong> - Contrainte unicité
+├── <strong>Properties :</strong>
+│   ├── bool CaseSensitive { get; set; } - Sensible à la casse
+│   ├── bool IgnoreWhitespace { get; set; } - Ignorer espaces début/fin
+│   ├── HashSet&lt;object&gt; ExistingValues { get; } - Valeurs existantes (cache)
+│   └── Func&lt;object, object&gt; NormalizeFunction { get; set; } - Fonction normalisation
+├── <strong>Methods :</strong>
+│   ├── void AddExistingValue(object value) - Ajout valeur existante
+│   ├── void RemoveExistingValue(object value) - Suppression valeur existante
+│   ├── void ClearExistingValues() - Vidage cache valeurs
+│   ├── object NormalizeValue(object value) - Normalisation valeur
+│   └── bool IsValueUnique(object value) - Test unicité
+
+<strong>RangeConstraint : FieldConstraint</strong> - Contrainte plage de valeurs
+├── <strong>Properties :</strong>
+│   ├── object MinValue { get; set; } - Valeur minimale inclusive
+│   ├── object MaxValue { get; set; } - Valeur maximale inclusive
+│   ├── bool MinInclusive { get; set; } - Minimum inclusif
+│   ├── bool MaxInclusive { get; set; } - Maximum inclusif
+│   ├── IComparer Comparer { get; set; } - Comparateur personnalisé
+│   └── Type ValueType { get; set; } - Type valeurs attendu
+├── <strong>Methods :</strong>
+│   ├── bool IsInRange(object value) - Test dans plage
+│   ├── ValidationResult ValidateRange(object value) - Validation plage
+│   ├── void SetRange(object min, object max, bool minInclusive, bool maxInclusive) - Configuration
+│   └── string GetRangeDescription() - Description plage lisible
+
+<strong>LengthConstraint : FieldConstraint</strong> - Contrainte longueur texte
+├── <strong>Properties :</strong>
+│   ├── int MinLength { get; set; } - Longueur minimale
+│   ├── int MaxLength { get; set; } - Longueur maximale
+│   ├── bool TrimWhitespace { get; set; } - Ignorer espaces début/fin
+│   ├── bool CountUnicodeGraphemes { get; set; } - Compter graphèmes Unicode
+│   └── Encoding TextEncoding { get; set; } - Encodage pour calcul longueur
+├── <strong>Methods :</strong>
+│   ├── int GetEffectiveLength(string text) - Longueur effective
+│   ├── bool IsValidLength(string text) - Test longueur valide
+│   ├── ValidationResult ValidateLength(object value) - Validation longueur
+│   └── string GetLengthDescription() - Description contrainte
+
+<strong>PatternConstraint : FieldConstraint</strong> - Contrainte expression régulière
+├── <strong>Properties :</strong>
+│   ├── string Pattern { get; set; } - Expression régulière
+│   ├── RegexOptions Options { get; set; } - Options regex
+│   ├── Regex CompiledRegex { get; } - Regex compilé (cache)
+│   ├── int TimeoutMs { get; set; } - Timeout évaluation (ms)
+│   └── string PatternDescription { get; set; } - Description lisible motif
+├── <strong>Methods :</strong>
+│   ├── bool IsMatch(string text) - Test correspondance motif
+│   ├── Match GetMatch(string text) - Détails correspondance
+│   ├── ValidationResult ValidatePattern(object value) - Validation motif
+│   ├── void SetPattern(string pattern, RegexOptions options) - Configuration motif
+│   └── string[] GetCaptureGroups(string text) - Groupes capturés
+
+<strong>CustomConstraint : FieldConstraint</strong> - Contrainte validation personnalisée
+├── <strong>Properties :</strong>
+│   ├── Func&lt;object, ValidationResult&gt; ValidationFunction { get; set; } - Fonction validation
+│   ├── string FunctionDescription { get; set; } - Description fonction
+│   ├── Dictionary&lt;string, object&gt; Context { get; } - Contexte validation
+│   └── bool UseAsyncValidation { get; set; } - Validation asynchrone
+├── <strong>Methods :</strong>
+│   ├── ValidationResult ExecuteValidation(object value) - Exécution validation
+│   ├── Task&lt;ValidationResult&gt; ExecuteValidationAsync(object value) - Version async
+│   ├── void SetValidationFunction(Func&lt;object, ValidationResult&gt; func) - Configuration fonction
+│   └── void SetContext(string key, object value) - Définition contexte
+
+<strong>CompositeConstraint : SchemaConstraint</strong> - Contrainte composite multi-champs
+├── <strong>Properties :</strong>
+│   ├── List&lt;SchemaConstraint&gt; ChildConstraints { get; } - Contraintes enfants
+│   ├── CompositeOperator Operator { get; set; } - Opérateur logique (AND/OR)
+│   ├── bool ShortCircuitEvaluation { get; set; } - Évaluation court-circuit
+│   └── int MaxFailures { get; set; } - Nombre max échecs autorisés
+├── <strong>Methods :</strong>
+│   ├── void AddConstraint(SchemaConstraint constraint) - Ajout contrainte enfant
+│   ├── bool RemoveConstraint(SchemaConstraint constraint) - Suppression contrainte
+│   ├── ValidationResult ValidateComposite(Dictionary&lt;string, object&gt; values) - Validation composite
+│   ├── void SetOperator(CompositeOperator op) - Définition opérateur logique
+│   └── SchemaConstraint[] GetFailedConstraints() - Contraintes échouées
+
+<strong>IndexDefinition : class</strong> - Définition d'index
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; } - Nom index
+│   ├── IndexType Type { get; set; } - Type index
+│   ├── string[] FieldNames { get; set; } - Champs indexés
+│   ├── bool IsUnique { get; set; } - Index unique
+│   ├── bool IsClustered { get; set; } - Index clustered
+│   ├── string WhereClause { get; set; } - Clause WHERE filtrée
+│   └── Dictionary&lt;string, object&gt; IndexOptions { get; } - Options spécifiques
+├── <strong>Methods :</strong>
+│   ├── bool IsComposite() - Test index composite
+│   ├── bool CoversField(string fieldName) - Test couverture champ
+│   ├── string GenerateDDL() - Génération DDL création
+│   └── IndexDefinition Clone() - Copie définition
+
+<strong>ValidationContext : class</strong> - Contexte validation
+├── <strong>Properties :</strong>
+│   ├── FeatureSchema Schema { get; } - Schéma validé
+│   ├── Dictionary&lt;string, object&gt; Values { get; } - Valeurs à valider
+│   ├── ValidationLevel Level { get; set; } - Niveau validation
+│   ├── bool StopOnFirstError { get; set; } - Arrêt première erreur
+│   ├── FeatureCollection DataContext { get; set; } - Contexte données
+│   └── Dictionary&lt;string, object&gt; ExternalContext { get; } - Contexte externe
+├── <strong>Methods :</strong>
+│   ├── object GetValue(string fieldName) - Récupération valeur champ
+│   ├── bool HasValue(string fieldName) - Test existence valeur
+│   ├── void SetExternalContext(string key, object value) - Contexte externe
+│   └── ValidationContext CreateChildContext() - Contexte enfant</div>
+                </div>
+
+
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="code-block">// Création d'un schéma complet pour bâtiments
+FeatureSchema buildingSchema = new FeatureSchema("Buildings", GeometryType.Polygon);
+buildingSchema.Description = "Schéma pour données bâtiments commerciaux";
+buildingSchema.SpatialReference = SpatialReference.UTMZone(18, true);
+
+// Champ ID auto-incrémenté (clé primaire)
+FieldInfo idField = FieldInfo.CreateObjectID("BuildingID");
+idField.IsPrimaryKey = true;
+buildingSchema.AddField(idField);
+
+// Champs descriptifs avec contraintes
+FieldInfo nameField = FieldInfo.CreateText("Name", 100, false);
+nameField.Description = "Nom du bâtiment";
+nameField.IsRequired = true;
+nameField.AddConstraint(new LengthConstraint("NameLength", 5, 100, "Le nom doit contenir entre 5 et 100 caractères"));
+buildingSchema.AddField(nameField);
+
+FieldInfo typeField = FieldInfo.CreateText("BuildingType", 50, false);
+typeField.SetAllowedValues("Residential", "Commercial", "Industrial", "Public", "Mixed");
+typeField.DefaultValue = "Commercial";
+buildingSchema.AddField(typeField);
+
+// Champ numérique avec plage
+FieldInfo areaField = FieldInfo.CreateDouble("Area", 10, 2);
+areaField.Description = "Surface en mètres carrés";
+areaField.AddConstraint(new RangeConstraint("AreaRange", 10.0, 50000.0, "La surface doit être entre 10 et 50,000 m²"));
+buildingSchema.AddField(areaField);
+
+// Champ entier avec valeur par défaut
+FieldInfo floorsField = FieldInfo.CreateInteger("Floors", true);
+floorsField.DefaultValue = 1;
+floorsField.SetRange(1, 50);
+buildingSchema.AddField(floorsField);
+
+// Index pour optimisation requêtes
+buildingSchema.AddIndex("BuildingType", IndexType.BTree);
+buildingSchema.AddIndex("Area", IndexType.BTree);
+buildingSchema.AddCompositeIndex("TypeAreaIndex", new[] { "BuildingType", "Area" });
+
+// Validation du schéma complet
+ValidationResult schemaValidation = buildingSchema.ValidateSchema();
+if (schemaValidation.IsValid)
+{
+    Console.WriteLine("Schéma valide");
+}
+
+// Test validation données contre schéma
+Dictionary&lt;string, object&gt; testData = new Dictionary&lt;string, object&gt;
+{
+    ["Name"] = "Centre Commercial ABC",
+    ["BuildingType"] = "Commercial", 
+    ["Area"] = 2500.75,
+    ["Floors"] = 2,
+    ["ConstructionDate"] = new DateTime(2020, 5, 15),
+    ["IsAccessible"] = true,
+    ["OwnerID"] = "OWNER_123"
+};
+
+ValidationResult dataValidation = buildingSchema.ValidateConstraints(testData);
+if (dataValidation.IsValid)
+{
+    Console.WriteLine("Données conformes au schéma");
+}
+
+// Création schéma depuis fichier existant
+FeatureSchema shapeSchema = FeatureSchema.CreateFromShapefile("buildings.shp");
+FeatureSchema csvSchema = FeatureSchema.CreateFromCSV("data.csv", true);
+
+// Comparaison et fusion de schémas
+CompatibilityReport compatibility = buildingSchema.CompareWith(shapeSchema);
+if (compatibility.IsCompatible)
+{
+    FeatureSchema mergedSchema = buildingSchema.Merge(shapeSchema);
+    Console.WriteLine($"Schéma fusionné avec {mergedSchema.Fields.Count} champs");
+}</div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-renderers.html">← Moteurs de Rendu</a></h4>
+                            <p>Système de rendu cartographique</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-query-filter.html">→ Système de Requêtes</a></h4>
+                            <p>Filtrage et sélection</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="donnees-geospatiales.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage des schémas dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

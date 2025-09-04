@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structure du Code - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link active">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>🏗️ Structure du Code Source</h1>
+                
+                <div class="card">
+                    <h2>Organisation Générale du Projet</h2>
+                    <div class="file-structure">
+Trifide360/
+├── 📁 Source/                          # Code source principal
+│   ├── 📄 Main.xaml.cs                 # (7000+ lignes) Contrôleur principal
+│   ├── 📄 Main.xaml                    # Interface WPF principale
+│   ├── 📄 App.xaml.cs                  # (200 lignes) Point d'entrée
+│   ├── 📄 App.xaml                     # Configuration application
+│   └── 📄 AssemblyInfo.cs              # Métadonnées assembly
+├── 📁 GISMind/                         # Bibliothèque géométrique propriétaire
+│   ├── 📁 Geometry/                    # Classes géométriques de base
+│   │   ├── 📄 Geometry.cs              # Classe abstraite de base
+│   │   ├── 📄 Point.cs                 # Géométrie point 3D + opérateurs
+│   │   ├── 📄 Polyline.cs              # Géométrie polyligne
+│   │   ├── 📄 Polygon.cs               # Géométrie polygone
+│   │   ├── 📄 MultiPoint.cs            # Collections de points
+│   │   ├── 📄 MultiPatch.cs            # Géométries 3D complexes
+│   │   └── 📄 GeometryEngine.cs        # Moteur calculs géométriques
+│   ├── 📁 GIS/                         # Utilitaires SIG
+│   │   ├── 📄 ProjectionHelper.cs      # Transformations coordonnées
+│   │   ├── 📄 SpatialReference.cs      # Systèmes de référence
+│   │   └── 📄 CoordinateSystem.cs      # Systèmes de coordonnées
+│   └── 📁 Mathematics/                 # Calculs géodésiques
+│       ├── 📄 GeodeticCalculations.cs  # Calculs géodésiques précis
+│       ├── 📄 MatrixOperations.cs      # Opérations matricielles
+│       └── 📄 StatisticsEngine.cs      # Analyses statistiques
+├── 📁 IO/                              # Gestion entrées/sorties
+│   ├── 📁 Readers/                     # Lecteurs de fichiers
+│   │   ├── 📄 ShapeFileReader.cs       # Import Shapefile
+│   │   ├── 📄 LASReader.cs             # Import nuages points LAS
+│   │   ├── 📄 CSVReader.cs             # Import données tabulaires
+│   │   ├── 📄 MXReader.cs              # Import Mobile Mapping
+│   │   └── 📄 E57Reader.cs             # Import scans 3D E57
+│   ├── 📁 Writers/                     # Exportateurs
+│   │   ├── 📄 UniversalWriter.cs       # Export multi-format
+│   │   ├── 📄 ShapeFileWriter.cs       # Export Shapefile
+│   │   └── 📄 ReportGenerator.cs       # Génération rapports
+│   └── 📄 FileValidator.cs             # Validation formats
+├── 📁 UI/                              # Interface utilisateur
+│   ├── 📁 Controls/                    # Contrôles personnalisés WPF
+│   │   ├── 📄 MapViewControl.xaml      # Contrôle carte principal
+│   │   ├── 📄 LayerTreeView.xaml       # Arbre des couches
+│   │   ├── 📄 AttributeEditor.xaml     # Éditeur d'attributs
+│   │   └── 📄 ToolbarControls.xaml     # Barres d'outils
+│   ├── 📁 Dialogs/                     # Fenêtres modales
+│   │   ├── 📄 ImportDialog.xaml        # Assistant import
+│   │   ├── 📄 ExportDialog.xaml        # Assistant export
+│   │   ├── 📄 SymbologyDialog.xaml     # Configuration symboles
+│   │   ├── 📄 ProjectionDialog.xaml    # Sélection projections
+│   │   └── 📄 SettingsDialog.xaml      # Paramètres application
+│   └── 📁 Themes/                      # Thèmes visuels
+│       ├── 📄 LightTheme.xaml          # Thème clair
+│       ├── 📄 DarkTheme.xaml           # Thème sombre
+│       └── 📄 HighContrastTheme.xaml   # Thème contraste élevé
+├── 📁 Data/                            # Gestion des données
+│   ├── 📄 FeatureTableManager.cs       # Gestionnaire tables entités
+│   ├── 📄 LayerManager.cs              # Gestionnaire couches
+│   ├── 📄 ProjectManager.cs            # Gestion projets
+│   └── 📄 CacheManager.cs              # Gestion cache données
+├── 📁 Unity/                           # Intégration Unity 3D
+│   ├── 📄 UnityController.cs           # Contrôleur Unity
+│   ├── 📄 IPCManager.cs                # Communication inter-processus
+│   ├── 📄 MemoryMappedCommunication.cs # Memory-mapped files
+│   └── 📄 Unity3DCommands.cs           # Commandes Unity
+├── 📁 Utilities/                       # Utilitaires transversaux
+│   ├── 📄 Extension.cs                 # Méthodes d'extension
+│   ├── 📄 Logger.cs                    # Système de logging
+│   ├── 📄 NumberConverter.cs           # Conversions numériques DBF
+│   ├── 📄 ConfigurationManager.cs      # Gestion configuration
+│   └── 📄 PerformanceMonitor.cs        # Monitoring performances
+├── 📁 Resources/                       # Ressources application
+│   ├── 📁 Icons/                       # Icônes interface
+│   ├── 📁 Localization/                # Fichiers de traduction
+│   │   ├── 📄 Resources.fr.resx        # Français
+│   │   ├── 📄 Resources.en.resx        # Anglais
+│   │   └── 📄 Resources.es.resx        # Espagnol
+│   └── 📁 Templates/                   # Modèles et templates
+└── 📁 Tests/                           # Tests unitaires et intégration
+    ├── 📄 GeometryTests.cs             # Tests géométrie
+    ├── 📄 IOTests.cs                   # Tests entrées/sorties
+    └── 📄 IntegrationTests.cs          # Tests d'intégration
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Responsabilités Détaillées par Composant</h2>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Composant</th>
+                                <th>Responsabilité Principale</th>
+                                <th>Taille Approximative</th>
+                                <th>Dépendances Critiques</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Main.xaml.cs</strong></td>
+                                <td>Orchestration générale, gestionnaires événements UI, coordination modules</td>
+                                <td>7000+ lignes</td>
+                                <td>WPF, Syncfusion, ArcGIS Runtime</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GISMind.Geometry</strong></td>
+                                <td>Classes géométriques de base avec opérateurs surchargés et validations</td>
+                                <td>2000+ lignes</td>
+                                <td>System.Numerics, Custom Math</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IO.Readers</strong></td>
+                                <td>Import multi-formats avec validation et parsing optimisé</td>
+                                <td>1500+ lignes</td>
+                                <td>File I/O, Format Libraries</td>
+                            </tr>
+                            <tr>
+                                <td><strong>UI.Controls</strong></td>
+                                <td>Contrôles WPF personnalisés et interfaces utilisateur spécialisées</td>
+                                <td>3000+ lignes</td>
+                                <td>WPF, Syncfusion Controls</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Unity Integration</strong></td>
+                                <td>Communication inter-processus et coordination 3D temps réel</td>
+                                <td>800+ lignes</td>
+                                <td>TCP/IP, Memory-Mapped Files</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Data Management</strong></td>
+                                <td>Gestion états applications, projets et cache données</td>
+                                <td>1200+ lignes</td>
+                                <td>ArcGIS FeatureTables</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>Dépendances Externes Critiques</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🏢 Syncfusion UI Framework</h4>
+                            <p><span class="badge">Licence Commerciale</span></p>
+                            <ul>
+                                <li><strong>Version :</strong> 20.4.0.58 ou supérieure</li>
+                                <li><strong>Composants utilisés :</strong> Docking Manager, Grid, Charts, Ribbon</li>
+                                <li><strong>Impact :</strong> Interface utilisateur complète</li>
+                                <li><strong>Alternatives :</strong> DevExpress (coût élevé), Telerik (migration complexe)</li>
+                                <li><strong>Risques :</strong> Dépendance licence, coût récurrent</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🗺️ ArcGIS Runtime SDK</h4>
+                            <p><span class="badge">SDK Licencié ESRI</span></p>
+                            <ul>
+                                <li><strong>Version :</strong> 100.15 ou supérieure</li>
+                                <li><strong>Fonctionnalités :</strong> MapView, FeatureTables, Renderers, Symbology</li>
+                                <li><strong>Impact :</strong> Cœur fonctionnel cartographique</li>
+                                <li><strong>Alternatives :</strong> MapBox (web-oriented), OpenLayers (JavaScript)</li>
+                                <li><strong>Risques :</strong> Coût par déploiement, évolutions API</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📋 NLog Framework</h4>
+                            <p><span class="badge">Open Source</span></p>
+                            <ul>
+                                <li><strong>Version :</strong> 5.2.0 ou supérieure</li>
+                                <li><strong>Usage :</strong> Logging structuré, audit, diagnostic</li>
+                                <li><strong>Impact :</strong> Système de traçabilité complet</li>
+                                <li><strong>Alternatives :</strong> Serilog, log4net</li>
+                                <li><strong>Avantages :</strong> Gratuit, performant, flexible</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎮 Unity Engine Integration</h4>
+                            <p><span class="badge">Processus Externe</span></p>
+                            <ul>
+                                <li><strong>Version :</strong> Unity 2022.3 LTS ou supérieure</li>
+                                <li><strong>Communication :</strong> TCP + Memory-Mapped Files</li>
+                                <li><strong>Impact :</strong> Visualisation 3D et panoramas</li>
+                                <li><strong>Alternatives :</strong> DirectX natif (complexité élevée)</li>
+                                <li><strong>Avantages :</strong> Rendu haute performance, écosystème riche</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Métriques de Complexité du Code</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📊 Statistiques Générales</h4>
+                            <ul>
+                                <li><strong>Total lignes de code :</strong> ~15,000 lignes C#</li>
+                                <li><strong>Fichiers source :</strong> ~60 fichiers .cs</li>
+                                <li><strong>Classes principales :</strong> ~40 classes métier</li>
+                                <li><strong>Interfaces :</strong> ~15 contrats d'abstraction</li>
+                                <li><strong>Méthodes publiques :</strong> ~200 points d'entrée</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔧 Complexité par Module</h4>
+                            <ul>
+                                <li><strong>Main.xaml.cs :</strong> Complexité élevée (orchestration)</li>
+                                <li><strong>GISMind.Geometry :</strong> Complexité moyenne (calculs)</li>
+                                <li><strong>IO.Readers :</strong> Complexité moyenne (parsing)</li>
+                                <li><strong>UI.Controls :</strong> Complexité faible (présentation)</li>
+                                <li><strong>Unity Integration :</strong> Complexité élevée (IPC)</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Points d'Attention</h4>
+                            <ul>
+                                <li><strong>Main.xaml.cs :</strong> Monolithique, difficile à maintenir</li>
+                                <li><strong>Memory leaks :</strong> Gestion événements ArcGIS</li>
+                                <li><strong>Thread safety :</strong> Accès concurrent données</li>
+                                <li><strong>Performance :</strong> Chargement gros fichiers</li>
+                                <li><strong>Error handling :</strong> Gestion robuste exceptions</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Évolution et Maintenance</h4>
+                            <ul>
+                                <li><strong>Testabilité :</strong> Limitée par couplage fort</li>
+                                <li><strong>Extensibilité :</strong> Ajout formats difficile</li>
+                                <li><strong>Documentation :</strong> Code faiblement documenté</li>
+                                <li><strong>Patterns :</strong> Peu de design patterns appliqués</li>
+                                <li><strong>Refactoring :</strong> Risques élevés modifications</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Architecture des Assemblies</h2>
+                    
+                    <div class="flow-diagram">
+                        <h4>Dépendances entre Assemblies</h4>
+                        <div class="code-block">
+Trifide360.exe (Application principale)
+    ↓ référence
+GISMind.dll (Géométrie propriétaire)
+    ↓ utilise
+ArcGIS.Runtime.dll (Cartographie ESRI)
+    ↓ référence
+Syncfusion.*.dll (Interface utilisateur)
+    ↓ utilise
+NLog.dll (Logging)
+    ↓ communique avec
+Unity3DViewer.exe (Processus externe 3D)
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h4>🏗️ Modularité et Couplage</h4>
+                        <ul>
+                            <li><strong>Couplage fort :</strong> Main.xaml.cs dépend de tous les modules</li>
+                            <li><strong>Separation of Concerns :</strong> Partiellement respectée</li>
+                            <li><strong>Dependency Injection :</strong> Non implémentée (opportunité d'amélioration)</li>
+                            <li><strong>Interface Segregation :</strong> Interfaces trop larges</li>
+                            <li><strong>Single Responsibility :</strong> Violations dans contrôleur principal</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="creation-interactive.html">⬅️ Création Interactive</a></h4>
+                            <p>Outils d'édition et projets</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="mapping-fonctions-code.html">➡️ Mapping Fonctions ↔ Code</a></h4>
+                            <p>Correspondances fonctionnalités</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">➡️ Hiérarchie des Classes</a></h4>
+                            <p>Organisation orientée objet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="vue-ensemble.html">⬅️ Vue d'Ensemble</a></h4>
+                            <p>Architecture générale</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

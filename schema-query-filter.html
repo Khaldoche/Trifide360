@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Requêtes - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>4. Système de Requêtes - Filtrage et Sélection</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système de Requêtes</h2>
+                    <p>Le système de requêtes de Trifide 360 permet la sélection et le filtrage avancés des données géospatiales. Il combine requêtes attributaires, spatiales et temporelles dans une architecture unifiée supportant des expressions complexes et des optimisations de performance.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>QueryFilter</h4>
+                            <p>Requêtes attributaires de base</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>SpatialFilter</h4>
+                            <p>Requêtes géométriques</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>QueryBuilder</h4>
+                            <p>Construction de requêtes</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>FilterExpression</h4>
+                            <p>Expressions complexes</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>QueryExecutor</h4>
+                            <p>Exécution optimisée</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ResultSet</h4>
+                            <p>Gestion résultats</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- query-filter-base-detail.html -->
+<div class="card">
+                    <h2>QueryFilter - Requêtes Attributaires de Base</h2>
+                    
+                    <div class="file-structure"><strong>QueryFilter : ICloneable</strong> - Classe de base pour requêtes attributaires
+├── <strong>Properties Core :</strong>
+│   ├── string WhereClause { get; set; } - Clause WHERE SQL
+│   ├── string[] OutputFields { get; set; } - Champs à retourner
+│   ├── string[] OrderByFields { get; set; } - Champs de tri
+│   ├── bool ReturnGeometry { get; set; } - Inclure géométrie
+│   ├── int MaxFeatures { get; set; } - Limite nombre résultats
+│   └── int StartIndex { get; set; } - Index début (pagination)
+├── <strong>Properties Configuration :</strong>
+│   ├── bool DistinctValues { get; set; } - Valeurs distinctes uniquement
+│   ├── string GroupByFields { get; set; } - Champs de regroupement
+│   ├── string HavingClause { get; set; } - Clause HAVING
+│   ├── bool CaseSensitive { get; set; } - Comparaison sensible casse
+│   ├── CultureInfo Culture { get; set; } - Culture comparaisons
+│   └── TimeZoneInfo TimeZone { get; set; } - Fuseau horaire dates
+├── <strong>Properties Métadata :</strong>
+│   ├── string QueryName { get; set; } - Nom requête
+│   ├── string Description { get; set; } - Description
+│   ├── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres nommés
+│   ├── bool UseParameterizedQuery { get; set; } - Requête paramétrisée
+│   └── QueryStatistics Statistics { get; } - Statistiques exécution
+├── <strong>Constructors :</strong>
+│   ├── QueryFilter() - Filtre vide
+│   ├── QueryFilter(string whereClause) - Avec clause WHERE
+│   ├── QueryFilter(string whereClause, string[] outputFields) - Complet basique
+│   └── QueryFilter(QueryFilter source) - Copie depuis autre filtre
+├── <strong>Methods - Construction WHERE :</strong>
+│   ├── void SetWhereClause(string clause) - Définition clause WHERE
+│   ├── void AppendWhereClause(string clause, LogicalOperator op) - Ajout condition
+│   ├── void AddCondition(string fieldName, ComparisonOperator op, object value) - Condition simple
+│   ├── void AddInCondition(string fieldName, object[] values) - Condition IN
+│   ├── void AddBetweenCondition(string fieldName, object minValue, object maxValue) - BETWEEN
+│   ├── void AddLikeCondition(string fieldName, string pattern) - Pattern matching
+│   ├── void AddNullCondition(string fieldName, bool isNull) - Test NULL
+│   └── void ClearWhereClause() - Suppression clause WHERE
+├── <strong>Methods - Gestion Champs :</strong>
+│   ├── void SetOutputFields(params string[] fields) - Définition champs sortie
+│   ├── void AddOutputField(string fieldName) - Ajout champ sortie
+│   ├── void RemoveOutputField(string fieldName) - Suppression champ sortie
+│   ├── bool HasOutputField(string fieldName) - Test présence champ
+│   ├── void SetAllFields() - Sélection tous champs (*)
+│   ├── void SetGeometryOnly() - Géométrie uniquement
+│   └── void ClearOutputFields() - Suppression tous champs
+├── <strong>Methods - Tri et Pagination :</strong>
+│   ├── void AddOrderBy(string fieldName, SortOrder order) - Ajout tri
+│   ├── void SetOrderBy(params string[] orderByFields) - Définition tri complet
+│   ├── void ClearOrderBy() - Suppression tri
+│   ├── void SetPagination(int startIndex, int maxFeatures) - Configuration pagination
+│   ├── void SetLimit(int maxFeatures) - Limite simple
+│   ├── QueryFilter GetNextPage() - Page suivante
+│   └── QueryFilter GetPreviousPage() - Page précédente
+├── <strong>Methods - Paramètres :</strong>
+│   ├── void AddParameter(string name, object value) - Ajout paramètre nommé
+│   ├── void RemoveParameter(string name) - Suppression paramètre
+│   ├── object GetParameter(string name) - Récupération paramètre
+│   ├── bool HasParameter(string name) - Test existence paramètre
+│   ├── void ClearParameters() - Suppression tous paramètres
+│   └── string GetParameterizedQuery() - Requête avec paramètres
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult ValidateQuery(FeatureSchema schema) - Validation contre schéma
+│   ├── bool IsValidFieldName(string fieldName, FeatureSchema schema) - Validation nom champ
+│   ├── bool IsValidWhereClause() - Validation syntaxe WHERE
+│   ├── string[] GetReferencedFields() - Champs référencés dans WHERE
+│   └── QueryComplexity GetComplexity() - Évaluation complexité
+├── <strong>Methods - Utilitaires :</strong>
+│   ├── QueryFilter Clone() - Copie profonde
+│   ├── void CopyFrom(QueryFilter source) - Copie configuration
+│   ├── string ToSQL() - Conversion SQL standard
+│   ├── string ToString() - Représentation textuelle
+│   ├── bool Equals(QueryFilter other) - Comparaison filtres
+│   └── void Reset() - Remise à zéro complet
+└── <strong>Static Helpers :</strong>
+    ├── QueryFilter CreateEmpty() - Filtre vide
+    ├── QueryFilter CreateSelectAll() - Sélection complète
+    ├── QueryFilter CreateFromSQL(string sql) - Parsing SQL
+    └── string EscapeValue(object value) - Échappement valeurs
+
+<strong>AttributeFilter : QueryFilter</strong> - Filtre attributaire spécialisé
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, ComparisonCondition&gt; Conditions { get; } - Conditions par champ
+│   ├── LogicalOperator DefaultOperator { get; set; } - Opérateur par défaut
+│   ├── bool AutoGenerateWhereClause { get; set; } - Génération auto WHERE
+│   └── CaseSensitivity CaseSensitivity { get; set; } - Gestion casse
+├── <strong>Methods :</strong>
+│   ├── AttributeFilter AddCondition(string field, ComparisonOperator op, object value) - Fluent API
+│   ├── AttributeFilter And(string field, ComparisonOperator op, object value) - Condition AND
+│   ├── AttributeFilter Or(string field, ComparisonOperator op, object value) - Condition OR
+│   ├── void RemoveCondition(string fieldName) - Suppression condition
+│   ├── void UpdateWhereClause() - Génération WHERE depuis conditions
+│   └── AttributeFilter Optimize() - Optimisation conditions
+
+<strong>TemporalFilter : QueryFilter</strong> - Filtre temporel spécialisé
+├── <strong>Properties :</strong>
+│   ├── string DateField { get; set; } - Champ date principal
+│   ├── DateTime? StartDate { get; set; } - Date début période
+│   ├── DateTime? EndDate { get; set; } - Date fin période
+│   ├── TimeSpan? Duration { get; set; } - Durée période
+│   ├── TemporalRelation Relation { get; set; } - Relation temporelle
+│   └── DateTimeKind DateTimeKind { get; set; } - Type DateTime
+├── <strong>Methods :</strong>
+│   ├── void SetDateRange(DateTime start, DateTime end) - Définition période
+│   ├── void SetRelativeDate(TimeSpan offset) - Date relative
+│   ├── void SetCurrentDate() - Date actuelle
+│   ├── void SetLastDays(int days) - N derniers jours
+│   ├── void SetLastMonths(int months) - N derniers mois
+│   ├── void SetLastYears(int years) - N dernières années
+│   └── void UpdateTemporalClause() - Mise à jour clause temporelle
+
+<strong>ComparisonCondition : class</strong> - Condition de comparaison
+├── <strong>Properties :</strong>
+│   ├── string FieldName { get; set; } - Champ comparé
+│   ├── ComparisonOperator Operator { get; set; } - Opérateur comparaison
+│   ├── object Value { get; set; } - Valeur référence
+│   ├── object SecondValue { get; set; } - Seconde valeur (BETWEEN)
+│   ├── bool CaseSensitive { get; set; } - Sensible casse
+│   └── bool IgnoreAccents { get; set; } - Ignorer accents
+├── <strong>Methods :</strong>
+│   ├── bool Evaluate(Dictionary&lt;string, object&gt; values) - Évaluation condition
+│   ├── string ToWhereClause() - Conversion clause WHERE
+│   ├── ComparisonCondition Negate() - Négation condition
+│   └── ValidationResult Validate(FeatureSchema schema) - Validation
+
+<strong>QueryStatistics : class</strong> - Statistiques exécution requête
+├── <strong>Properties :</strong>
+│   ├── DateTime ExecutionTime { get; } - Moment exécution
+│   ├── TimeSpan Duration { get; set; } - Durée exécution
+│   ├── int ResultCount { get; set; } - Nombre résultats
+│   ├── int TotalCount { get; set; } - Total sans limite
+│   ├── bool UsedIndex { get; set; } - Index utilisé
+│   ├── string[] IndexesUsed { get; set; } - Index utilisés
+│   ├── long MemoryUsed { get; set; } - Mémoire consommée
+│   └── string ExecutionPlan { get; set; } - Plan d'exécution
+└── <strong>Methods :</strong>
+    ├── void StartTiming() - Début chronométrage
+    ├── void StopTiming() - Fin chronométrage
+    ├── string GetPerformanceReport() - Rapport performance
+    └── void Reset() - Remise à zéro statistiques</div>
+                </div>
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- spatial-filter-detail.html -->
+<div class="card">
+                    <h2>SpatialQueryFilter - Requêtes Géométriques Spécialisées</h2>
+                    
+                    <div class="file-structure"><strong>SpatialQueryFilter : QueryFilter</strong> - Requêtes avec composante géométrique
+├── <strong>Properties Core :</strong>
+│   ├── Geometry FilterGeometry { get; set; } - Géométrie de filtrage
+│   ├── SpatialRelationship SpatialRelationship { get; set; } - Relation spatiale
+│   ├── SpatialReference SpatialReference { get; set; } - Système de coordonnées
+│   ├── double SearchDistance { get; set; } - Distance recherche (buffer)
+│   ├── LinearUnit DistanceUnit { get; set; } - Unité distance
+│   └── bool UseGeometryPrecision { get; set; } - Précision géométrique
+├── <strong>Properties Optimisation :</strong>
+│   ├── bool UseSpatialIndex { get; set; } - Utilisation index spatial
+│   ├── SpatialIndexType PreferredIndexType { get; set; } - Type index préféré
+│   ├── bool SimplifyGeometry { get; set; } - Simplification géométrie
+│   ├── double SimplificationTolerance { get; set; } - Tolérance simplification
+│   ├── bool UseApproximateIntersection { get; set; } - Intersection approximative
+│   └── int MaxCandidates { get; set; } - Candidats maximum (première passe)
+├── <strong>Properties Cache :</strong>
+│   ├── bool EnableGeometryCache { get; set; } - Cache géométries
+│   ├── TimeSpan CacheDuration { get; set; } - Durée cache
+│   ├── int MaxCacheSize { get; set; } - Taille max cache
+│   └── Dictionary&lt;string, Geometry&gt; CachedGeometries { get; } - Cache interne
+├── <strong>Constructors :</strong>
+│   ├── SpatialQueryFilter() - Filtre spatial vide
+│   ├── SpatialQueryFilter(Geometry geometry, SpatialRelationship relation) - Basique
+│   ├── SpatialQueryFilter(Geometry geometry, SpatialRelationship relation, double distance) - Avec distance
+│   └── SpatialQueryFilter(SpatialQueryFilter source) - Copie depuis autre filtre
+├── <strong>Methods - Configuration Géométrie :</strong>
+│   ├── void SetFilterGeometry(Geometry geometry) - Définition géométrie filtre
+│   ├── void SetEnvelopeFilter(Envelope envelope) - Filtre rectangle englobant
+│   ├── void SetPointFilter(Point point, double distance) - Filtre point + buffer
+│   ├── void SetPolygonFilter(Polygon polygon) - Filtre polygonal
+│   ├── void SetBufferFilter(Geometry geometry, double distance) - Filtre buffer
+│   ├── void SetCircleFilter(Point center, double radius) - Filtre circulaire
+│   └── void ClearGeometryFilter() - Suppression filtre géométrique
+├── <strong>Methods - Relations Spatiales :</strong>
+│   ├── void SetIntersectionFilter() - Configuration intersection
+│   ├── void SetContainsFilter() - Configuration contient
+│   ├── void SetWithinFilter() - Configuration dans
+│   ├── void SetTouchesFilter() - Configuration touche
+│   ├── void SetCrossesFilter() - Configuration croise
+│   ├── void SetOverlapsFilter() - Configuration chevauche
+│   ├── void SetDisjointFilter() - Configuration séparé
+│   └── void SetEqualsFilter() - Configuration identique
+├── <strong>Methods - Optimisation :</strong>
+│   ├── void OptimizeForPerformance() - Optimisation performance globale
+│   ├── void EnableSpatialIndexing() - Activation index spatial
+│   ├── void SetIndexHints(string[] indexNames) - Suggestions index
+│   ├── void SetGeometryPrecision(double precision) - Précision géométrique
+│   ├── void SimplifyFilterGeometry(double tolerance) - Simplification géométrie filtre
+│   ├── SpatialStatistics EstimatePerformance(FeatureTable table) - Estimation performance
+│   └── void ApplyOptimizationProfile(OptimizationProfile profile) - Profil optimisation
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult ValidateSpatialQuery(FeatureTable table) - Validation requête spatiale
+│   ├── bool IsGeometryValid() - Validation géométrie filtre
+│   ├── bool IsCompatibleSpatialReference(SpatialReference sr) - Test compatibilité SR
+│   ├── ValidationResult CheckIndexAvailability(FeatureTable table) - Vérification index
+│   └── string[] GetSpatialConstraints() - Contraintes spatiales
+├── <strong>Methods - Transformation :</strong>
+│   ├── void ProjectToTableSpatialReference(FeatureTable table) - Projection géométrie
+│   ├── SpatialQueryFilter TransformTo(SpatialReference targetSR) - Transformation SR
+│   ├── void NormalizeGeometry() - Normalisation géométrie
+│   ├── void EnsureValidGeometry() - Correction géométrie invalide
+│   └── Geometry GetTransformedGeometry(SpatialReference targetSR) - Géométrie transformée
+├── <strong>Static Factory :</strong>
+│   ├── SpatialQueryFilter CreateIntersectionQuery(Geometry geometry) - Factory intersection
+│   ├── SpatialQueryFilter CreateBufferQuery(Geometry geometry, double distance) - Factory buffer
+│   ├── SpatialQueryFilter CreateEnvelopeQuery(Envelope envelope) - Factory envelope
+│   └── SpatialQueryFilter CreateNearestNeighborQuery(Point point, int count) - Factory plus proches
+└── <strong>Events :</strong>
+    ├── GeometryChanged - Changement géométrie filtre
+    ├── SpatialRelationshipChanged - Changement relation spatiale
+    └── OptimizationApplied - Application optimisation
+
+<strong>GeometricFilter : SpatialQueryFilter</strong> - Filtre géométrique avancé
+├── <strong>Properties :</strong>
+│   ├── List&lt;Geometry&gt; MultipleGeometries { get; } - Géométries multiples
+│   ├── GeometricOperation Operation { get; set; } - Opération géométrique
+│   ├── bool UnionGeometries { get; set; } - Union géométries multiples
+│   ├── double BufferDistance { get; set; } - Distance buffer global
+│   └── TopologyPreservation TopologyMode { get; set; } - Préservation topologie
+├── <strong>Methods :</strong>
+│   ├── void AddGeometry(Geometry geometry) - Ajout géométrie
+│   ├── void RemoveGeometry(Geometry geometry) - Suppression géométrie
+│   ├── void SetGeometryCollection(IEnumerable&lt;Geometry&gt; geometries) - Collection géométries
+│   ├── Geometry GetCombinedGeometry() - Géométrie combinée
+│   ├── void ApplyBuffer(double distance) - Application buffer
+│   └── void SimplifyCollection(double tolerance) - Simplification collection
+
+<strong>BufferFilter : SpatialQueryFilter</strong> - Filtre buffer spécialisé
+├── <strong>Properties :</strong>
+│   ├── Geometry SourceGeometry { get; set; } - Géométrie source
+│   ├── double BufferDistance { get; set; } - Distance buffer
+│   ├── LinearUnit BufferUnit { get; set; } - Unité distance buffer
+│   ├── BufferCapStyle CapStyle { get; set; } - Style extrémités
+│   ├── BufferJoinStyle JoinStyle { get; set; } - Style jointures
+│   ├── double MiterLimit { get; set; } - Limite angle aigu
+│   └── int QuadrantSegments { get; set; } - Segments par quadrant
+├── <strong>Methods :</strong>
+│   ├── void SetBufferParameters(double distance, LinearUnit unit) - Configuration buffer
+│   ├── void SetBufferStyle(BufferCapStyle cap, BufferJoinStyle join) - Style buffer
+│   ├── Geometry GenerateBuffer() - Génération buffer
+│   ├── void UpdateBufferGeometry() - Mise à jour géométrie buffer
+│   └── BufferStatistics GetBufferStatistics() - Statistiques buffer
+
+<strong>ProximityFilter : SpatialQueryFilter</strong> - Filtre proximité
+├── <strong>Properties :</strong>
+│   ├── Point ReferencePoint { get; set; } - Point référence
+│   ├── double MaxDistance { get; set; } - Distance maximale
+│   ├── int MaxResults { get; set; } - Résultats maximum
+│   ├── DistanceCalculationMethod Method { get; set; } - Méthode calcul distance
+│   ├── bool SortByDistance { get; set; } - Tri par distance
+│   └── string DistanceFieldName { get; set; } - Nom champ distance
+├── <strong>Methods :</strong>
+│   ├── void SetProximitySearch(Point point, double maxDistance) - Configuration proximité
+│   ├── void SetNearestNeighbor(Point point, int count) - Plus proches voisins
+│   ├── void EnableDistanceCalculation(string fieldName) - Calcul distance
+│   ├── ProximityResult[] GetSortedResults() - Résultats triés par distance
+│   └── void UpdateReferencePoint(Point newPoint) - Mise à jour point référence
+
+<strong>SpatialIndexManager : class</strong> - Gestionnaire index spatiaux
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, SpatialIndex&gt; AvailableIndexes { get; } - Index disponibles
+│   ├── SpatialIndexStatistics Statistics { get; } - Statistiques index
+│   ├── bool AutoCreateIndexes { get; set; } - Création auto index
+│   └── SpatialIndexType DefaultIndexType { get; set; } - Type index par défaut
+├── <strong>Methods :</strong>
+│   ├── SpatialIndex GetBestIndex(SpatialQueryFilter filter, FeatureTable table) - Meilleur index
+│   ├── bool HasSpatialIndex(FeatureTable table) - Test présence index
+│   ├── void CreateSpatialIndex(FeatureTable table, SpatialIndexType type) - Création index
+│   ├── void UpdateIndexStatistics() - Mise à jour statistiques
+│   ├── SpatialIndexRecommendation GetIndexRecommendation(QueryPattern pattern) - Recommandation
+│   └── void OptimizeIndexes(FeatureTable table) - Optimisation index
+
+<strong>SpatialStatistics : class</strong> - Statistiques requêtes spatiales
+├── <strong>Properties :</strong>
+│   ├── int CandidateCount { get; set; } - Candidats première passe
+│   ├── int ResultCount { get; set; } - Résultats finaux
+│   ├── TimeSpan IndexSearchTime { get; set; } - Temps recherche index
+│   ├── TimeSpan GeometricTestTime { get; set; } - Temps tests géométriques
+│   ├── double FilterSelectivity { get; set; } - Sélectivité filtre
+│   ├── string IndexUsed { get; set; } - Index utilisé
+│   └── Envelope SearchEnvelope { get; set; } - Envelope recherche
+├── <strong>Methods :</strong>
+│   ├── double GetEfficiencyRatio() - Ratio efficacité
+│   ├── string GetPerformanceReport() - Rapport performance
+│   ├── void AddMeasurement(string operation, TimeSpan duration) - Ajout mesure
+│   └── void Reset() - Remise à zéro
+
+<strong>GeometryProcessor : static class</strong> - Traitement géométries
+├── <strong>Methods - Préparation :</strong>
+│   ├── Geometry PrepareForQuery(Geometry geometry) - Préparation requête
+│   ├── Geometry SimplifyForQuery(Geometry geometry, double tolerance) - Simplification
+│   ├── Geometry NormalizeGeometry(Geometry geometry) - Normalisation
+│   ├── bool IsValidForSpatialQuery(Geometry geometry) - Validation
+│   └── Geometry RepairGeometry(Geometry geometry) - Réparation
+├── <strong>Methods - Optimisation :</strong>
+│   ├── Envelope GetOptimalEnvelope(Geometry geometry) - Envelope optimale
+│   ├── double CalculateOptimalTolerance(Geometry geometry) - Tolérance optimale
+│   ├── Geometry GenerateApproximation(Geometry geometry, double tolerance) - Approximation
+│   └── GeometryComplexity AssessComplexity(Geometry geometry) - Évaluation complexité
+└── <strong>Methods - Conversion :</strong>
+    ├── Geometry ConvertToQueryGeometry(Geometry source, SpatialReference target) - Conversion
+    ├── Envelope ExtractEnvelope(Geometry geometry) - Extraction envelope
+    └── Point[] ExtractSignificantPoints(Geometry geometry, int maxPoints) - Points significatifs</div>
+                </div><div class="card">
+                    <h2>QueryBuilder - Construction Fluide de Requêtes Complexes</h2>
+                    
+                    <div class="file-structure"><strong>QueryBuilder : IDisposable</strong> - Constructeur fluide de requêtes
+├── <strong>Properties Core :</strong>
+│   ├── FeatureSchema Schema { get; } - Schéma de référence
+│   ├── FilterExpression RootExpression { get; } - Expression racine
+│   ├── List&lt;string&gt; SelectFields { get; } - Champs sélectionnés
+│   ├── List&lt;OrderByClause&gt; OrderByClauses { get; } - Clauses tri
+│   ├── int? LimitValue { get; set; } - Limite résultats
+│   └── int? OffsetValue { get; set; } - Décalage pagination
+├── <strong>Properties Configuration :</strong>
+│   ├── bool ValidateFieldNames { get; set; } - Validation noms champs
+│   ├── bool AutoOptimize { get; set; } - Optimisation automatique
+│   ├── QuerySyntax Syntax { get; set; } - Syntaxe cible (SQL/OQL)
+│   ├── CultureInfo Culture { get; set; } - Culture comparaisons
+│   └── Dictionary&lt;string, object&gt; BuilderContext { get; } - Contexte construction
+├── <strong>Constructors :</strong>
+│   ├── QueryBuilder() - Builder vide
+│   ├── QueryBuilder(FeatureSchema schema) - Avec schéma
+│   └── QueryBuilder(FeatureTable table) - Depuis table
+├── <strong>Methods - Fluent API Core :</strong>
+│   ├── FieldSelector Select(params string[] fields) - Sélection champs
+│   ├── FieldSelector SelectAll() - Sélection tous champs
+│   ├── WhereBuilder Where(string fieldName) - Début clause WHERE
+│   ├── QueryBuilder And(string fieldName) - Condition AND
+│   ├── QueryBuilder Or(string fieldName) - Condition OR
+│   ├── QueryBuilder Not() - Négation condition suivante
+│   └── GroupBuilder GroupBy(params string[] fields) - Regroupement
+├── <strong>Methods - Conditions :</strong>
+│   ├── QueryBuilder Equals(object value) - Égalité
+│   ├── QueryBuilder NotEquals(object value) - Inégalité
+│   ├── QueryBuilder GreaterThan(object value) - Supérieur
+│   ├── QueryBuilder GreaterThanOrEqual(object value) - Supérieur égal
+│   ├── QueryBuilder LessThan(object value) - Inférieur
+│   ├── QueryBuilder LessThanOrEqual(object value) - Inférieur égal
+│   ├── QueryBuilder Between(object minValue, object maxValue) - Entre valeurs
+│   ├── QueryBuilder In(params object[] values) - Dans liste
+│   ├── QueryBuilder Like(string pattern) - Correspondance motif
+│   ├── QueryBuilder IsNull() - Est null
+│   └── QueryBuilder IsNotNull() - N'est pas null
+├── <strong>Methods - Groupes et Sous-requêtes :</strong>
+│   ├── QueryBuilder BeginGroup() - Début groupe (parenthèses)
+│   ├── QueryBuilder EndGroup() - Fin groupe
+│   ├── QueryBuilder AddSubQuery(Func&lt;QueryBuilder, QueryBuilder&gt; subQuery) - Sous-requête
+│   ├── ExistsBuilder Exists(Func&lt;QueryBuilder, QueryBuilder&gt; subQuery) - Clause EXISTS
+│   └── InBuilder InSubQuery(Func&lt;QueryBuilder, QueryBuilder&gt; subQuery) - IN sous-requête
+├── <strong>Methods - Tri et Pagination :</strong>
+│   ├── QueryBuilder OrderBy(string fieldName, SortOrder order) - Tri
+│   ├── QueryBuilder OrderByAscending(params string[] fields) - Tri croissant
+│   ├── QueryBuilder OrderByDescending(params string[] fields) - Tri décroissant
+│   ├── QueryBuilder Limit(int maxResults) - Limite résultats
+│   ├── QueryBuilder Offset(int startIndex) - Décalage pagination
+│   └── QueryBuilder Page(int pageNumber, int pageSize) - Pagination
+├── <strong>Methods - Construction et Validation :</strong>
+│   ├── QueryFilter Build() - Construction filtre final
+│   ├── SpatialQueryFilter BuildSpatial() - Construction filtre spatial
+│   ├── ValidationResult Validate() - Validation requête
+│   ├── string ToSQL() - Génération SQL
+│   ├── string ToOQL() - Génération OQL
+│   └── QueryComplexity GetComplexity() - Analyse complexité
+├── <strong>Methods - Réinitialisation :</strong>
+│   ├── QueryBuilder Reset() - Remise à zéro complète
+│   ├── QueryBuilder ClearWhere() - Suppression WHERE
+│   ├── QueryBuilder ClearOrderBy() - Suppression ORDER BY
+│   └── QueryBuilder ClearLimits() - Suppression limites
+└── <strong>Static Factory :</strong>
+    ├── QueryBuilder Create(FeatureSchema schema) - Factory basique
+    ├── QueryBuilder CreateSpatial(FeatureSchema schema) - Factory spatial
+    └── QueryBuilder FromTemplate(QueryTemplate template) - Depuis modèle
+
+<strong>FilterExpression : abstract class</strong> - Expression de filtrage
+├── <strong>Properties :</strong>
+│   ├── ExpressionType Type { get; } - Type expression
+│   ├── FilterExpression Parent { get; set; } - Expression parente
+│   ├── List&lt;FilterExpression&gt; Children { get; } - Expressions enfants
+│   ├── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées expression
+│   └── bool IsNegated { get; set; } - Expression niée
+├── <strong>Methods :</strong>
+│   ├── abstract string ToWhereClause() - Conversion clause WHERE
+│   ├── abstract ValidationResult Validate(FeatureSchema schema) - Validation
+│   ├── abstract FilterExpression Clone() - Copie profonde
+│   ├── virtual FilterExpression Optimize() - Optimisation expression
+│   ├── virtual bool CanOptimize() - Test optimisation possible
+│   └── void AddChild(FilterExpression child) - Ajout expression enfant
+
+<strong>ComparisonExpression : FilterExpression</strong> - Expression comparaison
+├── <strong>Properties :</strong>
+│   ├── string FieldName { get; set; } - Champ comparé
+│   ├── ComparisonOperator Operator { get; set; } - Opérateur
+│   ├── object Value { get; set; } - Valeur comparaison
+│   ├── bool CaseSensitive { get; set; } - Sensible casse
+│   └── FieldType FieldType { get; set; } - Type champ
+├── <strong>Methods :</strong>
+│   ├── void SetValue(object value, bool autoDetectType) - Définition valeur
+│   ├── string FormatValue() - Formatage valeur pour SQL
+│   ├── bool IsValidForField(FieldInfo field) - Validation contre champ
+│   └── ComparisonExpression Negate() - Négation expression
+
+<strong>LogicalExpression : FilterExpression</strong> - Expression logique
+├── <strong>Properties :</strong>
+│   ├── LogicalOperator Operator { get; set; } - Opérateur logique
+│   ├── FilterExpression LeftExpression { get; set; } - Expression gauche
+│   ├── FilterExpression RightExpression { get; set; } - Expression droite
+│   └── bool ShortCircuitEvaluation { get; set; } - Évaluation court-circuit
+├── <strong>Methods :</strong>
+│   ├── void SetOperands(FilterExpression left, FilterExpression right) - Définition opérandes
+│   ├── LogicalExpression AddExpression(FilterExpression expr, LogicalOperator op) - Ajout expression
+│   ├── LogicalExpression Flatten() - Aplatissement arbre
+│   └── bool IsRedundant() - Test redondance
+
+<strong>WhereBuilder : IDisposable</strong> - Constructeur clause WHERE
+├── <strong>Properties :</strong>
+│   ├── QueryBuilder Parent { get; } - Builder parent
+│   ├── string CurrentField { get; set; } - Champ courant
+│   ├── FilterExpression CurrentExpression { get; set; } - Expression courante
+│   └── bool InGroup { get; set; } - Dans groupe parenthèses
+├── <strong>Methods - Comparaisons :</strong>
+│   ├── QueryBuilder Equals(object value) - Égalité
+│   ├── QueryBuilder NotEquals(object value) - Inégalité
+│   ├── QueryBuilder GreaterThan(object value) - Supérieur
+│   ├── QueryBuilder LessThan(object value) - Inférieur
+│   ├── QueryBuilder Between(object min, object max) - Entre
+│   ├── QueryBuilder In(IEnumerable values) - Dans liste
+│   ├── QueryBuilder Like(string pattern, bool caseSensitive) - Pattern
+│   ├── QueryBuilder StartsWith(string prefix) - Commence par
+│   ├── QueryBuilder EndsWith(string suffix) - Finit par
+│   └── QueryBuilder Contains(string substring) - Contient
+├── <strong>Methods - Tests spéciaux :</strong>
+│   ├── QueryBuilder IsNull() - Test NULL
+│   ├── QueryBuilder IsNotNull() - Test NOT NULL
+│   ├── QueryBuilder IsEmpty() - Test chaîne vide
+│   ├── QueryBuilder IsNotEmpty() - Test chaîne non-vide
+│   └── QueryBuilder HasValue() - Test valeur présente
+└── <strong>Methods - Validation :</strong>
+    ├── bool ValidateFieldExists() - Validation existence champ
+    ├── bool ValidateValueType(object value) - Validation type valeur
+    └── void ThrowIfInvalid() - Exception si invalide
+
+<strong>SpatialWhereBuilder : WhereBuilder</strong> - Constructeur WHERE spatial
+├── <strong>Properties :</strong>
+│   ├── Geometry FilterGeometry { get; set; } - Géométrie filtre
+│   ├── SpatialRelationship DefaultRelation { get; set; } - Relation par défaut
+│   └── double DefaultDistance { get; set; } - Distance par défaut
+├── <strong>Methods - Relations spatiales :</strong>
+│   ├── QueryBuilder Intersects(Geometry geometry) - Intersection
+│   ├── QueryBuilder Contains(Geometry geometry) - Contient
+│   ├── QueryBuilder Within(Geometry geometry) - Dans
+│   ├── QueryBuilder Touches(Geometry geometry) - Touche
+│   ├── QueryBuilder Crosses(Geometry geometry) - Croise
+│   ├── QueryBuilder Overlaps(Geometry geometry) - Chevauche
+│   ├── QueryBuilder Disjoint(Geometry geometry) - Séparé
+│   └── QueryBuilder Equals(Geometry geometry) - Identique
+├── <strong>Methods - Distance :</strong>
+│   ├── QueryBuilder WithinDistance(Geometry geometry, double distance) - Dans distance
+│   ├── QueryBuilder BeyondDistance(Geometry geometry, double distance) - Au-delà distance
+│   └── QueryBuilder NearestTo(Geometry geometry, int count) - Plus proches
+└── <strong>Methods - Formes communes :</strong>
+    ├── QueryBuilder InRectangle(Envelope envelope) - Dans rectangle
+    ├── QueryBuilder InCircle(Point center, double radius) - Dans cercle
+    └── QueryBuilder InPolygon(Polygon polygon) - Dans polygone
+
+<strong>SubQueryBuilder : QueryBuilder</strong> - Constructeur sous-requêtes
+├── <strong>Properties :</strong>
+│   ├── QueryBuilder ParentBuilder { get; } - Builder parent
+│   ├── SubQueryType Type { get; set; } - Type sous-requête
+│   ├── string CorrelationField { get; set; } - Champ corrélation
+│   └── bool IsCorrelated { get; set; } - Sous-requête corrélée
+├── <strong>Methods :</strong>
+│   ├── QueryBuilder Returns(string fieldName) - Champ retourné
+│   ├── QueryBuilder CorrelateWith(string parentField, string childField) - Corrélation
+│   ├── QueryBuilder AsExists() - Conversion EXISTS
+│   ├── QueryBuilder AsIn() - Conversion IN
+│   └── QueryBuilder EndSubQuery() - Fin sous-requête
+
+<strong>QueryTemplate : class</strong> - Modèle de requête
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; } - Nom modèle
+│   ├── string Description { get; set; } - Description
+│   ├── FeatureSchema TargetSchema { get; set; } - Schéma cible
+│   ├── string TemplateQuery { get; set; } - Requête modèle
+│   ├── Dictionary&lt;string, object&gt; DefaultParameters { get; } - Paramètres par défaut
+│   └── List&lt;TemplateParameter&gt; Parameters { get; } - Paramètres configurables
+├── <strong>Methods :</strong>
+│   ├── QueryBuilder CreateBuilder() - Création builder depuis modèle
+│   ├── QueryFilter Instantiate(Dictionary&lt;string, object&gt; parameters) - Instanciation
+│   ├── ValidationResult ValidateParameters(Dictionary&lt;string, object&gt; parameters) - Validation paramètres
+│   ├── string Preview(Dictionary&lt;string, object&gt; parameters) - Aperçu requête
+│   └── void SaveToFile(string filePath) - Sauvegarde modèle
+└── <strong>Static :</strong>
+    ├── QueryTemplate LoadFromFile(string filePath) - Chargement modèle
+    ├── QueryTemplate[] GetBuiltInTemplates() - Modèles intégrés
+    └── QueryTemplate CreateFromQuery(QueryFilter filter, string name) - Depuis requête</div>
+                </div>
+                <div class="card">
+                    <h2>Types et Enumerations</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>FilterType : enum</h4>
+                            <ul>
+                                <li><strong>Attribute</strong> - Filtre attributaire simple</li>
+                                <li><strong>Spatial</strong> - Filtre géométrique</li>
+                                <li><strong>Temporal</strong> - Filtre temporel</li>
+                                <li><strong>Combined</strong> - Filtre combiné</li>
+                                <li><strong>Custom</strong> - Filtre personnalisé</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>SpatialRelation : enum</h4>
+                            <ul>
+                                <li><strong>Intersects</strong> - Intersection géométrique</li>
+                                <li><strong>Contains</strong> - Géométrie contenante</li>
+                                <li><strong>Within</strong> - Géométrie contenue</li>
+                                <li><strong>Touches</strong> - Géométries adjacentes</li>
+                                <li><strong>Crosses</strong> - Intersection partielle</li>
+                                <li><strong>Overlaps</strong> - Chevauchement</li>
+                                <li><strong>Disjoint</strong> - Séparées</li>
+                                <li><strong>Equals</strong> - Géométriquement identiques</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ComparisonOperator : enum</h4>
+                            <ul>
+                                <li><strong>Equals</strong> - Égalité stricte</li>
+                                <li><strong>NotEquals</strong> - Inégalité</li>
+                                <li><strong>GreaterThan</strong> - Supérieur strict</li>
+                                <li><strong>GreaterThanOrEqual</strong> - Supérieur ou égal</li>
+                                <li><strong>LessThan</strong> - Inférieur strict</li>
+                                <li><strong>LessThanOrEqual</strong> - Inférieur ou égal</li>
+                                <li><strong>Like</strong> - Correspondance pattern</li>
+                                <li><strong>In</strong> - Dans liste valeurs</li>
+                                <li><strong>Between</strong> - Dans plage</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>LogicalOperator : enum</h4>
+                            <ul>
+                                <li><strong>And</strong> - ET logique</li>
+                                <li><strong>Or</strong> - OU logique</li>
+                                <li><strong>Not</strong> - NON logique</li>
+                                <li><strong>Xor</strong> - OU exclusif</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- query-builder-detail.html -->
+
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- query-execution-detail.html -->
+<div class="card">
+                    <h2>QueryExecutor - Exécution et Optimisation des Requêtes</h2>
+                    
+                    <div class="file-structure"><strong>QueryExecutor : IDisposable</strong> - Moteur d'exécution de requêtes
+├── <strong>Properties Core :</strong>
+│   ├── QueryOptimizer Optimizer { get; } - Optimiseur requêtes
+│   ├── QueryCache Cache { get; } - Cache résultats
+│   ├── ExecutionStatistics Statistics { get; } - Statistiques exécution
+│   ├── int MaxConcurrentQueries { get; set; } - Requêtes simultanées max
+│   ├── TimeSpan QueryTimeout { get; set; } - Timeout exécution
+│   └── ExecutionMode Mode { get; set; } - Mode exécution
+├── <strong>Properties Configuration :</strong>
+│   ├── bool EnableQueryOptimization { get; set; } - Optimisation activée
+│   ├── bool EnableResultCaching { get; set; } - Cache résultats activé
+│   ├── bool EnableParallelExecution { get; set; } - Exécution parallèle
+│   ├── bool CollectDetailedStatistics { get; set; } - Statistiques détaillées
+│   ├── QueryPriority DefaultPriority { get; set; } - Priorité par défaut
+│   └── Dictionary&lt;string, object&gt; ExecutionContext { get; } - Contexte exécution
+├── <strong>Constructors :</strong>
+│   ├── QueryExecutor() - Exécuteur par défaut
+│   ├── QueryExecutor(QueryOptimizerSettings settings) - Avec configuration
+│   └── QueryExecutor(IServiceProvider serviceProvider) - Avec injection dépendances
+├── <strong>Methods - Exécution Principale :</strong>
+│   ├── Task&lt;FeatureQueryResult&gt; ExecuteAsync(QueryFilter filter, FeatureTable table) - Exécution async
+│   ├── FeatureQueryResult Execute(QueryFilter filter, FeatureTable table) - Exécution sync
+│   ├── Task&lt;T&gt; ExecuteScalarAsync&lt;T&gt;(QueryFilter filter, FeatureTable table) - Scalaire async
+│   ├── Task&lt;int&gt; ExecuteCountAsync(QueryFilter filter, FeatureTable table) - Comptage async
+│   ├── IAsyncEnumerable&lt;Feature&gt; ExecuteStreamAsync(QueryFilter filter, FeatureTable table) - Stream async
+│   └── Task&lt;bool&gt; ExecuteExistsAsync(QueryFilter filter, FeatureTable table) - Test existence async
+├── <strong>Methods - Exécution avec Plan :</strong>
+│   ├── ExecutionPlan CreatePlan(QueryFilter filter, FeatureTable table) - Création plan
+│   ├── Task&lt;FeatureQueryResult&gt; ExecutePlanAsync(ExecutionPlan plan) - Exécution plan async
+│   ├── FeatureQueryResult ExecutePlan(ExecutionPlan plan) - Exécution plan sync
+│   ├── void CachePlan(string queryHash, ExecutionPlan plan) - Cache plan
+│   └── ExecutionPlan GetCachedPlan(string queryHash) - Récupération plan
+├── <strong>Methods - Exécution Batch :</strong>
+│   ├── Task&lt;BatchQueryResult&gt; ExecuteBatchAsync(QueryFilter[] filters, FeatureTable table) - Batch async
+│   ├── Task&lt;FeatureQueryResult[]&gt; ExecuteMultipleAsync(QueryFilter[] filters, FeatureTable[] tables) - Multiple async
+│   ├── void ExecuteParallel(QueryTask[] tasks) - Exécution parallèle
+│   └── Task&lt;T[]&gt; ExecuteAllAsync&lt;T&gt;(Func&lt;FeatureTable, Task&lt;T&gt;&gt;[] operations) - Toutes opérations
+├── <strong>Methods - Contrôle Exécution :</strong>
+│   ├── void CancelQuery(Guid queryId) - Annulation requête
+│   ├── void CancelAllQueries() - Annulation toutes requêtes
+│   ├── QueryStatus GetQueryStatus(Guid queryId) - Statut requête
+│   ├── void SetQueryPriority(Guid queryId, QueryPriority priority) - Priorité requête
+│   └── void PauseExecution() - Pause exécution
+├── <strong>Methods - Cache et Performance :</strong>
+│   ├── void ClearCache() - Vidage cache
+│   ├── void WarmupCache(QueryFilter[] commonQueries, FeatureTable table) - Préchauffage cache
+│   ├── CacheStatistics GetCacheStatistics() - Statistiques cache
+│   ├── void OptimizeMemoryUsage() - Optimisation mémoire
+│   └── PerformanceReport GetPerformanceReport() - Rapport performance
+├── <strong>Events :</strong>
+│   ├── QueryStarted - Début exécution requête
+│   ├── QueryCompleted - Fin exécution requête
+│   ├── QueryFailed - Échec exécution requête
+│   ├── QueryCancelled - Annulation requête
+│   └── OptimizationApplied - Application optimisation
+└── <strong>Static :</strong>
+    ├── QueryExecutor CreateDefault() - Instance par défaut
+    ├── QueryExecutor CreateHighPerformance() - Instance haute performance
+    └── QueryExecutor CreateMemoryOptimized() - Instance optimisée mémoire
+
+<strong>ExecutionPlan : class</strong> - Plan d'exécution optimisé
+├── <strong>Properties :</strong>
+│   ├── Guid PlanId { get; } - Identifiant plan
+│   ├── QueryFilter OriginalQuery { get; } - Requête originale
+│   ├── QueryFilter OptimizedQuery { get; } - Requête optimisée
+│   ├── List&lt;ExecutionStep&gt; Steps { get; } - Étapes exécution
+│   ├── EstimatedCost Cost { get; } - Coût estimé
+│   ├── Dictionary&lt;string, IndexUsage&gt; IndexUsages { get; } - Utilisation index
+│   └── DateTime CreatedAt { get; } - Date création plan
+├── <strong>Properties Optimisation :</strong>
+│   ├── OptimizationLevel Level { get; set; } - Niveau optimisation
+│   ├── bool UseIndexHints { get; set; } - Suggestions index
+│   ├── bool EnableParallelSteps { get; set; } - Étapes parallèles
+│   ├── int EstimatedResultCount { get; set; } - Résultats estimés
+│   └── TimeSpan EstimatedDuration { get; set; } - Durée estimée
+├── <strong>Methods :</strong>
+│   ├── void AddStep(ExecutionStep step) - Ajout étape
+│   ├── void OptimizeStepOrder() - Optimisation ordre étapes
+│   ├── ValidationResult Validate(FeatureTable table) - Validation plan
+│   ├── ExecutionPlan Clone() - Copie plan
+│   ├── string GetExecutionSummary() - Résumé exécution
+│   └── void UpdateStatistics(ExecutionStatistics stats) - Mise à jour stats
+
+<strong>QueryOptimizer : class</strong> - Optimiseur de requêtes
+├── <strong>Properties :</strong>
+│   ├── OptimizerConfiguration Configuration { get; set; } - Configuration optimiseur
+│   ├── IndexManager IndexManager { get; } - Gestionnaire index
+│   ├── StatisticsCollector Statistics { get; } - Collecteur statistiques
+│   ├── Dictionary&lt;string, OptimizationRule&gt; Rules { get; } - Règles optimisation
+│   └── OptimizationHistory History { get; } - Historique optimisations
+├── <strong>Methods - Optimisation Principale :</strong>
+│   ├── ExecutionPlan Optimize(QueryFilter filter, FeatureTable table) - Optimisation complète
+│   ├── QueryFilter OptimizeWhereClause(QueryFilter filter) - Optimisation WHERE
+│   ├── string[] OptimizeFieldSelection(string[] fields, QueryFilter filter) - Optimisation champs
+│   ├── string[] OptimizeOrderBy(string[] orderBy, QueryFilter filter) - Optimisation tri
+│   └── void ApplyIndexHints(ExecutionPlan plan, FeatureTable table) - Suggestions index
+├── <strong>Methods - Analyse :</strong>
+│   ├── QueryComplexity AnalyzeComplexity(QueryFilter filter) - Analyse complexité
+│   ├── EstimatedCost EstimateCost(QueryFilter filter, FeatureTable table) - Estimation coût
+│   ├── int EstimateResultCount(QueryFilter filter, FeatureTable table) - Estimation résultats
+│   ├── IndexRecommendation[] RecommendIndexes(QueryFilter filter) - Recommandations index
+│   └── OptimizationOpportunity[] FindOptimizations(QueryFilter filter) - Opportunités optimisation
+├── <strong>Methods - Règles :</strong>
+│   ├── void AddRule(OptimizationRule rule) - Ajout règle
+│   ├── void RemoveRule(string ruleName) - Suppression règle
+│   ├── void EnableRule(string ruleName) - Activation règle
+│   ├── void DisableRule(string ruleName) - Désactivation règle
+│   └── OptimizationRule[] GetActiveRules() - Règles actives
+
+<strong>QueryCache : class</strong> - Cache des résultats de requête
+├── <strong>Properties :</strong>
+│   ├── long MaxMemorySize { get; set; } - Taille mémoire max
+│   ├── int MaxEntries { get; set; } - Entrées maximum
+│   ├── TimeSpan DefaultTTL { get; set; } - TTL par défaut
+│   ├── CacheEvictionPolicy EvictionPolicy { get; set; } - Politique éviction
+│   ├── CacheStatistics Statistics { get; } - Statistiques cache
+│   └── bool IsEnabled { get; set; } - Cache activé
+├── <strong>Methods - Cache Principal :</strong>
+│   ├── Task&lt;FeatureQueryResult&gt; GetAsync(string key) - Récupération async
+│   ├── void Set(string key, FeatureQueryResult result, TimeSpan? ttl) - Stockage
+│   ├── bool TryGet(string key, out FeatureQueryResult result) - Tentative récupération
+│   ├── void Remove(string key) - Suppression entrée
+│   ├── void Clear() - Vidage complet
+│   └── Task WarmupAsync(QueryFilter[] queries, FeatureTable table) - Préchauffage
+├── <strong>Methods - Gestion :</strong>
+│   ├── string GenerateKey(QueryFilter filter, FeatureTable table) - Génération clé
+│   ├── void InvalidateByTable(FeatureTable table) - Invalidation par table
+│   ├── void InvalidateByPattern(string pattern) - Invalidation par motif
+│   ├── void CompactCache() - Compactage cache
+│   └── void OptimizeMemory() - Optimisation mémoire
+├── <strong>Events :</strong>
+│   ├── CacheHit - Succès cache
+│   ├── CacheMiss - Échec cache
+│   ├── EntryEvicted - Éviction entrée
+│   └── CacheCleared - Vidage cache
+
+<strong>ResultSet : class, IDisposable</strong> - Ensemble de résultats
+├── <strong>Properties :</strong>
+│   ├── IEnumerable&lt;Feature&gt; Features { get; } - Features résultats
+│   ├── int Count { get; } - Nombre résultats
+│   ├── bool HasMore { get; } - Plus de résultats disponibles
+│   ├── ExecutionPlan ExecutionPlan { get; } - Plan exécution utilisé
+│   ├── ExecutionStatistics Statistics { get; } - Statistiques exécution
+│   ├── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées résultat
+│   └── ResultFormat Format { get; set; } - Format résultat
+├── <strong>Methods - Navigation :</strong>
+│   ├── Task&lt;ResultSet&gt; GetNextPageAsync() - Page suivante
+│   ├── Task&lt;ResultSet&gt; GetPreviousPageAsync() - Page précédente
+│   ├── void MoveToFirst() - Premier résultat
+│   ├── void MoveToLast() - Dernier résultat
+│   └── Task&lt;Feature[]&gt; GetAllAsync() - Tous résultats
+├── <strong>Methods - Export :</strong>
+│   ├── Task ExportToFileAsync(string filePath, ExportFormat format) - Export fichier
+│   ├── Task&lt;string&gt; ToJSONAsync() - Export JSON
+│   ├── Task&lt;DataTable&gt; ToDataTableAsync() - Export DataTable
+│   └── Task&lt;byte[]&gt; SerializeAsync() - Sérialisation binaire
+├── <strong>Methods - Analyse :</strong>
+│   ├── Dictionary&lt;string, object&gt; GetStatisticsSummary() - Résumé statistiques
+│   ├── PerformanceMetrics GetPerformanceMetrics() - Métriques performance
+│   └── string GetExecutionReport() - Rapport exécution
+
+<strong>ExecutionStatistics : class</strong> - Statistiques d'exécution
+├── <strong>Properties Timing :</strong>
+│   ├── DateTime StartTime { get; set; } - Heure début
+│   ├── DateTime EndTime { get; set; } - Heure fin
+│   ├── TimeSpan TotalDuration { get; } - Durée totale
+│   ├── TimeSpan QueryParsingTime { get; set; } - Temps parsing
+│   ├── TimeSpan OptimizationTime { get; set; } - Temps optimisation
+│   ├── TimeSpan ExecutionTime { get; set; } - Temps exécution
+│   └── TimeSpan ResultProcessingTime { get; set; } - Temps traitement résultats
+├── <strong>Properties Résultats :</strong>
+│   ├── int ResultCount { get; set; } - Nombre résultats
+│   ├── int CandidateCount { get; set; } - Candidats évalués
+│   ├── int FilteredCount { get; set; } - Filtrés
+│   ├── double SelectivityRatio { get; } - Ratio sélectivité
+│   └── long ResultSizeBytes { get; set; } - Taille résultats
+├── <strong>Properties Performance :</strong>
+│   ├── long MemoryUsed { get; set; } - Mémoire utilisée
+│   ├── long PeakMemoryUsage { get; set; } - Pic mémoire
+│   ├── int CPUUsagePercent { get; set; } - Utilisation CPU
+│   ├── string[] IndexesUsed { get; set; } - Index utilisés
+│   └── bool CacheHit { get; set; } - Succès cache
+└── <strong>Methods :</strong>
+    ├── void RecordTiming(string operation, TimeSpan duration) - Enregistrement timing
+    ├── void IncrementCounter(string counter) - Incrémentation compteur
+    ├── string GenerateReport() - Génération rapport
+    └── void Reset() - Remise à zéro</div>
+                </div>
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="examples-section">
+                        <h3>Requêtes Attributaires de Base</h3>
+                        <div class="code-block">// Requête simple sur un champ
+QueryFilter filter = new QueryFilter();
+filter.WhereClause = "BuildingType = 'Commercial'";
+filter.OutputFields = new[] { "Name", "Area", "BuildingType" };
+
+// Application du filtre
+FeatureQueryResult result = featureTable.QueryFeaturesAsync(filter).Result;
+Console.WriteLine($"Trouvé {result.Count()} bâtiments commerciaux");
+
+// Requête avec plage de valeurs
+QueryFilter areaFilter = new QueryFilter();
+areaFilter.WhereClause = "Area BETWEEN 1000 AND 5000";
+areaFilter.OrderByFields = new[] { "Area DESC" };
+
+// Requête avec opérateurs multiples
+QueryFilter complexFilter = new QueryFilter();
+complexFilter.WhereClause = "BuildingType = 'Commercial' AND Area > 2000 AND Floors >= 2";
+complexFilter.MaxFeatures = 100;</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Requêtes Spatiales</h3>
+                        <div class="code-block">// Sélection par zone rectangulaire
+Envelope searchArea = new Envelope(-73.6, 45.4, -73.5, 45.6);
+SpatialQueryFilter spatialFilter = new SpatialQueryFilter();
+spatialFilter.Geometry = searchArea;
+spatialFilter.SpatialRelationship = SpatialRelationship.Intersects;
+
+// Requête buffer autour d'un point
+Point centerPoint = new Point(-73.5673, 45.5017);
+Polygon bufferZone = GeometryEngine.Buffer(centerPoint, 1000); // 1km
+spatialFilter.Geometry = bufferZone;
+spatialFilter.WhereClause = "BuildingType IN ('Commercial', 'Mixed')";
+
+FeatureQueryResult spatialResults = featureTable.QueryFeaturesAsync(spatialFilter).Result;</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Construction avec QueryBuilder</h3>
+                        <div class="code-block">// Construction de requête complexe
+QueryBuilder builder = new QueryBuilder(buildingSchema);
+
+// Critères multiples avec AND/OR
+var query = builder
+    .Where("BuildingType").Equals("Commercial")
+    .And("Area").GreaterThan(1500)
+    .Or(subBuilder => subBuilder
+        .Where("Floors").GreaterThanOrEqual(3)
+        .And("HasElevator").Equals(true))
+    .OrderBy("Area", SortOrder.Descending)
+    .Limit(50)
+    .Build();
+
+// Exécution avec optimisation
+QueryExecutionPlan plan = queryOptimizer.CreatePlan(query, featureTable);
+FeatureQueryResult optimizedResults = queryExecutor.Execute(plan);</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-schema.html">← Schéma de Données</a></h4>
+                            <p>Structure des données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-validation-system.html">→ Système Validation</a></h4>
+                            <p>Validation et contrôles qualité</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="donnees-geospatiales.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage des requêtes dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

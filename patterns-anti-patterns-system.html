@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patterns & Anti-Patterns - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-data-binding.html" class="nav-link">Data Binding & MVVM</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-transaction-system.html" class="nav-link">Gestion des Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a href="cache-performance-system.html" class="nav-link">Cache et Performance</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns-system.html" class="nav-link active">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>9. Patterns et Anti-Patterns Architecturaux</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble de l'Analyse Architecturale</h2>
+                    <p>Cette analyse examine les patterns de conception utilisés dans Trifide 360, identifie les anti-patterns problématiques présents dans le code, et propose des solutions d'amélioration concrètes. L'objectif est de documenter les bonnes pratiques architecturales actuelles et de mettre en évidence les axes d'amélioration prioritaires pour optimiser la maintenabilité, la performance et l'évolutivité du système.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>Design Patterns</h4>
+                            <p>Observer, Factory, Strategy, Singleton</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Architectural Patterns</h4>
+                            <p>MVVM partiel, Repository, Service Layer</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Anti-Patterns</h4>
+                            <p>God Object, Tight Coupling, Anemic Model</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Code Smells</h4>
+                            <p>Long Method, Large Class, Feature Envy</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Refactoring</h4>
+                            <p>Extract Service, Dependency Injection</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Quality Metrics</h4>
+                            <p>Cyclomatic Complexity, Coupling</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- design-patterns-used.html -->
+
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- architectural-patterns-analysis.html -->
+
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- anti-patterns-critical.html -->
+
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- code-smells-detection.html -->
+
+                <!-- INSERTION FICHIER 5 ICI -->
+                <!-- refactoring-recommendations.html -->
+
+                <div class="card">
+                    <h2>Matrice Qualité Architecturale</h2>
+                    
+                    <div class="mapping-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Aspect Qualité</th>
+                                    <th>État Actuel</th>
+                                    <th>Score (1-10)</th>
+                                    <th>Impact Critique</th>
+                                    <th>Priorité Amélioration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Maintenabilité</strong></td>
+                                    <td>God Object (7000+ lignes)</td>
+                                    <td><span style="color: #ef4444">3/10</span></td>
+                                    <td>Très élevé</td>
+                                    <td><span style="color: #ef4444">P0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Testabilité</strong></td>
+                                    <td>Tight coupling, pas d'IoC</td>
+                                    <td><span style="color: #ef4444">2/10</span></td>
+                                    <td>Très élevé</td>
+                                    <td><span style="color: #ef4444">P0</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Extensibilité</strong></td>
+                                    <td>Couplage fort aux frameworks</td>
+                                    <td><span style="color: #f59e0b">4/10</span></td>
+                                    <td>Élevé</td>
+                                    <td><span style="color: #f59e0b">P1</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Performance</strong></td>
+                                    <td>Chargements bloquants</td>
+                                    <td><span style="color: #f59e0b">5/10</span></td>
+                                    <td>Moyen</td>
+                                    <td><span style="color: #f59e0b">P1</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Réutilisabilité</strong></td>
+                                    <td>Logique métier dispersée</td>
+                                    <td><span style="color: #f59e0b">4/10</span></td>
+                                    <td>Moyen</td>
+                                    <td><span style="color: #f59e0b">P1</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Lisibilité</strong></td>
+                                    <td>Méthodes longues, noms descriptifs</td>
+                                    <td><span style="color: #f59e0b">6/10</span></td>
+                                    <td>Moyen</td>
+                                    <td><span style="color: #10b981">P2</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Classification des Patterns</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Hiérarchie Patterns Architecturaux</h3>
+                        <div class="code-block">Architectural Patterns (Application Level)
+    ↓
+    MVVM (partiel) - Séparation UI/Logic
+    Repository (implicite) - Accès données
+    ↓
+Design Patterns (Component Level)
+    ↓
+    Observer - Notifications UI
+    Factory - Création renderers ArcGIS
+    Strategy - Readers multiformats
+    Singleton - Managers globaux
+    ↓
+Implementation Patterns (Code Level)
+    ↓
+    Event-driven - Gestion événements
+    Lazy Loading - Chargement différé
+    ↓
+Anti-Patterns (Issues)
+    ↓
+    God Object - Main.xaml.cs
+    Tight Coupling - UI ↔ Frameworks
+    Anemic Domain Model - Logique dispersée</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Evaluation Impact vs Effort</h2>
+                    
+                    <div class="features-grid">
+                        <div class="pattern-card">
+                            <h4>🔥 Impact Élevé - Effort Faible</h4>
+                            <ul>
+                                <li><strong>Extraction méthodes</strong> - Réduction méthodes longues</li>
+                                <li><strong>Introduction interfaces</strong> - Abstraction dépendances</li>
+                                <li><strong>Dependency Injection</strong> - IoC container</li>
+                                <li><strong>Async/await</strong> - Opérations non-bloquantes</li>
+                            </ul>
+                        </div>
+                        <div class="recommendation-card">
+                            <h4>⚡ Impact Élevé - Effort Moyen</h4>
+                            <ul>
+                                <li><strong>Service layer</strong> - Extraction logique métier</li>
+                                <li><strong>Command pattern</strong> - Actions utilisateur</li>
+                                <li><strong>MVVM complet</strong> - ViewModels pour toutes vues</li>
+                                <li><strong>Unit testing</strong> - Couverture tests critique</li>
+                            </ul>
+                        </div>
+                        <div class="antipattern-card">
+                            <h4>🚀 Impact Élevé - Effort Élevé</h4>
+                            <ul>
+                                <li><strong>Décomposition God Object</strong> - Refactoring Main.xaml.cs</li>
+                                <li><strong>Clean Architecture</strong> - Couches découplées</li>
+                                <li><strong>Domain model</strong> - Logique métier centralisée</li>
+                                <li><strong>Microservices</strong> - Architecture distribuée (futur)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Roadmap Amélioration Architecturale</h2>
+                    
+                    <div class="mapping-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Phase</th>
+                                    <th>Durée</th>
+                                    <th>Actions Prioritaires</th>
+                                    <th>Bénéfices Attendus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Phase 1 - Stabilisation</strong></td>
+                                    <td>2-3 mois</td>
+                                    <td>Extraction méthodes, interfaces, DI container</td>
+                                    <td>Testabilité basique, réduction complexité</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phase 2 - Séparation</strong></td>
+                                    <td>4-6 mois</td>
+                                    <td>Service layer, MVVM complet, Command pattern</td>
+                                    <td>Maintenabilité améliorée, logique centralisée</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phase 3 - Restructuration</strong></td>
+                                    <td>6-12 mois</td>
+                                    <td>Clean Architecture, Domain model, découplage</td>
+                                    <td>Architecture moderne, extensibilité, performance</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phase 4 - Optimisation</strong></td>
+                                    <td>3-6 mois</td>
+                                    <td>Cache avancé, async complet, monitoring</td>
+                                    <td>Performance optimale, observabilité</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="cache-performance-system.html">← Cache et Performance</a></h4>
+                            <p>Optimisation système complet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">← Hiérarchie Classes</a></h4>
+                            <p>Structure orientée objet actuelle</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="recommandations.html">→ Recommandations</a></h4>
+                            <p>Plan d'action détaillé</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="vue-ensemble.html">→ Vue d'Ensemble</a></h4>
+                            <p>Architecture générale système</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Transactions - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-data-binding.html" class="nav-link">Data Binding & MVVM</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-transaction-system.html" class="nav-link active">Gestion des Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>7. Gestion des Transactions et Historique</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système Transactionnel</h2>
+                    <p>Le système de gestion des transactions de Trifide 360 assure l'intégrité des données géospatiales lors des opérations d'édition complexes. Il combine transactions ACID, historique complet des modifications, mécanismes d'annulation/rétablissement (Undo/Redo), et gestion des conflits pour maintenir la cohérence des données cartographiques.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>Transactions ACID</h4>
+                            <p>Atomicité, Cohérence, Isolation, Durabilité</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Undo/Redo Stack</h4>
+                            <p>Historique complet des actions</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Change Tracking</h4>
+                            <p>Suivi modifications granulaire</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Conflict Resolution</h4>
+                            <p>Résolution conflits concurrence</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Rollback System</h4>
+                            <p>Retour arrière automatique</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Audit Trail</h4>
+                            <p>Journal complet des modifications</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- transaction-acid-detail.html -->
+                <div class="card">
+                    <h2>Transactions ACID - Atomicité, Cohérence, Isolation, Durabilité</h2>
+                    
+                    <div class="file-structure"><strong>Transaction : IDisposable</strong> - Transaction ACID pour données géospatiales
+├── <strong>Properties Core :</strong>
+│   ├── Guid TransactionId { get; } - Identifiant unique transaction
+│   ├── string Name { get; set; } - Nom descriptif transaction
+│   ├── DateTime StartTime { get; } - Heure début transaction
+│   ├── DateTime? EndTime { get; private set; } - Heure fin transaction
+│   ├── TransactionState State { get; private set; } - État transaction
+│   ├── TimeSpan Duration { get; } - Durée transaction
+│   ├── TransactionIsolationLevel IsolationLevel { get; set; } - Niveau isolation
+│   └── int OperationCount { get; } - Nombre opérations
+├── <strong>Properties ACID :</strong>
+│   ├── bool IsAtomic { get; } - Transaction atomique (tout ou rien)
+│   ├── bool IsConsistent { get; } - Cohérence données maintenue
+│   ├── bool IsIsolated { get; } - Isolation autres transactions
+│   ├── bool IsDurable { get; } - Durabilité après commit
+│   ├── List&lt;IOperation&gt; Operations { get; } - Opérations transaction
+│   ├── Dictionary&lt;string, object&gt; Savepoints { get; } - Points sauvegarde
+│   └── TransactionOptions Options { get; set; } - Options transaction
+├── <strong>Properties État :</strong>
+│   ├── bool IsActive { get; } - Transaction active
+│   ├── bool IsCommitted { get; } - Transaction validée
+│   ├── bool IsRolledBack { get; } - Transaction annulée
+│   ├── bool HasErrors { get; } - Erreurs présentes
+│   ├── List&lt;TransactionError&gt; Errors { get; } - Liste erreurs
+│   ├── Exception LastException { get; } - Dernière exception
+│   └── object Context { get; set; } - Contexte utilisateur
+├── <strong>Methods - Cycle Vie :</strong>
+│   ├── void Begin() - Début transaction
+│   ├── void Commit() - Validation transaction
+│   ├── void Rollback() - Annulation transaction
+│   ├── void Rollback(string savepointName) - Retour point sauvegarde
+│   ├── string CreateSavepoint(string name) - Création point sauvegarde
+│   ├── void ReleaseSavepoint(string name) - Libération point sauvegarde
+│   ├── void SetIsolationLevel(TransactionIsolationLevel level) - Niveau isolation
+│   └── void Dispose() - Libération ressources
+├── <strong>Methods - Opérations :</strong>
+│   ├── void AddOperation(IOperation operation) - Ajout opération
+│   ├── void RemoveOperation(IOperation operation) - Suppression opération
+│   ├── bool CanExecuteOperation(IOperation operation) - Test exécution possible
+│   ├── void ExecuteOperation(IOperation operation) - Exécution opération
+│   ├── void ExecuteAllOperations() - Exécution toutes opérations
+│   ├── void UndoLastOperation() - Annulation dernière opération
+│   └── void UndoAllOperations() - Annulation toutes opérations
+├── <strong>Methods - Validation :</strong>
+│   ├── bool ValidateConsistency() - Validation cohérence
+│   ├── List&lt;ValidationError&gt; GetValidationErrors() - Erreurs validation
+│   ├── bool CanCommit() - Test commit possible
+│   ├── ValidationResult ValidateBeforeCommit() - Validation pré-commit
+│   └── void EnsureConsistency() - Assurance cohérence
+└── <strong>Events :</strong>
+    ├── TransactionStarted - Transaction démarrée
+    ├── OperationAdded - Opération ajoutée
+    ├── OperationExecuted - Opération exécutée
+    ├── SavepointCreated - Point sauvegarde créé
+    ├── TransactionCommitted - Transaction validée
+    ├── TransactionRolledBack - Transaction annulée
+    └── ErrorOccurred - Erreur survenue
+
+<strong>TransactionManager : Singleton</strong> - Gestionnaire global transactions
+├── <strong>Properties :</strong>
+│   ├── Transaction CurrentTransaction { get; } - Transaction courante
+│   ├── List&lt;Transaction&gt; ActiveTransactions { get; } - Transactions actives
+│   ├── TransactionStatistics Statistics { get; } - Statistiques transactions
+│   ├── int MaxConcurrentTransactions { get; set; } - Max transactions simultanées
+│   ├── TimeSpan DefaultTimeout { get; set; } - Délai expiration par défaut
+│   ├── TransactionIsolationLevel DefaultIsolationLevel { get; set; } - Niveau isolation défaut
+│   └── bool AutoCommit { get; set; } - Commit automatique
+├── <strong>Methods - Gestion :</strong>
+│   ├── Transaction BeginTransaction(string name) - Début nouvelle transaction
+│   ├── Transaction BeginTransaction(string name, TransactionOptions options) - Avec options
+│   ├── void CommitTransaction(Guid transactionId) - Validation transaction
+│   ├── void RollbackTransaction(Guid transactionId) - Annulation transaction
+│   ├── void CommitAllTransactions() - Validation toutes transactions
+│   ├── void RollbackAllTransactions() - Annulation toutes transactions
+│   ├── Transaction GetTransaction(Guid transactionId) - Récupération transaction
+│   └── void SetCurrentTransaction(Transaction transaction) - Définition courante
+├── <strong>Methods - Monitoring :</strong>
+│   ├── bool HasActiveTransactions() - Test transactions actives
+│   ├── int GetActiveTransactionCount() - Nombre transactions actives
+│   ├── TimeSpan GetLongestRunningTransactionDuration() - Plus longue transaction
+│   ├── List&lt;Transaction&gt; GetTransactionsByState(TransactionState state) - Par état
+│   ├── TransactionReport GenerateReport() - Rapport transactions
+│   └── void CleanupCompletedTransactions() - Nettoyage transactions terminées
+├── <strong>Methods - Configuration :</strong>
+│   ├── void SetGlobalTimeout(TimeSpan timeout) - Délai global
+│   ├── void SetGlobalIsolationLevel(TransactionIsolationLevel level) - Niveau global
+│   ├── void EnableDeadlockDetection(bool enable) - Détection deadlock
+│   ├── void SetRetryPolicy(RetryPolicy policy) - Politique retry
+│   └── void ConfigureLogging(LogLevel level) - Configuration logs
+└── <strong>Events :</strong>
+    ├── TransactionCreated - Transaction créée
+    ├── TransactionCompleted - Transaction terminée
+    ├── DeadlockDetected - Deadlock détecté
+    └── PerformanceAlert - Alerte performance
+
+<strong>IOperation</strong> - Interface opération transactionnelle
+├── <strong>Properties :</strong>
+│   ├── Guid OperationId { get; } - Identifiant opération
+│   ├── string Name { get; } - Nom opération
+│   ├── OperationType Type { get; } - Type opération
+│   ├── object Target { get; } - Cible opération
+│   ├── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres
+│   ├── bool IsReversible { get; } - Opération réversible
+│   ├── DateTime Timestamp { get; } - Horodatage
+│   └── OperationState State { get; } - État opération
+├── <strong>Methods :</strong>
+│   ├── OperationResult Execute() - Exécution opération
+│   ├── OperationResult Undo() - Annulation opération
+│   ├── bool CanExecute() - Test exécution possible
+│   ├── bool CanUndo() - Test annulation possible
+│   ├── ValidationResult Validate() - Validation opération
+│   ├── IOperation Clone() - Clone opération
+│   └── string GetDescription() - Description opération
+└── <strong>Types d'Opérations :</strong>
+    ├── CreateFeatureOperation - Création feature
+    ├── UpdateFeatureOperation - Modification feature
+    ├── DeleteFeatureOperation - Suppression feature
+    ├── MoveFeatureOperation - Déplacement feature
+    ├── ImportDataOperation - Import données
+    ├── ExportDataOperation - Export données
+    ├── ProjectionOperation - Transformation projection
+    └── GeometryOperation - Opération géométrique
+
+<strong>AtomicOperation&lt;T&gt; : IOperation</strong> - Opération atomique typée
+├── <strong>Properties :</strong>
+│   ├── Func&lt;T&gt; ExecuteFunc { get; set; } - Fonction exécution
+│   ├── Action&lt;T&gt; UndoAction { get; set; } - Action annulation
+│   ├── Func&lt;bool&gt; CanExecuteFunc { get; set; } - Test exécution
+│   ├── Func&lt;bool&gt; CanUndoFunc { get; set; } - Test annulation
+│   ├── T Result { get; private set; } - Résultat exécution
+│   ├── T PreviousState { get; set; } - État précédent
+│   └── bool StoreState { get; set; } - Stockage état
+├── <strong>Methods :</strong>
+│   ├── OperationResult Execute() - Exécution avec stockage résultat
+│   ├── OperationResult Undo() - Annulation avec restauration état
+│   ├── void StoreCurrentState() - Sauvegarde état actuel
+│   ├── void RestorePreviousState() - Restauration état précédent
+│   └── bool CompareStates(T state1, T state2) - Comparaison états
+└── <strong>Specializations :</strong>
+    ├── FeatureAtomicOperation - Opération feature atomique
+    ├── GeometryAtomicOperation - Opération géométrie atomique
+    ├── AttributeAtomicOperation - Opération attribut atomique
+    └── LayerAtomicOperation - Opération couche atomique
+
+<strong>CompositeOperation : IOperation</strong> - Opération composite (plusieurs sous-opérations)
+├── <strong>Properties :</strong>
+│   ├── List&lt;IOperation&gt; ChildOperations { get; } - Opérations enfants
+│   ├── CompositeExecutionMode ExecutionMode { get; set; } - Mode exécution
+│   ├── bool StopOnFirstError { get; set; } - Arrêt première erreur
+│   ├── int ExecutedOperationsCount { get; } - Nombre opérations exécutées
+│   ├── int SuccessfulOperationsCount { get; } - Nombre opérations réussies
+│   └── List&lt;OperationError&gt; ExecutionErrors { get; } - Erreurs exécution
+├── <strong>Methods :</strong>
+│   ├── void AddOperation(IOperation operation) - Ajout opération
+│   ├── void RemoveOperation(IOperation operation) - Suppression opération
+│   ├── void InsertOperation(int index, IOperation operation) - Insertion opération
+│   ├── OperationResult Execute() - Exécution séquentielle ou parallèle
+│   ├── OperationResult Undo() - Annulation ordre inverse
+│   ├── OperationResult ExecuteParallel() - Exécution parallèle
+│   ├── void UndoExecutedOperations() - Annulation opérations exécutées
+│   └── bool CanRollbackPartially() - Rollback partiel possible
+└── <strong>Execution Modes :</strong>
+    ├── Sequential - Exécution séquentielle
+    ├── Parallel - Exécution parallèle
+    ├── ConditionalSequential - Séquentielle conditionnelle
+    └── TransactionalBatch - Batch transactionnel
+
+<strong>TransactionLock</strong> - Verrouillage ressources transaction
+├── <strong>Properties :</strong>
+│   ├── object Resource { get; } - Ressource verrouillée
+│   ├── LockType LockType { get; } - Type verrou (Shared, Exclusive)
+│   ├── Guid TransactionId { get; } - Transaction propriétaire
+│   ├── DateTime AcquiredTime { get; } - Heure acquisition
+│   ├── TimeSpan? Timeout { get; set; } - Délai expiration
+│   ├── bool IsExpired { get; } - Verrou expiré
+│   └── string ResourceIdentifier { get; } - Identifiant ressource
+├── <strong>Methods :</strong>
+│   ├── bool TryAcquire(TimeSpan timeout) - Tentative acquisition
+│   ├── void Acquire() - Acquisition bloquante
+│   ├── void Release() - Libération verrou
+│   ├── bool CanUpgrade(LockType newType) - Test upgrade possible
+│   ├── bool TryUpgrade(LockType newType) - Tentative upgrade
+│   └── void ExtendTimeout(TimeSpan extension) - Extension délai
+└── <strong>Lock Types :</strong>
+    ├── None - Pas de verrou
+    ├── Shared - Verrou partagé (lecture)
+    ├── Exclusive - Verrou exclusif (écriture)
+    ├── Update - Verrou mise à jour
+    └── Intent - Verrou intention
+
+<strong>DeadlockDetector</strong> - Détecteur interblocages
+├── <strong>Properties :</strong>
+│   ├── bool IsEnabled { get; set; } - Détection activée
+│   ├── TimeSpan DetectionInterval { get; set; } - Intervalle détection
+│   ├── int MaxDeadlockResolutionAttempts { get; set; } - Tentatives résolution max
+│   ├── DeadlockResolutionStrategy Strategy { get; set; } - Stratégie résolution
+│   ├── List&lt;DeadlockInfo&gt; DetectedDeadlocks { get; } - Deadlocks détectés
+│   └── DateTime LastDetectionRun { get; } - Dernière détection
+├── <strong>Methods :</strong>
+│   ├── bool DetectDeadlock() - Détection deadlock
+│   ├── List&lt;Transaction&gt; FindDeadlockedTransactions() - Transactions bloquées
+│   ├── bool ResolveDeadlock(DeadlockInfo deadlock) - Résolution deadlock
+│   ├── void StartDetection() - Démarrage détection automatique
+│   ├── void StopDetection() - Arrêt détection
+│   ├── DeadlockGraph BuildWaitForGraph() - Graphe attente
+│   └── Transaction SelectVictimTransaction(List&lt;Transaction&gt; candidates) - Sélection victime
+├── <strong>Resolution Strategies :</strong>
+│   ├── AbortYoungestTransaction - Abandon plus récente
+│   ├── AbortOldestTransaction - Abandon plus ancienne
+│   ├── AbortFewestOperations - Abandon moins d'opérations
+│   ├── AbortLowestPriority - Abandon priorité plus faible
+│   └── Custom - Stratégie personnalisée
+└── <strong>Events :</strong>
+    ├── DeadlockDetected - Deadlock détecté
+    ├── DeadlockResolved - Deadlock résolu
+    └── ResolutionFailed - Échec résolution
+
+<strong>TransactionOptions</strong> - Options configuration transaction
+├── <strong>Properties :</strong>
+│   ├── TransactionIsolationLevel IsolationLevel { get; set; } - Niveau isolation
+│   ├── TimeSpan Timeout { get; set; } - Délai expiration
+│   ├── bool AutoCommit { get; set; } - Commit automatique
+│   ├── bool AutoRollback { get; set; } - Rollback automatique erreur
+│   ├── int MaxRetryAttempts { get; set; } - Tentatives retry max
+│   ├── TimeSpan RetryDelay { get; set; } - Délai entre retry
+│   ├── bool EnableDeadlockDetection { get; set; } - Détection deadlock
+│   ├── bool ReadUncommitted { get; set; } - Lecture non commitée
+│   ├── bool EnableLogging { get; set; } - Journalisation activée
+│   └── Dictionary&lt;string, object&gt; CustomProperties { get; } - Propriétés personnalisées
+├── <strong>Isolation Levels :</strong>
+│   ├── ReadUncommitted - Lecture sale autorisée
+│   ├── ReadCommitted - Lecture commitée seulement
+│   ├── RepeatableRead - Lecture répétable
+│   ├── Serializable - Sérialisable complet
+│   └── Snapshot - Isolation snapshot
+├── <strong>Static Presets :</strong>
+│   ├── Default - Options par défaut
+│   ├── ReadOnly - Transaction lecture seule
+│   ├── BulkOperation - Opération massive
+│   ├── Interactive - Opération interactive
+│   └── Critical - Opération critique
+└── <strong>Methods :</strong>
+    ├── TransactionOptions Clone() - Clone options
+    ├── void Validate() - Validation cohérence options
+    ├── void ApplyPreset(TransactionPreset preset) - Application preset
+    └── Dictionary&lt;string, object&gt; ToDictionary() - Conversion dictionnaire
+
+<strong>TransactionState Enum</strong> - États transaction
+├── NotStarted - Transaction non démarrée
+├── Active - Transaction active
+├── Committing - En cours de commit
+├── Committed - Transaction validée
+├── RollingBack - En cours de rollback
+├── RolledBack - Transaction annulée
+├── Failed - Transaction échouée
+├── TimedOut - Transaction expirée
+└── Disposed - Transaction supprimée
+
+<strong>TransactionStatistics</strong> - Statistiques performances
+├── <strong>Properties :</strong>
+│   ├── int TotalTransactions { get; } - Total transactions
+│   ├── int CommittedTransactions { get; } - Transactions validées
+│   ├── int RolledBackTransactions { get; } - Transactions annulées
+│   ├── int FailedTransactions { get; } - Transactions échouées
+│   ├── TimeSpan AverageTransactionDuration { get; } - Durée moyenne
+│   ├── TimeSpan LongestTransactionDuration { get; } - Plus longue durée
+│   ├── TimeSpan ShortestTransactionDuration { get; } - Plus courte durée
+│   ├── int DeadlocksDetected { get; } - Deadlocks détectés
+│   ├── int DeadlocksResolved { get; } - Deadlocks résolus
+│   └── DateTime LastResetTime { get; } - Dernière remise zéro
+└── <strong>Methods :</strong>
+    ├── void Reset() - Remise zéro statistiques
+    ├── TransactionPerformanceReport GenerateReport() - Rapport performance
+    ├── void RecordTransaction(Transaction transaction) - Enregistrement transaction
+    └── Dictionary&lt;string, object&gt; GetMetrics() - Métriques détaillées</div>
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- undo-redo-system-detail.html -->
+<!--<div class="card">-->
+                    <h2>Système Undo/Redo - Historique et Annulation des Actions</h2>
+                    
+                    <div class="file-structure"><strong>UndoRedoManager : Singleton</strong> - Gestionnaire central historique actions
+├── <strong>Properties Core :</strong>
+│   ├── Stack&lt;IUndoRedoCommand&gt; UndoStack { get; } - Pile actions annulables
+│   ├── Stack&lt;IUndoRedoCommand&gt; RedoStack { get; } - Pile actions rétablissables
+│   ├── int MaxHistorySize { get; set; } - Taille max historique (défaut: 100)
+│   ├── int UndoCount { get; } - Nombre actions annulables
+│   ├── int RedoCount { get; } - Nombre actions rétablissables
+│   ├── bool CanUndo { get; } - Annulation possible
+│   ├── bool CanRedo { get; } - Rétablissement possible
+│   └── long MemoryUsage { get; } - Utilisation mémoire historique
+├── <strong>Properties État :</strong>
+│   ├── bool IsEnabled { get; set; } - Système activé
+│   ├── bool IsRecording { get; set; } - Enregistrement actions actif
+│   ├── bool IsExecutingCommand { get; } - Exécution commande en cours
+│   ├── IUndoRedoCommand CurrentCommand { get; } - Commande courante
+│   ├── UndoRedoTransaction ActiveTransaction { get; } - Transaction active
+│   ├── DateTime LastActionTime { get; } - Dernière action
+│   └── Dictionary&lt;string, object&gt; Context { get; } - Contexte global
+├── <strong>Methods - Actions :</strong>
+│   ├── void ExecuteCommand(IUndoRedoCommand command) - Exécution avec historique
+│   ├── void Undo() - Annulation dernière action
+│   ├── void Redo() - Rétablissement dernière action
+│   ├── void UndoMultiple(int count) - Annulations multiples
+│   ├── void RedoMultiple(int count) - Rétablissements multiples
+│   ├── void UndoToCommand(IUndoRedoCommand targetCommand) - Annulation jusqu'à commande
+│   ├── void RedoToCommand(IUndoRedoCommand targetCommand) - Rétablissement jusqu'à commande
+│   └── bool TryUndo() - Tentative annulation (pas d'exception)
+├── <strong>Methods - Historique :</strong>
+│   ├── void ClearHistory() - Suppression historique complet
+│   ├── void ClearUndoHistory() - Suppression pile Undo
+│   ├── void ClearRedoHistory() - Suppression pile Redo
+│   ├── IUndoRedoCommand[] GetUndoCommands() - Tableau commandes Undo
+│   ├── IUndoRedoCommand[] GetRedoCommands() - Tableau commandes Redo
+│   ├── IUndoRedoCommand GetUndoCommand(int index) - Commande Undo par index
+│   ├── IUndoRedoCommand GetRedoCommand(int index) - Commande Redo par index
+│   └── void TrimHistory() - Nettoyage historique (limite mémoire)
+├── <strong>Methods - Transactions :</strong>
+│   ├── UndoRedoTransaction BeginTransaction(string name) - Début transaction groupée
+│   ├── void CommitTransaction() - Validation transaction
+│   ├── void RollbackTransaction() - Annulation transaction
+│   ├── void AddToCurrentTransaction(IUndoRedoCommand command) - Ajout à transaction
+│   └── bool IsInTransaction { get; } - Test transaction active
+├── <strong>Methods - Monitoring :</strong>
+│   ├── UndoRedoStatistics GetStatistics() - Statistiques système
+│   ├── HistorySnapshot CreateSnapshot() - Instantané historique
+│   ├── void RestoreSnapshot(HistorySnapshot snapshot) - Restauration instantané
+│   ├── long CalculateMemoryUsage() - Calcul utilisation mémoire
+│   └── void OptimizeMemoryUsage() - Optimisation mémoire
+└── <strong>Events :</strong>
+    ├── CommandExecuted - Commande exécutée
+    ├── CommandUndone - Commande annulée
+    ├── CommandRedone - Commande rétablie
+    ├── HistoryChanged - Historique modifié
+    ├── TransactionStarted - Transaction démarrée
+    ├── TransactionCompleted - Transaction terminée
+    ├── MemoryThresholdReached - Seuil mémoire atteint
+    └── HistoryCleared - Historique effacé
+
+<strong>IUndoRedoCommand</strong> - Interface commande réversible
+├── <strong>Properties :</strong>
+│   ├── Guid CommandId { get; } - Identifiant unique commande
+│   ├── string Name { get; } - Nom descriptif commande
+│   ├── string Description { get; } - Description détaillée
+│   ├── DateTime ExecutedAt { get; } - Horodatage exécution
+│   ├── CommandCategory Category { get; } - Catégorie commande
+│   ├── bool CanUndo { get; } - Annulation possible
+│   ├── bool CanRedo { get; } - Rétablissement possible
+│   ├── long MemoryFootprint { get; } - Empreinte mémoire
+│   └── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées
+├── <strong>Methods :</strong>
+│   ├── CommandResult Execute() - Exécution commande
+│   ├── CommandResult Undo() - Annulation commande
+│   ├── CommandResult Redo() - Rétablissement commande
+│   ├── bool CanMergeWith(IUndoRedoCommand other) - Test fusion possible
+│   ├── IUndoRedoCommand MergeWith(IUndoRedoCommand other) - Fusion commandes
+│   ├── IUndoRedoCommand Clone() - Clone commande
+│   ├── void Dispose() - Libération ressources
+│   └── string GetDisplayText() - Texte affichage UI
+└── <strong>Command Categories :</strong>
+    ├── Creation - Création objets
+    ├── Modification - Modification objets
+    ├── Deletion - Suppression objets
+    ├── Navigation - Navigation/vue
+    ├── Import - Import données
+    ├── Export - Export données
+    └── System - Actions système
+
+<strong>FeatureCommand : IUndoRedoCommand</strong> - Commande feature géospatiale
+├── <strong>Properties :</strong>
+│   ├── Feature TargetFeature { get; } - Feature cible
+│   ├── FeatureOperation Operation { get; } - Type opération
+│   ├── object OldValue { get; set; } - Valeur avant modification
+│   ├── object NewValue { get; set; } - Valeur après modification
+│   ├── string PropertyName { get; set; } - Nom propriété modifiée
+│   ├── Geometry OldGeometry { get; set; } - Géométrie avant
+│   ├── Geometry NewGeometry { get; set; } - Géométrie après
+│   └── Dictionary&lt;string, object&gt; OldAttributes { get; set; } - Attributs avant
+├── <strong>Specialized Commands :</strong>
+│   ├── CreateFeatureCommand - Création feature
+│   ├── DeleteFeatureCommand - Suppression feature
+│   ├── MoveFeatureCommand - Déplacement feature
+│   ├── ModifyGeometryCommand - Modification géométrie
+│   ├── ModifyAttributeCommand - Modification attribut
+│   ├── SplitFeatureCommand - Division feature
+│   ├── MergeFeatureCommand - Fusion features
+│   └── TransformFeatureCommand - Transformation géométrique
+├── <strong>Methods :</strong>
+│   ├── CommandResult Execute() - Exécution opération feature
+│   ├── CommandResult Undo() - Annulation avec restauration état
+│   ├── CommandResult Redo() - Rétablissement modification
+│   ├── bool ValidateFeatureState() - Validation état feature
+│   ├── void CaptureFeatureState() - Capture état avant modification
+│   ├── void RestoreFeatureState() - Restauration état précédent
+│   └── bool CanMergeWith(IUndoRedoCommand other) - Fusion modifications similaires
+└── <strong>Feature Operations :</strong>
+    ├── Create - Création nouvelle feature
+    ├── Delete - Suppression feature
+    ├── Move - Déplacement coordonnées
+    ├── ModifyGeometry - Modification géométrie
+    ├── ModifyAttribute - Modification attribut
+    ├── Transform - Transformation géométrique
+    └── Batch - Opération multiple features
+
+<strong>CompositeCommand : IUndoRedoCommand</strong> - Commande composite (groupe actions)
+├── <strong>Properties :</strong>
+│   ├── List&lt;IUndoRedoCommand&gt; ChildCommands { get; } - Commandes enfants
+│   ├── CompositeExecutionMode ExecutionMode { get; set; } - Mode exécution
+│   ├── bool AllowPartialUndo { get; set; } - Annulation partielle autorisée
+│   ├── bool StopOnFirstError { get; set; } - Arrêt première erreur
+│   ├── int ExecutedCommandsCount { get; } - Nombre commandes exécutées
+│   ├── List&lt;CommandError&gt; ExecutionErrors { get; } - Erreurs exécution
+│   └── TimeSpan TotalExecutionTime { get; } - Temps exécution total
+├── <strong>Methods :</strong>
+│   ├── void AddCommand(IUndoRedoCommand command) - Ajout commande enfant
+│   ├── void InsertCommand(int index, IUndoRedoCommand command) - Insertion commande
+│   ├── void RemoveCommand(IUndoRedoCommand command) - Suppression commande
+│   ├── CommandResult Execute() - Exécution séquentielle commandes
+│   ├── CommandResult Undo() - Annulation ordre inverse
+│   ├── CommandResult Redo() - Rétablissement ordre original
+│   ├── CommandResult ExecutePartial(int startIndex, int count) - Exécution partielle
+│   ├── CommandResult UndoPartial(int startIndex, int count) - Annulation partielle
+│   └── void OptimizeCommandList() - Optimisation liste (fusion similaires)
+├── <strong>Execution Modes :</strong>
+│   ├── Sequential - Exécution séquentielle
+│   ├── ReverseSequential - Séquentielle inverse (undo)
+│   ├── Parallel - Exécution parallèle (où possible)
+│   └── Conditional - Exécution conditionnelle
+└── <strong>Specializations :</strong>
+    ├── ImportCommand - Import fichier (multiples features)
+    ├── BatchEditCommand - Édition massive
+    ├── TransactionCommand - Transaction complète
+    └── MacroCommand - Macro utilisateur
+
+<strong>UndoRedoTransaction</strong> - Transaction groupée d'actions
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom transaction
+│   ├── Guid TransactionId { get; } - Identifiant transaction
+│   ├── DateTime StartTime { get; } - Heure début
+│   ├── DateTime? EndTime { get; } - Heure fin
+│   ├── TransactionState State { get; } - État transaction
+│   ├── List&lt;IUndoRedoCommand&gt; Commands { get; } - Commandes transaction
+│   ├── bool IsActive { get; } - Transaction active
+│   └── object Context { get; set; } - Contexte transaction
+├── <strong>Methods :</strong>
+│   ├── void AddCommand(IUndoRedoCommand command) - Ajout commande à transaction
+│   ├── void Commit() - Validation transaction (ajout à historique)
+│   ├── void Rollback() - Annulation transaction (suppression commandes)
+│   ├── CompositeCommand ToCompositeCommand() - Conversion commande composite
+│   ├── bool CanCommit() - Test validation possible
+│   └── void Dispose() - Libération ressources
+└── <strong>Transaction States :</strong>
+    ├── Active - Transaction active
+    ├── Committed - Transaction validée
+    ├── RolledBack - Transaction annulée
+    └── Disposed - Transaction supprimée
+
+<strong>CommandMemoryManager</strong> - Gestionnaire mémoire historique
+├── <strong>Properties :</strong>
+│   ├── long MaxMemoryUsage { get; set; } - Utilisation mémoire max (bytes)
+│   ├── long CurrentMemoryUsage { get; } - Utilisation courante
+│   ├── double MemoryUsagePercentage { get; } - Pourcentage utilisation
+│   ├── int CommandsInMemory { get; } - Nombre commandes en mémoire
+│   ├── bool AutoCleanup { get; set; } - Nettoyage automatique
+│   ├── CleanupStrategy CleanupStrategy { get; set; } - Stratégie nettoyage
+│   └── TimeSpan CleanupInterval { get; set; } - Intervalle nettoyage
+├── <strong>Methods :</strong>
+│   ├── long CalculateCommandMemoryUsage(IUndoRedoCommand command) - Calcul mémoire commande
+│   ├── void RegisterCommand(IUndoRedoCommand command) - Enregistrement commande
+│   ├── void UnregisterCommand(IUndoRedoCommand command) - Désenregistrement commande
+│   ├── bool ShouldCleanup() - Test nettoyage nécessaire
+│   ├── int CleanupOldestCommands(int count) - Nettoyage anciennes commandes
+│   ├── int CleanupLargestCommands(int count) - Nettoyage plus grosses commandes
+│   ├── void CompressCommands() - Compression commandes
+│   └── MemoryReport GenerateMemoryReport() - Rapport utilisation mémoire
+├── <strong>Cleanup Strategies :</strong>
+│   ├── OldestFirst - Plus anciennes d'abord
+│   ├── LargestFirst - Plus grosses d'abord
+│   ├── LeastUsed - Moins utilisées d'abord
+│   ├── ByCategory - Par catégorie
+│   └── Smart - Stratégie intelligente
+└── <strong>Compression :</strong>
+    ├── bool CanCompress(IUndoRedoCommand command) - Test compression possible
+    ├── IUndoRedoCommand Compress(IUndoRedoCommand command) - Compression commande
+    ├── IUndoRedoCommand Decompress(IUndoRedoCommand command) - Décompression commande
+    └── CompressionRatio GetCompressionRatio(IUndoRedoCommand command) - Ratio compression
+
+<strong>CommandMerger</strong> - Fusion commandes similaires
+├── <strong>Properties :</strong>
+│   ├── bool AutoMerge { get; set; } - Fusion automatique
+│   ├── TimeSpan MergeTimeWindow { get; set; } - Fenêtre temporelle fusion
+│   ├── int MaxMergeCount { get; set; } - Nombre max commandes fusionnées
+│   ├── Dictionary&lt;Type, IMergeStrategy&gt; MergeStrategies { get; } - Stratégies par type
+│   └── List&lt;CommandPair&gt; MergeableCommands { get; } - Paires fusionnables
+├── <strong>Methods :</strong>
+│   ├── bool CanMerge(IUndoRedoCommand command1, IUndoRedoCommand command2) - Test fusion
+│   ├── IUndoRedoCommand Merge(IUndoRedoCommand command1, IUndoRedoCommand command2) - Fusion
+│   ├── List&lt;IUndoRedoCommand&gt; MergeSequence(List&lt;IUndoRedoCommand&gt; commands) - Fusion séquence
+│   ├── void RegisterMergeStrategy(Type commandType, IMergeStrategy strategy) - Enregistrement stratégie
+│   ├── void SetMergeStrategy&lt;T&gt;(IMergeStrategy&lt;T&gt; strategy) where T : IUndoRedoCommand - Stratégie typée
+│   └── bool ShouldMerge(IUndoRedoCommand lastCommand, IUndoRedoCommand newCommand) - Test fusion nécessaire
+├── <strong>Built-in Merge Strategies :</strong>
+│   ├── AttributeModificationMerger - Fusion modifications attributs
+│   ├── GeometryModificationMerger - Fusion modifications géométrie
+│   ├── MoveCommandMerger - Fusion déplacements consécutifs
+│   ├── TextEditMerger - Fusion éditions texte
+│   └── ViewNavigationMerger - Fusion navigations vue
+└── <strong>Merge Rules :</strong>
+    ├── Same target object - Même objet cible
+    ├── Same property modified - Même propriété modifiée
+    ├── Within time window - Dans fenêtre temporelle
+    ├── Same user action - Même action utilisateur
+    └── Compatible operations - Opérations compatibles
+
+<strong>UndoRedoUI</strong> - Interface utilisateur historique
+├── <strong>Properties :</strong>
+│   ├── bool ShowUndoButton { get; set; } - Affichage bouton Undo
+│   ├── bool ShowRedoButton { get; set; } - Affichage bouton Redo
+│   ├── bool ShowHistoryList { get; set; } - Affichage liste historique
+│   ├── int MaxHistoryListItems { get; set; } - Max éléments liste
+│   ├── bool ShowTooltips { get; set; } - Affichage info-bulles
+│   ├── string UndoButtonText { get; set; } - Texte bouton Undo
+│   ├── string RedoButtonText { get; set; } - Texte bouton Redo
+│   └── Dictionary&lt;CommandCategory, Style&gt; CategoryStyles { get; } - Styles par catégorie
+├── <strong>Methods :</strong>
+│   ├── void UpdateUI() - Mise à jour interface
+│   ├── void UpdateButtons() - Mise à jour boutons
+│   ├── void UpdateHistoryList() - Mise à jour liste historique
+│   ├── string GetUndoText() - Texte action Undo
+│   ├── string GetRedoText() - Texte action Redo
+│   ├── void ShowUndoPreview() - Aperçu action Undo
+│   ├── void ShowRedoPreview() - Aperçu action Redo
+│   └── void HighlightAffectedObjects(IUndoRedoCommand command) - Surlignage objets affectés
+├── <strong>UI Components :</strong>
+│   ├── UndoButton - Bouton annulation
+│   ├── RedoButton - Bouton rétablissement
+│   ├── HistoryListBox - Liste historique
+│   ├── HistoryTreeView - Arbre historique
+│   ├── ProgressIndicator - Indicateur progression
+│   └── PreviewWindow - Fenêtre aperçu
+└── <strong>Keyboard Shortcuts :</strong>
+    ├── Ctrl+Z - Undo
+    ├── Ctrl+Y - Redo
+    ├── Ctrl+Shift+Z - Redo alternatif
+    ├── Alt+Backspace - Undo alternatif
+    └── F4 - Affichage historique
+
+<strong>CommandSerializer</strong> - Sérialisation historique
+├── <strong>Properties :</strong>
+│   ├── SerializationFormat Format { get; set; } - Format sérialisation
+│   ├── bool CompressData { get; set; } - Compression données
+│   ├── EncryptionSettings Encryption { get; set; } - Paramètres chiffrement
+│   ├── Dictionary&lt;Type, ICommandSerializer&gt; TypeSerializers { get; } - Sérialiseurs par type
+│   └── SerializationOptions Options { get; set; } - Options sérialisation
+├── <strong>Methods :</strong>
+│   ├── byte[] SerializeCommand(IUndoRedoCommand command) - Sérialisation commande
+│   ├── IUndoRedoCommand DeserializeCommand(byte[] data) - Désérialisation commande
+│   ├── byte[] SerializeHistory(IEnumerable&lt;IUndoRedoCommand&gt; history) - Sérialisation historique
+│   ├── IEnumerable&lt;IUndoRedoCommand&gt; DeserializeHistory(byte[] data) - Désérialisation historique
+│   ├── void SaveToFile(string filePath, IEnumerable&lt;IUndoRedoCommand&gt; history) - Sauvegarde fichier
+│   ├── IEnumerable&lt;IUndoRedoCommand&gt; LoadFromFile(string filePath) - Chargement fichier
+│   ├── void RegisterSerializer(Type commandType, ICommandSerializer serializer) - Enregistrement sérialiseur
+│   └── bool CanSerialize(IUndoRedoCommand command) - Test sérialisation possible
+├── <strong>Formats :</strong>
+│   ├── Binary - Binaire (compact)
+│   ├── Json - JSON (lisible)
+│   ├── Xml - XML (structuré)
+│   └── Custom - Format personnalisé
+└── <strong>Security :</strong>
+    ├── Encryption support - Chiffrement données
+    ├── Integrity checking - Vérification intégrité
+    ├── Version control - Contrôle version format
+    └── Backward compatibility - Compatibilité ascendante
+
+<strong>UndoRedoStatistics</strong> - Statistiques utilisation
+├── <strong>Properties :</strong>
+│   ├── int TotalCommandsExecuted { get; } - Total commandes exécutées
+│   ├── int TotalUndoOperations { get; } - Total opérations Undo
+│   ├── int TotalRedoOperations { get; } - Total opérations Redo
+│   ├── Dictionary&lt;CommandCategory, int&gt; CommandsByCategory { get; } - Commandes par catégorie
+│   ├── TimeSpan AverageCommandExecutionTime { get; } - Temps moyen exécution
+│   ├── long TotalMemoryUsed { get; } - Mémoire totale utilisée
+│   ├── int MaxHistorySizeReached { get; } - Taille max historique atteinte
+│   └── DateTime LastResetTime { get; } - Dernière remise zéro
+└── <strong>Methods :</strong>
+    ├── void RecordCommandExecution(IUndoRedoCommand command) - Enregistrement exécution
+    ├── void RecordUndoOperation(IUndoRedoCommand command) - Enregistrement Undo
+    ├── void RecordRedoOperation(IUndoRedoCommand command) - Enregistrement Redo
+    ├── void Reset() - Remise zéro statistiques
+    ├── StatisticsReport GenerateReport() - Génération rapport
+    └── Dictionary&lt;string, object&gt; GetMetrics() - Métriques détaillées</div>
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- change-tracking-detail.html -->
+<!--<div class="card">-->
+                    <h2>Change Tracking - Suivi Granulaire des Modifications</h2>
+                    
+                    <div class="file-structure"><strong>ChangeTracker : Singleton</strong> - Gestionnaire central suivi modifications
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;object, ChangeSet&gt; TrackedObjects { get; } - Objets suivis avec modifications
+│   ├── bool IsEnabled { get; set; } - Suivi activé globalement
+│   ├── bool IsRecording { get; set; } - Enregistrement modifications actif
+│   ├── TrackingMode Mode { get; set; } - Mode suivi (Automatic, Manual, Selective)
+│   ├── int TrackedObjectsCount { get; } - Nombre objets suivis
+│   ├── long TotalChanges { get; } - Total modifications enregistrées
+│   ├── DateTime LastChangeTime { get; } - Dernière modification
+│   └── ChangeTrackingOptions Options { get; set; } - Options configuration
+├── <strong>Properties État :</strong>
+│   ├── bool HasPendingChanges { get; } - Modifications non sauvées
+│   ├── bool HasConflicts { get; } - Conflits détectés
+│   ├── List&lt;ChangeConflict&gt; Conflicts { get; } - Liste conflits
+│   ├── Dictionary&lt;Type, int&gt; ChangesByType { get; } - Modifications par type
+│   ├── long MemoryUsage { get; } - Utilisation mémoire tracking
+│   └── PerformanceMetrics Performance { get; } - Métriques performance
+├── <strong>Methods - Tracking :</strong>
+│   ├── void StartTracking(object obj) - Démarrage suivi objet
+│   ├── void StopTracking(object obj) - Arrêt suivi objet
+│   ├── void StartTracking&lt;T&gt;(IEnumerable&lt;T&gt; objects) - Suivi collection
+│   ├── void StopTracking&lt;T&gt;(IEnumerable&lt;T&gt; objects) - Arrêt suivi collection
+│   ├── bool IsTracking(object obj) - Test suivi objet
+│   ├── void ClearTracking() - Suppression tous suivis
+│   ├── void PauseTracking() - Suspension suivi
+│   └── void ResumeTracking() - Reprise suivi
+├── <strong>Methods - Changes :</strong>
+│   ├── ChangeSet GetChanges(object obj) - Récupération modifications objet
+│   ├── List&lt;ChangeSet&gt; GetAllChanges() - Toutes modifications
+│   ├── List&lt;ChangeSet&gt; GetChangesByType(Type objectType) - Modifications par type
+│   ├── void AcceptChanges(object obj) - Validation modifications objet
+│   ├── void AcceptAllChanges() - Validation toutes modifications
+│   ├── void RejectChanges(object obj) - Rejet modifications objet
+│   ├── void RejectAllChanges() - Rejet toutes modifications
+│   └── bool HasChanges(object obj) - Test modifications objet
+├── <strong>Methods - Snapshots :</strong>
+│   ├── ObjectSnapshot CreateSnapshot(object obj) - Instantané objet
+│   ├── void RestoreSnapshot(object obj, ObjectSnapshot snapshot) - Restauration instantané
+│   ├── GlobalSnapshot CreateGlobalSnapshot() - Instantané global
+│   ├── void RestoreGlobalSnapshot(GlobalSnapshot snapshot) - Restauration globale
+│   ├── bool CompareSnapshots(ObjectSnapshot s1, ObjectSnapshot s2) - Comparaison instantanés
+│   └── SnapshotDiff GetSnapshotDiff(ObjectSnapshot s1, ObjectSnapshot s2) - Différences
+├── <strong>Methods - Conflict Resolution :</strong>
+│   ├── List&lt;ChangeConflict&gt; DetectConflicts() - Détection conflits
+│   ├── void ResolveConflict(ChangeConflict conflict, ConflictResolution resolution) - Résolution conflit
+│   ├── void ResolveAllConflicts(ConflictResolutionStrategy strategy) - Résolution tous conflits
+│   ├── bool CanResolveConflict(ChangeConflict conflict) - Test résolution possible
+│   └── ConflictResolution SuggestResolution(ChangeConflict conflict) - Suggestion résolution
+└── <strong>Events :</strong>
+    ├── ObjectChangeDetected - Modification objet détectée
+    ├── PropertyChanged - Propriété modifiée
+    ├── CollectionChanged - Collection modifiée
+    ├── TrackingStarted - Suivi démarré
+    ├── TrackingStopped - Suivi arrêté
+    ├── ConflictDetected - Conflit détecté
+    ├── ConflictResolved - Conflit résolu
+    └── ChangesAccepted - Modifications validées
+
+<strong>ChangeSet</strong> - Ensemble modifications d'un objet
+├── <strong>Properties Core :</strong>
+│   ├── object Target { get; } - Objet cible modifications
+│   ├── Type TargetType { get; } - Type objet cible
+│   ├── Guid ObjectId { get; } - Identifiant objet unique
+│   ├── DateTime FirstChangeTime { get; } - Première modification
+│   ├── DateTime LastChangeTime { get; } - Dernière modification
+│   ├── ChangeSetState State { get; set; } - État ensemble modifications
+│   ├── string Description { get; set; } - Description modifications
+│   └── object Context { get; set; } - Contexte modifications
+├── <strong>Properties Changes :</strong>
+│   ├── List&lt;PropertyChange&gt; PropertyChanges { get; } - Modifications propriétés
+│   ├── List&lt;CollectionChange&gt; CollectionChanges { get; } - Modifications collections
+│   ├── List&lt;FieldChange&gt; FieldChanges { get; } - Modifications champs
+│   ├── int TotalChanges { get; } - Nombre total modifications
+│   ├── bool HasPropertyChanges { get; } - Propriétés modifiées
+│   ├── bool HasCollectionChanges { get; } - Collections modifiées
+│   └── bool HasFieldChanges { get; } - Champs modifiés
+├── <strong>Methods :</strong>
+│   ├── void AddPropertyChange(string propertyName, object oldValue, object newValue) - Ajout modif propriété
+│   ├── void AddCollectionChange(string collectionName, CollectionChangeAction action, object item) - Ajout modif collection
+│   ├── void AddFieldChange(string fieldName, object oldValue, object newValue) - Ajout modif champ
+│   ├── PropertyChange GetPropertyChange(string propertyName) - Récupération modif propriété
+│   ├── List&lt;CollectionChange&gt; GetCollectionChanges(string collectionName) - Modifs collection
+│   ├── bool HasChanged(string memberName) - Test modification membre
+│   ├── void RemoveChange(string memberName) - Suppression modification
+│   ├── void ClearChanges() - Suppression toutes modifications
+│   ├── ChangeSet Clone() - Clone ensemble modifications
+│   └── ChangeSet Merge(ChangeSet other) - Fusion ensembles modifications
+├── <strong>Serialization :</strong>
+│   ├── byte[] Serialize() - Sérialisation binaire
+│   ├── string SerializeToJson() - Sérialisation JSON
+│   ├── void Deserialize(byte[] data) - Désérialisation binaire
+│   ├── void DeserializeFromJson(string json) - Désérialisation JSON
+│   └── bool CanSerialize { get; } - Sérialisation possible
+└── <strong>States :</strong>
+    ├── Tracking - Suivi actif
+    ├── Modified - Modifié
+    ├── Accepted - Modifications acceptées
+    ├── Rejected - Modifications rejetées
+    └── Conflicted - En conflit
+
+<strong>PropertyChange</strong> - Modification propriété individuelle
+├── <strong>Properties :</strong>
+│   ├── string PropertyName { get; } - Nom propriété
+│   ├── Type PropertyType { get; } - Type propriété
+│   ├── object OldValue { get; } - Ancienne valeur
+│   ├── object NewValue { get; } - Nouvelle valeur
+│   ├── DateTime ChangeTime { get; } - Moment modification
+│   ├── PropertyChangeType ChangeType { get; } - Type modification
+│   ├── bool IsReversible { get; } - Modification réversible
+│   ├── string ChangeDescription { get; } - Description modification
+│   └── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées
+├── <strong>Methods :</strong>
+│   ├── bool HasValueChanged() - Test changement valeur
+│   ├── T GetOldValue&lt;T&gt;() - Ancienne valeur typée
+│   ├── T GetNewValue&lt;T&gt;() - Nouvelle valeur typée
+│   ├── void Apply(object target) - Application modification
+│   ├── void Revert(object target) - Annulation modification
+│   ├── bool CanApply(object target) - Test application possible
+│   ├── bool CanRevert(object target) - Test annulation possible
+│   ├── PropertyChange Clone() - Clone modification
+│   └── string GetDisplayText() - Texte affichage
+├── <strong>Change Types :</strong>
+│   ├── ValueChanged - Valeur modifiée
+│   ├── Added - Propriété ajoutée
+│   ├── Removed - Propriété supprimée
+│   ├── TypeChanged - Type modifié
+│   └── Reset - Propriété remise à zéro
+└── <strong>Special Properties :</strong>
+    ├── IsGeometryProperty - Propriété géométrique
+    ├── IsCalculatedProperty - Propriété calculée
+    ├── IsReadOnlyProperty - Propriété lecture seule
+    └── IsCriticalProperty - Propriété critique
+
+<strong>CollectionChange</strong> - Modification collection
+├── <strong>Properties :</strong>
+│   ├── string CollectionName { get; } - Nom collection
+│   ├── CollectionChangeAction Action { get; } - Action modification
+│   ├── object Item { get; } - Élément modifié
+│   ├── int Index { get; } - Index élément
+│   ├── int OldIndex { get; } - Ancien index (pour Move)
+│   ├── object OldItem { get; } - Ancien élément (pour Replace)
+│   ├── DateTime ChangeTime { get; } - Moment modification
+│   └── string ChangeId { get; } - Identifiant modification
+├── <strong>Methods :</strong>
+│   ├── void Apply(IList collection) - Application modification
+│   ├── void Revert(IList collection) - Annulation modification
+│   ├── bool CanApply(IList collection) - Test application possible
+│   ├── bool CanRevert(IList collection) - Test annulation possible
+│   ├── CollectionChange GetReverseChange() - Modification inverse
+│   ├── CollectionChange Clone() - Clone modification
+│   └── string GetDescription() - Description modification
+├── <strong>Actions :</strong>
+│   ├── Add - Ajout élément
+│   ├── Remove - Suppression élément
+│   ├── Replace - Remplacement élément
+│   ├── Move - Déplacement élément
+│   ├── Clear - Vidage collection
+│   └── Reset - Remise à zéro collection
+└── <strong>Collection Types :</strong>
+    ├── ObservableCollection - Collection observable
+    ├── List - Liste générique
+    ├── Array - Tableau
+    ├── Dictionary - Dictionnaire
+    └── Custom - Collection personnalisée
+
+<strong>GeometryChangeTracker</strong> - Suivi spécialisé géométries
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;Geometry, GeometrySnapshot&gt; TrackedGeometries { get; } - Géométries suivies
+│   ├── bool TrackCoordinates { get; set; } - Suivi coordonnées individuelles
+│   ├── bool TrackTopology { get; set; } - Suivi topologie
+│   ├── bool TrackSpatialReference { get; set; } - Suivi référence spatiale
+│   ├── double CoordinateTolerance { get; set; } - Tolérance coordonnées
+│   ├── TopologyValidationLevel ValidationLevel { get; set; } - Niveau validation topologie
+│   └── GeometryChangeOptions Options { get; set; } - Options spécialisées
+├── <strong>Methods :</strong>
+│   ├── void TrackGeometry(Geometry geometry) - Suivi géométrie
+│   ├── GeometryChangeSet GetGeometryChanges(Geometry geometry) - Modifications géométrie
+│   ├── bool HasTopologyChanged(Geometry geometry) - Test changement topologie
+│   ├── bool HasCoordinatesChanged(Geometry geometry) - Test changement coordonnées
+│   ├── bool HasSpatialReferenceChanged(Geometry geometry) - Test changement référence
+│   ├── List&lt;CoordinateChange&gt; GetCoordinateChanges(Geometry geometry) - Modifications coordonnées
+│   ├── TopologyChange GetTopologyChange(Geometry geometry) - Modification topologie
+│   ├── void ValidateGeometryChanges(Geometry geometry) - Validation modifications géométrie
+│   └── void RepairGeometry(Geometry geometry) - Réparation géométrie
+├── <strong>Geometry Types :</strong>
+│   ├── Point - Points individuels
+│   ├── Multipoint - Collections points
+│   ├── Polyline - Lignes et polylignes
+│   ├── Polygon - Polygones
+│   ├── Multipatch - Géométries 3D complexes
+│   └── GeometryCollection - Collections géométriques
+└── <strong>Change Detection :</strong>
+    ├── Coordinate precision - Précision coordonnées
+    ├── Topology validation - Validation topologique
+    ├── Spatial relationship - Relations spatiales
+    └── Projection changes - Changements projection
+
+<strong>FeatureChangeTracker</strong> - Suivi spécialisé features
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;Feature, FeatureSnapshot&gt; TrackedFeatures { get; } - Features suivies
+│   ├── bool TrackAttributes { get; set; } - Suivi attributs
+│   ├── bool TrackGeometry { get; set; } - Suivi géométrie
+│   ├── bool TrackRelationships { get; set; } - Suivi relations
+│   ├── List&lt;string&gt; TrackedAttributeNames { get; set; } - Attributs suivis spécifiques
+│   ├── List&lt;string&gt; IgnoredAttributeNames { get; set; } - Attributs ignorés
+│   └── FeatureTrackingOptions Options { get; set; } - Options feature
+├── <strong>Methods :</strong>
+│   ├── void TrackFeature(Feature feature) - Suivi feature
+│   ├── FeatureChangeSet GetFeatureChanges(Feature feature) - Modifications feature
+│   ├── bool HasAttributeChanges(Feature feature) - Test modif attributs
+│   ├── bool HasGeometryChanges(Feature feature) - Test modif géométrie
+│   ├── bool HasRelationshipChanges(Feature feature) - Test modif relations
+│   ├── List&lt;AttributeChange&gt; GetAttributeChanges(Feature feature) - Modifs attributs
+│   ├── GeometryChange GetGeometryChange(Feature feature) - Modif géométrie
+│   ├── List&lt;RelationshipChange&gt; GetRelationshipChanges(Feature feature) - Modifs relations
+│   └── void ValidateFeatureChanges(Feature feature) - Validation modifs feature
+├── <strong>Feature Components :</strong>
+│   ├── ObjectID - Identifiant objet
+│   ├── Geometry - Géométrie feature
+│   ├── Attributes - Attributs alphanumériques
+│   ├── Symbology - Symbologie affichage
+│   └── Relationships - Relations autres features
+└── <strong>Validation :</strong>
+    ├── Attribute constraints - Contraintes attributs
+    ├── Geometry validity - Validité géométrique
+    ├── Relationship integrity - Intégrité relations
+    └── Business rules - Règles métier
+
+<strong>ChangeConflict</strong> - Conflit entre modifications
+├── <strong>Properties :</strong>
+│   ├── object ConflictedObject { get; } - Objet en conflit
+│   ├── string ConflictedMember { get; } - Membre en conflit
+│   ├── ConflictType Type { get; } - Type conflit
+│   ├── object LocalValue { get; } - Valeur locale
+│   ├── object RemoteValue { get; } - Valeur distante
+│   ├── object OriginalValue { get; } - Valeur originale
+│   ├── DateTime ConflictTime { get; } - Moment conflit
+│   ├── ConflictSeverity Severity { get; } - Gravité conflit
+│   └── string Description { get; } - Description conflit
+├── <strong>Methods :</strong>
+│   ├── ConflictResolution[] GetPossibleResolutions() - Résolutions possibles
+│   ├── void ResolveWith(object value) - Résolution avec valeur
+│   ├── void ResolveWithLocal() - Résolution valeur locale
+│   ├── void ResolveWithRemote() - Résolution valeur distante
+│   ├── void ResolveWithOriginal() - Résolution valeur originale
+│   ├── bool CanAutoResolve() - Résolution automatique possible
+│   ├── ConflictResolution GetSuggestedResolution() - Résolution suggérée
+│   └── void MarkAsResolved() - Marquage conflit résolu
+├── <strong>Conflict Types :</strong>
+│   ├── ConcurrentModification - Modification concurrente
+│   ├── DeleteUpdate - Suppression vs modification
+│   ├── TypeMismatch - Incompatibilité types
+│   ├── ConstraintViolation - Violation contrainte
+│   └── BusinessRuleViolation - Violation règle métier
+├── <strong>Severity Levels :</strong>
+│   ├── Low - Faible impact
+│   ├── Medium - Impact moyen
+│   ├── High - Impact élevé
+│   └── Critical - Impact critique
+└── <strong>Resolution Strategies :</strong>
+    ├── Manual - Résolution manuelle
+    ├── LocalWins - Local prioritaire
+    ├── RemoteWins - Distant prioritaire
+    ├── Merge - Fusion valeurs
+    └── Custom - Stratégie personnalisée
+
+<strong>ChangeTrackingOptions</strong> - Options configuration suivi
+├── <strong>Properties Core :</strong>
+│   ├── TrackingGranularity Granularity { get; set; } - Granularité suivi
+│   ├── bool EnableAutoDetection { get; set; } - Détection automatique
+│   ├── TimeSpan DetectionInterval { get; set; } - Intervalle détection
+│   ├── bool EnableDeepTracking { get; set; } - Suivi profond (objets imbriqués)
+│   ├── int MaxTrackingDepth { get; set; } - Profondeur max suivi
+│   ├── bool EnableConflictDetection { get; set; } - Détection conflits
+│   └── bool EnablePerformanceMonitoring { get; set; } - Monitoring performance
+├── <strong>Properties Memory :</strong>
+│   ├── long MaxMemoryUsage { get; set; } - Usage mémoire max
+│   ├── bool EnableMemoryOptimization { get; set; } - Optimisation mémoire
+│   ├── bool EnableCompression { get; set; } - Compression données
+│   ├── TimeSpan SnapshotRetentionPeriod { get; set; } - Période rétention instantanés
+│   └── int MaxSnapshotsPerObject { get; set; } - Max instantanés par objet
+├── <strong>Properties Filtering :</strong>
+│   ├── List&lt;Type&gt; TrackedTypes { get; set; } - Types suivis
+│   ├── List&lt;Type&gt; IgnoredTypes { get; set; } - Types ignorés
+│   ├── List&lt;string&gt; TrackedProperties { get; set; } - Propriétés suivies
+│   ├── List&lt;string&gt; IgnoredProperties { get; set; } - Propriétés ignorées
+│   ├── Func&lt;object, bool&gt; ObjectFilter { get; set; } - Filtre objets
+│   └── Func&lt;PropertyInfo, bool&gt; PropertyFilter { get; set; } - Filtre propriétés
+└── <strong>Granularity Levels :</strong>
+    ├── Coarse - Suivi grossier (objet niveau)
+    ├── Medium - Suivi moyen (propriétés principales)
+    ├── Fine - Suivi fin (toutes propriétés)
+    └── Ultra - Suivi ultra-fin (champs privés inclus)
+
+<strong>ObjectSnapshot</strong> - Instantané état objet
+├── <strong>Properties :</strong>
+│   ├── object Target { get; } - Objet source
+│   ├── Type TargetType { get; } - Type objet
+│   ├── DateTime SnapshotTime { get; } - Moment instantané
+│   ├── Dictionary&lt;string, object&gt; PropertyValues { get; } - Valeurs propriétés
+│   ├── Dictionary&lt;string, object&gt; FieldValues { get; } - Valeurs champs
+│   ├── byte[] SerializedData { get; } - Données sérialisées
+│   ├── string SnapshotId { get; } - Identifiant instantané
+│   └── long MemorySize { get; } - Taille mémoire
+├── <strong>Methods :</strong>
+│   ├── T GetPropertyValue&lt;T&gt;(string propertyName) - Valeur propriété
+│   ├── void SetPropertyValue(string propertyName, object value) - Définition valeur
+│   ├── bool HasProperty(string propertyName) - Test existence propriété
+│   ├── string[] GetPropertyNames() - Noms propriétés
+│   ├── ObjectSnapshot Clone() - Clone instantané
+│   ├── bool Equals(ObjectSnapshot other) - Comparaison instantanés
+│   ├── void Restore(object target) - Restauration sur objet
+│   └── SnapshotDiff Compare(ObjectSnapshot other) - Comparaison avec autre
+└── <strong>Serialization :</strong>
+    ├── Binary serialization - Sérialisation binaire
+    ├── JSON serialization - Sérialisation JSON
+    ├── Compression support - Support compression
+    └── Encryption support - Support chiffrement</div>
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- conflict-resolution-detail.html -->
+<!--<div class="card">-->
+                    <h2>Conflict Resolution - Résolution Automatique et Manuelle des Conflits</h2>
+                    
+                    <div class="file-structure"><strong>ConflictResolver : Singleton</strong> - Gestionnaire central résolution conflits
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;ConflictType, IResolutionStrategy&gt; ResolutionStrategies { get; } - Stratégies par type conflit
+│   ├── List&lt;ConflictCase&gt; ActiveConflicts { get; } - Conflits actifs non résolus
+│   ├── List&lt;ConflictCase&gt; ResolvedConflicts { get; } - Historique conflits résolus
+│   ├── bool AutoResolveEnabled { get; set; } - Résolution automatique activée
+│   ├── ConflictResolutionMode DefaultMode { get; set; } - Mode résolution par défaut
+│   ├── TimeSpan ConflictTimeout { get; set; } - Délai expiration conflit
+│   └── ConflictResolverOptions Options { get; set; } - Options configuration
+├── <strong>Properties Monitoring :</strong>
+│   ├── int TotalConflictsDetected { get; } - Total conflits détectés
+│   ├── int AutoResolvedConflicts { get; } - Conflits résolus automatiquement
+│   ├── int ManualResolvedConflicts { get; } - Conflits résolus manuellement
+│   ├── int UnresolvedConflicts { get; } - Conflits non résolus
+│   ├── double AutoResolutionSuccessRate { get; } - Taux succès résolution auto
+│   ├── TimeSpan AverageResolutionTime { get; } - Temps moyen résolution
+│   └── Dictionary&lt;ConflictType, int&gt; ConflictsByType { get; } - Conflits par type
+├── <strong>Methods - Detection :</strong>
+│   ├── ConflictCase DetectConflict(object obj1, object obj2) - Détection conflit entre objets
+│   ├── List&lt;ConflictCase&gt; DetectConflicts(IEnumerable&lt;object&gt; objects) - Détection multiple
+│   ├── ConflictCase DetectGeometryConflict(Geometry geom1, Geometry geom2) - Conflit géométrique
+│   ├── ConflictCase DetectAttributeConflict(Feature feature1, Feature feature2) - Conflit attributs
+│   ├── ConflictCase DetectVersionConflict(object localVersion, object remoteVersion) - Conflit versions
+│   ├── bool HasConflict(object obj1, object obj2) - Test existence conflit
+│   ├── ConflictType DetermineConflictType(object obj1, object obj2) - Détermination type conflit
+│   └── ConflictSeverity AssessConflictSeverity(ConflictCase conflict) - Évaluation gravité
+├── <strong>Methods - Resolution :</strong>
+│   ├── ConflictResolutionResult ResolveConflict(ConflictCase conflict) - Résolution conflit
+│   ├── ConflictResolutionResult ResolveConflict(ConflictCase conflict, ResolutionStrategy strategy) - Avec stratégie
+│   ├── List&lt;ConflictResolutionResult&gt; ResolveAllConflicts() - Résolution tous conflits
+│   ├── List&lt;ConflictResolutionResult&gt; ResolveConflicts(List&lt;ConflictCase&gt; conflicts) - Résolution liste
+│   ├── bool TryAutoResolve(ConflictCase conflict) - Tentative résolution automatique
+│   ├── ConflictResolutionResult ManualResolve(ConflictCase conflict, object resolution) - Résolution manuelle
+│   ├── void RegisterResolutionStrategy(ConflictType type, IResolutionStrategy strategy) - Enregistrement stratégie
+│   └── void SetDefaultStrategy(ConflictType type, IResolutionStrategy strategy) - Stratégie par défaut
+├── <strong>Methods - Analysis :</strong>
+│   ├── ConflictAnalysisReport AnalyzeConflict(ConflictCase conflict) - Analyse détaillée conflit
+│   ├── List&lt;ResolutionOption&gt; GetResolutionOptions(ConflictCase conflict) - Options résolution
+│   ├── ResolutionRecommendation GetRecommendation(ConflictCase conflict) - Recommandation
+│   ├── ConflictImpactAssessment AssessImpact(ConflictCase conflict) - Évaluation impact
+│   ├── bool CanAutoResolve(ConflictCase conflict) - Test résolution auto possible
+│   ├── double CalculateResolutionConfidence(ConflictCase conflict, ResolutionStrategy strategy) - Confiance résolution
+│   └── ConflictTreeAnalysis BuildConflictTree(List&lt;ConflictCase&gt; conflicts) - Arbre conflits
+└── <strong>Events :</strong>
+    ├── ConflictDetected - Conflit détecté
+    ├── ConflictResolved - Conflit résolu
+    ├── AutoResolutionFailed - Échec résolution automatique
+    ├── ManualResolutionRequired - Résolution manuelle requise
+    ├── ConflictEscalated - Conflit escaladé
+    ├── ResolutionTimeout - Délai résolution dépassé
+    └── ConflictAnalysisCompleted - Analyse terminée
+
+<strong>ConflictCase</strong> - Cas de conflit spécifique
+├── <strong>Properties Core :</strong>
+│   ├── Guid ConflictId { get; } - Identifiant unique conflit
+│   ├── ConflictType Type { get; } - Type conflit
+│   ├── ConflictSeverity Severity { get; set; } - Gravité conflit
+│   ├── object LocalObject { get; } - Objet local
+│   ├── object RemoteObject { get; } - Objet distant
+│   ├── object BaseObject { get; } - Objet base (ancêtre commun)
+│   ├── DateTime DetectedAt { get; } - Moment détection
+│   ├── ConflictStatus Status { get; set; } - État conflit
+│   └── string Description { get; set; } - Description conflit
+├── <strong>Properties Details :</strong>
+│   ├── List&lt;ConflictDetail&gt; Details { get; } - Détails conflits
+│   ├── Dictionary&lt;string, ConflictPropertyDetail&gt; PropertyConflicts { get; } - Conflits par propriété
+│   ├── List&lt;GeometryConflictDetail&gt; GeometryConflicts { get; } - Conflits géométriques
+│   ├── List&lt;AttributeConflictDetail&gt; AttributeConflicts { get; } - Conflits attributs
+│   ├── ConflictContext Context { get; set; } - Contexte conflit
+│   └── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées
+├── <strong>Properties Resolution :</strong>
+│   ├── List&lt;ResolutionOption&gt; AvailableOptions { get; } - Options disponibles
+│   ├── ResolutionRecommendation Recommendation { get; set; } - Recommandation système
+│   ├── object ProposedResolution { get; set; } - Résolution proposée
+│   ├── DateTime? ResolvedAt { get; set; } - Moment résolution
+│   ├── ResolutionStrategy UsedStrategy { get; set; } - Stratégie utilisée
+│   ├── ConflictResolutionResult Result { get; set; } - Résultat résolution
+│   └── string ResolutionNotes { get; set; } - Notes résolution
+├── <strong>Methods :</strong>
+│   ├── void AddConflictDetail(ConflictDetail detail) - Ajout détail conflit
+│   ├── ConflictDetail GetConflictDetail(string propertyName) - Détail propriété
+│   ├── bool HasPropertyConflict(string propertyName) - Test conflit propriété
+│   ├── void SetResolution(object resolution, ResolutionStrategy strategy) - Définition résolution
+│   ├── bool CanApplyResolution() - Test application résolution possible
+│   ├── ConflictResolutionResult ApplyResolution() - Application résolution
+│   ├── void EscalateConflict(string reason) - Escalade conflit
+│   ├── ConflictCase Clone() - Clone cas conflit
+│   └── string GetSummary() - Résumé conflit
+└── <strong>Conflict Types :</strong>
+    ├── ConcurrentEdit - Édition concurrente
+    ├── DeleteUpdate - Suppression vs modification
+    ├── GeometryMismatch - Incompatibilité géométrique
+    ├── AttributeConflict - Conflit attributs
+    ├── VersionConflict - Conflit versions
+    ├── SchemaConflict - Conflit schéma
+    ├── ConstraintViolation - Violation contrainte
+    └── BusinessRuleViolation - Violation règle métier
+
+<strong>IResolutionStrategy</strong> - Interface stratégie résolution
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom stratégie
+│   ├── string Description { get; } - Description stratégie
+│   ├── ConflictType[] ApplicableTypes { get; } - Types conflits applicables
+│   ├── ResolutionMode Mode { get; } - Mode résolution (Auto/Manual/Interactive)
+│   ├── double SuccessRate { get; } - Taux succès historique
+│   ├── bool RequiresUserInput { get; } - Nécessite saisie utilisateur
+│   └── int Priority { get; set; } - Priorité stratégie
+├── <strong>Methods :</strong>
+│   ├── bool CanResolve(ConflictCase conflict) - Test résolution possible
+│   ├── ConflictResolutionResult Resolve(ConflictCase conflict) - Résolution conflit
+│   ├── ResolutionRecommendation AnalyzeConflict(ConflictCase conflict) - Analyse conflit
+│   ├── double CalculateConfidence(ConflictCase conflict) - Calcul confiance
+│   ├── List&lt;ResolutionOption&gt; GetOptions(ConflictCase conflict) - Options résolution
+│   ├── ConflictResolutionResult Preview(ConflictCase conflict, ResolutionOption option) - Aperçu résolution
+│   └── void Configure(Dictionary&lt;string, object&gt; parameters) - Configuration stratégie
+└── <strong>Built-in Strategies :</strong>
+    ├── LastWriteWinsStrategy - Dernière modification gagne
+    ├── FirstWriteWinsStrategy - Première modification gagne
+    ├── MergeStrategy - Fusion modifications
+    ├── UserChoiceStrategy - Choix utilisateur
+    ├── BusinessRuleStrategy - Règles métier
+    ├── GeometryUnionStrategy - Union géométriques
+    ├── AttributePriorityStrategy - Priorité attributs
+    └── SmartMergeStrategy - Fusion intelligente
+
+<strong>GeometryConflictResolver</strong> - Résolveur spécialisé géométries
+├── <strong>Properties :</strong>
+│   ├── double CoordinateTolerance { get; set; } - Tolérance coordonnées
+│   ├── TopologyValidationLevel ValidationLevel { get; set; } - Niveau validation topologie
+│   ├── bool EnableGeometryRepair { get; set; } - Réparation géométrie activée
+│   ├── bool PreferLargerGeometry { get; set; } - Préférence géométrie plus grande
+│   ├── bool PreserveTopology { get; set; } - Préservation topologie
+│   └── GeometryMergeStrategy MergeStrategy { get; set; } - Stratégie fusion géométries
+├── <strong>Methods :</strong>
+│   ├── ConflictResolutionResult ResolveGeometryConflict(Geometry local, Geometry remote) - Résolution conflit géo
+│   ├── Geometry MergeGeometries(Geometry geom1, Geometry geom2) - Fusion géométries
+│   ├── Geometry ResolveOverlapConflict(Geometry geom1, Geometry geom2) - Résolution chevauchement
+│   ├── Geometry ResolveGapConflict(Geometry geom1, Geometry geom2) - Résolution écart
+│   ├── Geometry ResolveTopologyConflict(Geometry geom1, Geometry geom2) - Résolution topologie
+│   ├── bool IsGeometryValid(Geometry geometry) - Validation géométrie
+│   ├── Geometry RepairGeometry(Geometry geometry) - Réparation géométrie
+│   └── GeometryConflictAnalysis AnalyzeGeometryConflict(Geometry geom1, Geometry geom2) - Analyse conflit
+├── <strong>Geometry Operations :</strong>
+│   ├── Union - Union géométries
+│   ├── Intersection - Intersection géométries
+│   ├── Difference - Différence géométries
+│   ├── SymmetricDifference - Différence symétrique
+│   ├── Buffer - Tampon autour géométrie
+│   ├── Simplify - Simplification géométrie
+│   ├── Smooth - Lissage géométrie
+│   └── Snap - Alignement coordonnées
+└── <strong>Conflict Types :</strong>
+    ├── OverlapConflict - Chevauchement géométries
+    ├── GapConflict - Écart entre géométries
+    ├── TopologyConflict - Conflit topologique
+    ├── PrecisionConflict - Conflit précision
+    ├── ProjectionConflict - Conflit projection
+    └── ValidityConflict - Conflit validité
+
+<strong>AttributeConflictResolver</strong> - Résolveur spécialisé attributs
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, AttributeResolutionRule&gt; AttributeRules { get; } - Règles par attribut
+│   ├── bool CaseSensitiveComparison { get; set; } - Comparaison sensible casse
+│   ├── bool TrimWhitespace { get; set; } - Suppression espaces
+│   ├── AttributeMergeMode DefaultMergeMode { get; set; } - Mode fusion par défaut
+│   ├── bool EnableDataTypeCoercion { get; set; } - Coercition types données
+│   └── CultureInfo ComparisonCulture { get; set; } - Culture comparaison
+├── <strong>Methods :</strong>
+│   ├── ConflictResolutionResult ResolveAttributeConflict(string attributeName, object localValue, object remoteValue) - Résolution conflit attribut
+│   ├── object MergeAttributeValues(object value1, object value2, AttributeMergeMode mode) - Fusion valeurs
+│   ├── bool AreAttributeValuesEqual(object value1, object value2) - Test égalité valeurs
+│   ├── object CoerceAttributeValue(object value, Type targetType) - Coercition valeur
+│   ├── ValidationResult ValidateAttributeValue(string attributeName, object value) - Validation valeur
+│   ├── AttributeConflictPriority GetAttributePriority(string attributeName) - Priorité attribut
+│   ├── void SetAttributeRule(string attributeName, AttributeResolutionRule rule) - Définition règle
+│   └── AttributeConflictAnalysis AnalyzeAttributeConflict(string attributeName, object value1, object value2) - Analyse conflit
+├── <strong>Merge Modes :</strong>
+│   ├── UseLocal - Utiliser valeur locale
+│   ├── UseRemote - Utiliser valeur distante
+│   ├── UseLatest - Utiliser plus récente
+│   ├── UseHighestPriority - Utiliser priorité plus haute
+│   ├── Concatenate - Concaténer valeurs
+│   ├── Average - Moyenne valeurs numériques
+│   ├── Maximum - Maximum valeurs
+│   ├── Minimum - Minimum valeurs
+│   └── UserChoice - Choix utilisateur
+└── <strong>Data Types :</strong>
+    ├── String - Chaînes caractères
+    ├── Numeric - Valeurs numériques
+    ├── DateTime - Dates et heures
+    ├── Boolean - Valeurs booléennes
+    ├── Enum - Énumérations
+    ├── Collection - Collections
+    └── Complex - Objets complexes
+
+<strong>ConflictUI</strong> - Interface utilisateur résolution conflits
+├── <strong>Properties :</strong>
+│   ├── bool ShowConflictDialog { get; set; } - Affichage dialogue conflit
+│   ├── bool ShowConflictList { get; set; } - Affichage liste conflits
+│   ├── bool ShowResolutionPreview { get; set; } - Aperçu résolution
+│   ├── bool EnableBatchResolution { get; set; } - Résolution batch activée
+│   ├── ConflictDisplayMode DisplayMode { get; set; } - Mode affichage
+│   ├── Dictionary&lt;ConflictType, Style&gt; ConflictStyles { get; } - Styles par type conflit
+│   └── ConflictUIOptions Options { get; set; } - Options interface
+├── <strong>Methods :</strong>
+│   ├── ConflictResolutionResult ShowConflictDialog(ConflictCase conflict) - Affichage dialogue
+│   ├── List&lt;ConflictResolutionResult&gt; ShowBatchResolutionDialog(List&lt;ConflictCase&gt; conflicts) - Dialogue batch
+│   ├── void HighlightConflictedObjects(ConflictCase conflict) - Surlignage objets
+│   ├── void ShowResolutionPreview(ConflictCase conflict, ResolutionOption option) - Aperçu résolution
+│   ├── void UpdateConflictsList() - Mise à jour liste conflits
+│   ├── void ShowConflictDetails(ConflictCase conflict) - Affichage détails
+│   ├── UserChoice RequestUserChoice(List&lt;ResolutionOption&gt; options) - Demande choix utilisateur
+│   └── void ShowResolutionResult(ConflictResolutionResult result) - Affichage résultat
+├── <strong>UI Components :</strong>
+│   ├── ConflictDialog - Dialogue résolution
+│   ├── ConflictListView - Liste conflits
+│   ├── ResolutionPreviewPanel - Panneau aperçu
+│   ├── ConflictDetailsPanel - Détails conflit
+│   ├── BatchResolutionDialog - Dialogue batch
+│   ├── ConflictTreeView - Arbre conflits
+│   └── ResolutionWizard - Assistant résolution
+└── <strong>Display Modes :</strong>
+    ├── List - Liste simple
+    ├── Tree - Arbre hiérarchique
+    ├── Grid - Grille détaillée
+    ├── Card - Cartes visuelles
+    └── Timeline - Chronologie
+
+<strong>ConflictAuditLog</strong> - Journal audit résolution conflits
+├── <strong>Properties :</strong>
+│   ├── List&lt;ConflictAuditEntry&gt; Entries { get; } - Entrées journal
+│   ├── bool EnableLogging { get; set; } - Journalisation activée
+│   ├── LogLevel MinimumLogLevel { get; set; } - Niveau minimum journalisation
+│   ├── TimeSpan RetentionPeriod { get; set; } - Période rétention logs
+│   ├── string LogFilePath { get; set; } - Chemin fichier log
+│   ├── bool EnableEncryption { get; set; } - Chiffrement logs
+│   └── long MaxLogFileSize { get; set; } - Taille max fichier log
+├── <strong>Methods :</strong>
+│   ├── void LogConflictDetected(ConflictCase conflict) - Journalisation détection
+│   ├── void LogConflictResolved(ConflictCase conflict, ConflictResolutionResult result) - Journal résolution
+│   ├── void LogResolutionFailed(ConflictCase conflict, Exception error) - Journal échec
+│   ├── void LogUserDecision(ConflictCase conflict, ResolutionOption choice) - Journal décision utilisateur
+│   ├── List&lt;ConflictAuditEntry&gt; GetLogEntries(DateTime startDate, DateTime endDate) - Entrées période
+│   ├── ConflictAuditReport GenerateReport(TimeSpan period) - Génération rapport
+│   ├── void ExportLog(string filePath, LogFormat format) - Export journal
+│   └── void ArchiveOldEntries() - Archivage anciennes entrées
+└── <strong>Audit Entry Types :</strong>
+    ├── ConflictDetected - Conflit détecté
+    ├── ConflictResolved - Conflit résolu
+    ├── AutoResolutionApplied - Résolution auto appliquée
+    ├── ManualResolutionApplied - Résolution manuelle appliquée
+    ├── ResolutionFailed - Échec résolution
+    ├── ConflictEscalated - Conflit escaladé
+    ├── UserChoiceMade - Choix utilisateur
+    └── BatchResolutionCompleted - Résolution batch terminée
+
+<strong>ConflictMetrics</strong> - Métriques performance résolution
+├── <strong>Properties :</strong>
+│   ├── int TotalConflicts { get; } - Total conflits
+│   ├── int AutoResolvedCount { get; } - Nombre résolutions automatiques
+│   ├── int ManualResolvedCount { get; } - Nombre résolutions manuelles
+│   ├── int UnresolvedCount { get; } - Nombre conflits non résolus
+│   ├── double AutoResolutionRate { get; } - Taux résolution automatique
+│   ├── TimeSpan AverageResolutionTime { get; } - Temps moyen résolution
+│   ├── Dictionary&lt;ConflictType, ConflictTypeMetrics&gt; MetricsByType { get; } - Métriques par type
+│   └── Dictionary&lt;string, double&gt; StrategySuccessRates { get; } - Taux succès par stratégie
+├── <strong>Methods :</strong>
+│   ├── void RecordConflictDetection(ConflictCase conflict) - Enregistrement détection
+│   ├── void RecordConflictResolution(ConflictCase conflict, ConflictResolutionResult result) - Enregistrement résolution
+│   ├── ConflictMetricsReport GenerateReport() - Génération rapport
+│   ├── void ResetMetrics() - Remise zéro métriques
+│   ├── ConflictTrendAnalysis AnalyzeTrends(TimeSpan period) - Analyse tendances
+│   ├── List&lt;ConflictHotspot&gt; IdentifyHotspots() - Identification points chauds
+│   └── PerformanceRecommendations GetRecommendations() - Recommandations performance
+└── <strong>Trend Analysis :</strong>
+    ├── Conflict frequency trends - Tendances fréquence
+    ├── Resolution success trends - Tendances succès résolution
+    ├── Performance degradation - Dégradation performance
+    └── Strategy effectiveness - Efficacité stratégies</div>
+                <!-- INSERTION FICHIER 5 ICI -->
+                <!-- audit-trail-logging-detail.html -->
+<!--<div class="card">-->
+                    <h2>Audit Trail & Logging - Traçabilité Complète et Journalisation</h2>
+                    
+                    <div class="file-structure"><strong>AuditLogger : Singleton</strong> - Gestionnaire central journalisation audit
+├── <strong>Properties Core :</strong>
+│   ├── List&lt;IAuditSink&gt; AuditSinks { get; } - Destinations journalisation
+│   ├── AuditLogLevel MinimumLogLevel { get; set; } - Niveau minimum journalisation
+│   ├── bool IsEnabled { get; set; } - Journalisation activée
+│   ├── bool EnableRealTimeLogging { get; set; } - Journalisation temps réel
+│   ├── bool EnableBuffering { get; set; } - Mise en tampon activée
+│   ├── int BufferSize { get; set; } - Taille tampon (défaut: 1000)
+│   ├── TimeSpan FlushInterval { get; set; } - Intervalle vidage tampon
+│   └── AuditLoggerOptions Options { get; set; } - Options configuration
+├── <strong>Properties Security :</strong>
+│   ├── bool EnableEncryption { get; set; } - Chiffrement logs activé
+│   ├── EncryptionSettings EncryptionSettings { get; set; } - Paramètres chiffrement
+│   ├── bool EnableDigitalSigning { get; set; } - Signature numérique activée
+│   ├── X509Certificate2 SigningCertificate { get; set; } - Certificat signature
+│   ├── bool EnableTampering Protection { get; set; } - Protection altération
+│   ├── HashAlgorithmName HashAlgorithm { get; set; } - Algorithme hachage
+│   └── bool EnableAnonymization { get; set; } - Anonymisation données sensibles
+├── <strong>Properties Monitoring :</strong>
+│   ├── long TotalLogEntries { get; } - Total entrées journalisées
+│   ├── long LogEntriesThisSession { get; } - Entrées session courante
+│   ├── DateTime LastLogEntry { get; } - Dernière entrée
+│   ├── Dictionary&lt;AuditEventType, long&gt; EntriesByType { get; } - Entrées par type
+│   ├── long CurrentBufferSize { get; } - Taille tampon actuelle
+│   ├── AuditPerformanceMetrics Performance { get; } - Métriques performance
+│   └── List&lt;AuditError&gt; LoggingErrors { get; } - Erreurs journalisation
+├── <strong>Methods - Logging :</strong>
+│   ├── void LogEvent(AuditEvent auditEvent) - Journalisation événement
+│   ├── void LogUserAction(string userId, string action, object details) - Action utilisateur
+│   ├── void LogSystemEvent(SystemEventType eventType, string message) - Événement système
+│   ├── void LogDataChange(object entity, string propertyName, object oldValue, object newValue) - Changement données
+│   ├── void LogTransaction(TransactionAuditInfo transaction) - Transaction
+│   ├── void LogSecurityEvent(SecurityEventType eventType, string details) - Événement sécurité
+│   ├── void LogError(Exception exception, string context) - Erreur application
+│   └── void LogCustomEvent(string eventType, Dictionary&lt;string, object&gt; properties) - Événement personnalisé
+├── <strong>Methods - Management :</strong>
+│   ├── void Flush() - Vidage immédiat tampon
+│   ├── Task FlushAsync() - Vidage asynchrone
+│   ├── void AddSink(IAuditSink sink) - Ajout destination
+│   ├── void RemoveSink(IAuditSink sink) - Suppression destination
+│   ├── void StartLogging() - Démarrage journalisation
+│   ├── void StopLogging() - Arrêt journalisation
+│   ├── void PauseLogging() - Suspension journalisation
+│   ├── void ResumeLogging() - Reprise journalisation
+│   └── AuditLoggerStatus GetStatus() - État journaliseur
+├── <strong>Methods - Query :</strong>
+│   ├── List&lt;AuditEvent&gt; QueryEvents(AuditQueryFilter filter) - Requête événements
+│   ├── List&lt;AuditEvent&gt; GetEventsByUser(string userId, DateTime startDate, DateTime endDate) - Par utilisateur
+│   ├── List&lt;AuditEvent&gt; GetEventsByType(AuditEventType eventType, int maxResults) - Par type
+│   ├── List&lt;AuditEvent&gt; GetEventsByEntity(object entity, DateTime since) - Par entité
+│   ├── AuditTrail GetEntityAuditTrail(object entity) - Piste audit entité
+│   ├── UserActivitySummary GetUserActivity(string userId, TimeSpan period) - Activité utilisateur
+│   └── List&lt;AuditEvent&gt; SearchEvents(string searchTerm, SearchOptions options) - Recherche
+└── <strong>Events :</strong>
+    ├── EventLogged - Événement journalisé
+    ├── BufferFull - Tampon plein
+    ├── LoggingError - Erreur journalisation
+    ├── SinkAdded - Destination ajoutée
+    ├── SinkRemoved - Destination supprimée
+    ├── LoggingStarted - Journalisation démarrée
+    ├── LoggingStopped - Journalisation arrêtée
+    └── SecurityViolation - Violation sécurité
+
+<strong>AuditEvent</strong> - Événement d'audit individuel
+├── <strong>Properties Core :</strong>
+│   ├── Guid EventId { get; } - Identifiant unique événement
+│   ├── DateTime Timestamp { get; } - Horodatage précis
+│   ├── AuditEventType EventType { get; } - Type événement
+│   ├── AuditLogLevel Level { get; } - Niveau gravité
+│   ├── string UserId { get; set; } - Identifiant utilisateur
+│   ├── string SessionId { get; set; } - Identifiant session
+│   ├── string MachineName { get; } - Nom machine
+│   └── string ApplicationVersion { get; } - Version application
+├── <strong>Properties Details :</strong>
+│   ├── string EventName { get; set; } - Nom événement
+│   ├── string Description { get; set; } - Description détaillée
+│   ├── string Category { get; set; } - Catégorie événement
+│   ├── object Target { get; set; } - Objet cible
+│   ├── string TargetType { get; set; } - Type objet cible
+│   ├── Dictionary&lt;string, object&gt; Properties { get; } - Propriétés personnalisées
+│   ├── List&lt;AuditEventDetail&gt; Details { get; } - Détails supplémentaires
+│   └── AuditContext Context { get; set; } - Contexte audit
+├── <strong>Properties Change Tracking :</strong>
+│   ├── object OldValue { get; set; } - Ancienne valeur
+│   ├── object NewValue { get; set; } - Nouvelle valeur
+│   ├── string ChangedProperty { get; set; } - Propriété modifiée
+│   ├── ChangeType ChangeType { get; set; } - Type modification
+│   ├── string ChangeReason { get; set; } - Raison modification
+│   └── bool IsReversible { get; set; } - Modification réversible
+├── <strong>Properties Security :</strong>
+│   ├── string IpAddress { get; set; } - Adresse IP
+│   ├── string UserAgent { get; set; } - Agent utilisateur
+│   ├── SecurityContext SecurityContext { get; set; } - Contexte sécurité
+│   ├── List&lt;string&gt; Permissions { get; set; } - Permissions requises
+│   ├── bool IsSecurityEvent { get; } - Événement sécurité
+│   └── SecurityRiskLevel RiskLevel { get; set; } - Niveau risque
+├── <strong>Properties Integrity :</strong>
+│   ├── string Hash { get; } - Hachage intégrité
+│   ├── string Signature { get; } - Signature numérique
+│   ├── byte[] SerializedData { get; } - Données sérialisées
+│   ├── bool IsValid { get; } - Événement valide
+│   └── DateTime? VerifiedAt { get; set; } - Moment vérification
+├── <strong>Methods :</strong>
+│   ├── void AddProperty(string key, object value) - Ajout propriété
+│   ├── T GetProperty&lt;T&gt;(string key) - Récupération propriété
+│   ├── void AddDetail(AuditEventDetail detail) - Ajout détail
+│   ├── void Sign(X509Certificate2 certificate) - Signature événement
+│   ├── bool VerifySignature(X509Certificate2 certificate) - Vérification signature
+│   ├── void ComputeHash() - Calcul hachage
+│   ├── bool VerifyHash() - Vérification hachage
+│   ├── byte[] Serialize() - Sérialisation binaire
+│   ├── string SerializeToJson() - Sérialisation JSON
+│   ├── AuditEvent Clone() - Clone événement
+│   └── string GetSummary() - Résumé événement
+└── <strong>Event Types :</strong>
+    ├── UserLogin - Connexion utilisateur
+    ├── UserLogout - Déconnexion utilisateur
+    ├── DataCreate - Création données
+    ├── DataUpdate - Modification données
+    ├── DataDelete - Suppression données
+    ├── FileAccess - Accès fichier
+    ├── TransactionStart - Début transaction
+    ├── TransactionCommit - Validation transaction
+    ├── TransactionRollback - Annulation transaction
+    ├── SecurityViolation - Violation sécurité
+    ├── SystemError - Erreur système
+    └── CustomEvent - Événement personnalisé
+
+<strong>IAuditSink</strong> - Interface destination journalisation
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom destination
+│   ├── bool IsEnabled { get; set; } - Destination activée
+│   ├── AuditLogLevel MinLevel { get; set; } - Niveau minimum
+│   ├── AuditLogLevel MaxLevel { get; set; } - Niveau maximum
+│   ├── List&lt;AuditEventType&gt; SupportedEventTypes { get; } - Types supportés
+│   ├── SinkConfiguration Configuration { get; set; } - Configuration destination
+│   └── SinkStatistics Statistics { get; } - Statistiques destination
+├── <strong>Methods :</strong>
+│   ├── Task WriteEventAsync(AuditEvent auditEvent) - Écriture événement async
+│   ├── void WriteEvent(AuditEvent auditEvent) - Écriture événement sync
+│   ├── Task WriteEventsAsync(IEnumerable&lt;AuditEvent&gt; events) - Écriture batch async
+│   ├── void Flush() - Vidage tampon destination
+│   ├── Task FlushAsync() - Vidage asynchrone
+│   ├── bool CanWrite(AuditEvent auditEvent) - Test écriture possible
+│   ├── void Initialize(SinkConfiguration config) - Initialisation
+│   └── void Dispose() - Libération ressources
+└── <strong>Built-in Sinks :</strong>
+    ├── FileSink - Fichier texte/JSON/XML
+    ├── DatabaseSink - Base données SQL
+    ├── EventLogSink - Journal événements Windows
+    ├── ConsoleSink - Console application
+    ├── EmailSink - Notifications email
+    ├── WebServiceSink - Service web distant
+    ├── MemorySink - Mémoire (tests/debug)
+    └── CompositeSink - Multiple destinations
+
+<strong>DatabaseAuditSink</strong> - Destination base de données
+├── <strong>Properties :</strong>
+│   ├── string ConnectionString { get; set; } - Chaîne connexion
+│   ├── string TableName { get; set; } - Nom table audit
+│   ├── bool EnableBatching { get; set; } - Traitement par lots
+│   ├── int BatchSize { get; set; } - Taille lots
+│   ├── TimeSpan BatchTimeout { get; set; } - Délai lots
+│   ├── bool EnableRetry { get; set; } - Tentatives activées
+│   ├── RetryPolicy RetryPolicy { get; set; } - Politique tentatives
+│   └── DatabaseProvider Provider { get; set; } - Fournisseur BD
+├── <strong>Methods :</strong>
+│   ├── void CreateAuditTable() - Création table audit
+│   ├── void EnsureTableExists() - Vérification existence table
+│   ├── Task WriteEventAsync(AuditEvent auditEvent) - Insertion événement
+│   ├── Task WriteEventsAsync(IEnumerable&lt;AuditEvent&gt; events) - Insertion batch
+│   ├── List&lt;AuditEvent&gt; QueryEvents(AuditQueryFilter filter) - Requête événements
+│   ├── void ArchiveOldEvents(TimeSpan retentionPeriod) - Archivage anciens événements
+│   ├── long GetEventCount() - Nombre événements
+│   └── DatabaseStatistics GetStatistics() - Statistiques base
+├── <strong>Database Providers :</strong>
+│   ├── SqlServer - Microsoft SQL Server
+│   ├── PostgreSQL - PostgreSQL
+│   ├── MySQL - MySQL/MariaDB
+│   ├── SQLite - SQLite
+│   ├── Oracle - Oracle Database
+│   └── Custom - Fournisseur personnalisé
+└── <strong>Table Schema :</strong>
+    ├── EventId (GUID) - Identifiant unique
+    ├── Timestamp (DateTime) - Horodatage
+    ├── EventType (String) - Type événement
+    ├── Level (String) - Niveau gravité
+    ├── UserId (String) - Utilisateur
+    ├── Description (Text) - Description
+    ├── Properties (JSON/Text) - Propriétés
+    └── Hash (String) - Hachage intégrité
+
+<strong>FileAuditSink</strong> - Destination fichier
+├── <strong>Properties :</strong>
+│   ├── string FilePath { get; set; } - Chemin fichier
+│   ├── FileFormat Format { get; set; } - Format fichier
+│   ├── bool EnableRolling { get; set; } - Rotation fichiers
+│   ├── RollingPolicy RollingPolicy { get; set; } - Politique rotation
+│   ├── long MaxFileSize { get; set; } - Taille max fichier
+│   ├── int MaxFiles { get; set; } - Nombre max fichiers
+│   ├── bool EnableCompression { get; set; } - Compression archives
+│   └── Encoding FileEncoding { get; set; } - Encodage fichier
+├── <strong>Methods :</strong>
+│   ├── void WriteEvent(AuditEvent auditEvent) - Écriture événement
+│   ├── void RollFile() - Rotation fichier
+│   ├── string FormatEvent(AuditEvent auditEvent) - Formatage événement
+│   ├── void CompressOldFiles() - Compression anciens fichiers
+│   ├── void CleanupOldFiles() - Nettoyage anciens fichiers
+│   ├── FileInfo GetCurrentFile() - Fichier actuel
+│   └── FileInfo[] GetAllFiles() - Tous fichiers audit
+├── <strong>File Formats :</strong>
+│   ├── PlainText - Texte simple
+│   ├── JSON - Format JSON
+│   ├── XML - Format XML
+│   ├── CSV - Valeurs séparées virgules
+│   ├── Binary - Format binaire
+│   └── Custom - Format personnalisé
+├── <strong>Rolling Policies :</strong>
+│   ├── Size - Par taille fichier
+│   ├── Date - Par date (quotidien, hebdo, mensuel)
+│   ├── Count - Par nombre événements
+│   └── Composite - Politique composite
+└── <strong>Naming Patterns :</strong>
+    ├── {date} - Date courante
+    ├── {counter} - Compteur séquentiel
+    ├── {machine} - Nom machine
+    ├── {pid} - ID processus
+    └── {guid} - GUID unique
+
+<strong>AuditQueryBuilder</strong> - Constructeur requêtes audit
+├── <strong>Properties :</strong>
+│   ├── AuditQueryFilter Filter { get; } - Filtre courant
+│   ├── List&lt;SortCriteria&gt; SortCriteria { get; } - Critères tri
+│   ├── int? Skip { get; set; } - Éléments à ignorer
+│   ├── int? Take { get; set; } - Éléments à prendre
+│   ├── bool IncludeDetails { get; set; } - Inclure détails
+│   └── QueryOptions Options { get; set; } - Options requête
+├── <strong>Fluent API :</strong>
+│   ├── AuditQueryBuilder Where(Expression&lt;Func&lt;AuditEvent, bool&gt;&gt; predicate) - Condition
+│   ├── AuditQueryBuilder ByUser(string userId) - Par utilisateur
+│   ├── AuditQueryBuilder ByType(AuditEventType eventType) - Par type
+│   ├── AuditQueryBuilder ByLevel(AuditLogLevel level) - Par niveau
+│   ├── AuditQueryBuilder InDateRange(DateTime startDate, DateTime endDate) - Plage dates
+│   ├── AuditQueryBuilder ByEntity(object entity) - Par entité
+│   ├── AuditQueryBuilder WithProperty(string key, object value) - Avec propriété
+│   ├── AuditQueryBuilder OrderBy(Expression&lt;Func&lt;AuditEvent, object&gt;&gt; selector) - Tri
+│   ├── AuditQueryBuilder OrderByDescending(Expression&lt;Func&lt;AuditEvent, object&gt;&gt; selector) - Tri desc
+│   ├── AuditQueryBuilder Skip(int count) - Ignorer éléments
+│   ├── AuditQueryBuilder Take(int count) - Prendre éléments
+│   └── List&lt;AuditEvent&gt; Execute() - Exécution requête
+├── <strong>Predefined Queries :</strong>
+│   ├── GetUserLoginHistory(string userId) - Historique connexions
+│   ├── GetDataChanges(object entity, TimeSpan period) - Changements données
+│   ├── GetSecurityEvents(DateTime since) - Événements sécurité
+│   ├── GetFailedTransactions(TimeSpan period) - Transactions échouées
+│   ├── GetHighRiskEvents() - Événements haut risque
+│   └── GetSystemErrors(DateTime since) - Erreurs système
+└── <strong>Query Performance :</strong>
+    ├── Index recommendations - Recommandations index
+    ├── Query optimization - Optimisation requêtes
+    ├── Caching support - Support cache
+    └── Async execution - Exécution asynchrone
+
+<strong>AuditReportGenerator</strong> - Générateur rapports audit
+├── <strong>Properties :</strong>
+│   ├── List&lt;IReportTemplate&gt; Templates { get; } - Modèles rapport
+│   ├── ReportFormat DefaultFormat { get; set; } - Format par défaut
+│   ├── bool EnableCharting { get; set; } - Graphiques activés
+│   ├── ChartingEngine ChartEngine { get; set; } - Moteur graphiques
+│   ├── Dictionary&lt;string, object&gt; GlobalParameters { get; } - Paramètres globaux
+│   └── ReportGeneratorOptions Options { get; set; } - Options générateur
+├── <strong>Methods :</strong>
+│   ├── AuditReport GenerateReport(string templateName, Dictionary&lt;string, object&gt; parameters) - Génération rapport
+│   ├── AuditReport GenerateUserActivityReport(string userId, TimeSpan period) - Activité utilisateur
+│   ├── AuditReport GenerateDataChangeReport(Type entityType, TimeSpan period) - Changements données
+│   ├── AuditReport GenerateSecurityReport(TimeSpan period) - Rapport sécurité
+│   ├── AuditReport GenerateComplianceReport(ComplianceStandard standard, TimeSpan period) - Conformité
+│   ├── AuditReport GeneratePerformanceReport(TimeSpan period) - Performance
+│   ├── void RegisterTemplate(IReportTemplate template) - Enregistrement modèle
+│   ├── byte[] ExportReport(AuditReport report, ReportFormat format) - Export rapport
+│   └── void EmailReport(AuditReport report, List&lt;string&gt; recipients) - Envoi email
+├── <strong>Report Types :</strong>
+│   ├── UserActivity - Activité utilisateurs
+│   ├── DataChanges - Changements données
+│   ├── SecurityEvents - Événements sécurité
+│   ├── SystemPerformance - Performance système
+│   ├── ComplianceAudit - Audit conformité
+│   ├── TransactionSummary - Résumé transactions
+│   └── CustomReport - Rapport personnalisé
+├── <strong>Output Formats :</strong>
+│   ├── PDF - Document PDF
+│   ├── Excel - Feuille calcul Excel
+│   ├── HTML - Page web HTML
+│   ├── CSV - Valeurs séparées
+│   ├── JSON - Données JSON
+│   └── XML - Document XML
+└── <strong>Chart Types :</strong>
+    ├── LineChart - Graphique linéaire
+    ├── BarChart - Graphique barres
+    ├── PieChart - Graphique secteurs
+    ├── Timeline - Chronologie
+    ├── Heatmap - Carte chaleur
+    └── Dashboard - Tableau bord
+
+<strong>ComplianceAuditor</strong> - Auditeur conformité réglementaire
+├── <strong>Properties :</strong>
+│   ├── List&lt;ComplianceStandard&gt; Standards { get; } - Standards conformité
+│   ├── Dictionary&lt;ComplianceStandard, ComplianceStatus&gt; ComplianceStatus { get; } - État conformité
+│   ├── bool ContinuousMonitoring { get; set; } - Surveillance continue
+│   ├── TimeSpan MonitoringInterval { get; set; } - Intervalle surveillance
+│   ├── List&lt;ComplianceViolation&gt; Violations { get; } - Violations détectées
+│   └── ComplianceAuditorOptions Options { get; set; } - Options auditeur
+├── <strong>Methods :</strong>
+│   ├── ComplianceAssessment AssessCompliance(ComplianceStandard standard) - Évaluation conformité
+│   ├── List&lt;ComplianceViolation&gt; CheckCompliance(TimeSpan period) - Vérification conformité
+│   ├── ComplianceReport GenerateComplianceReport(ComplianceStandard standard) - Rapport conformité
+│   ├── void RegisterStandard(ComplianceStandard standard) - Enregistrement standard
+│   ├── void StartContinuousMonitoring() - Démarrage surveillance
+│   ├── void StopContinuousMonitoring() - Arrêt surveillance
+│   ├── List&lt;ComplianceRecommendation&gt; GetRecommendations() - Recommandations
+│   └── void RemediateViolation(ComplianceViolation violation) - Correction violation
+├── <strong>Compliance Standards :</strong>
+│   ├── GDPR - Règlement général protection données
+│   ├── HIPAA - Health Insurance Portability Accountability
+│   ├── SOX - Sarbanes-Oxley Act
+│   ├── ISO27001 - Sécurité information
+│   ├── PCI_DSS - Payment Card Industry
+│   └── Custom - Standard personnalisé
+├── <strong>Violation Types :</strong>
+│   ├── DataRetention - Rétention données
+│   ├── AccessControl - Contrôle accès
+│   ├── DataEncryption - Chiffrement données
+│   ├── AuditTrail - Piste audit
+│   ├── PrivacyBreach - Violation vie privée
+│   └── SecurityIncident - Incident sécurité
+└── <strong>Remediation Actions :</strong>
+    ├── Automated fixes - Corrections automatiques
+    ├── Policy updates - Mises jour politiques
+    ├── User notifications - Notifications utilisateurs
+    ├── Process improvements - Améliorations processus
+    └── Training recommendations - Recommandations formation</div>
+                <div class="card">
+                    <h2>Architecture Transactionnelle</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Pipeline Transactionnel</h3>
+                        <div class="code-block">Début Transaction
+    ↓
+Validation Prérequis
+    ↓
+Exécution Operations (Batch)
+    ↓
+Validation Postconditions
+    ↓
+Commit/Rollback Decision
+    ↓
+Journal Historique
+    ↓
+Notification Changements</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Types de Transactions</h2>
+                    
+                    <div class="features-grid">
+                        <div class="pattern-card">
+                            <h4>Transactions Simples</h4>
+                            <ul>
+                                <li><strong>Édition feature</strong> - Modification géométrie/attributs</li>
+                                <li><strong>Création objet</strong> - Nouveau point/ligne/polygone</li>
+                                <li><strong>Suppression</strong> - Retrait élément unique</li>
+                                <li><strong>Déplacement</strong> - Translation géométrique</li>
+                            </ul>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Transactions Complexes</h4>
+                            <ul>
+                                <li><strong>Import fichier</strong> - Chargement données massives</li>
+                                <li><strong>Opérations géométriques</strong> - Buffer, intersection, union</li>
+                                <li><strong>Projections</strong> - Transformation systèmes coordonnées</li>
+                                <li><strong>Édition batch</strong> - Modification multiple features</li>
+                            </ul>
+                        </div>
+                        <div class="recommendation-card">
+                            <h4>Transactions Distribuées</h4>
+                            <ul>
+                                <li><strong>Multi-couches</strong> - Modifications plusieurs datasets</li>
+                                <li><strong>Inter-modules</strong> - WPF ↔ Unity synchronisation</li>
+                                <li><strong>Sauvegarde projet</strong> - État complet application</li>
+                                <li><strong>Synchronisation données</strong> - Mise à jour externe</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="examples-section">
+                        <h3>Transaction Simple</h3>
+                        <div class="code-block">// Modification coordonnées point avec transaction
+using (var transaction = TransactionManager.BeginTransaction("Move Point"))
+{
+    try
+    {
+        var originalGeometry = feature.Geometry.Clone();
+        
+        // Modification coordonnées
+        feature.Geometry = new Point(newX, newY, newZ);
+        
+        // Validation nouvelle position
+        if (!GeometryValidator.IsValid(feature.Geometry))
+        {
+            transaction.Rollback();
+            return false;
+        }
+        
+        // Commit transaction
+        transaction.Commit();
+        
+        // Ajout à l'historique Undo
+        UndoRedoManager.AddCommand(new MovePointCommand(feature, originalGeometry));
+        
+        return true;
+    }
+    catch (Exception ex)
+    {
+        transaction.Rollback();
+        Logger.Error($"Transaction failed: {ex.Message}");
+        return false;
+    }
+}</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Transaction Complexe avec Batch</h3>
+                        <div class="code-block">// Import fichier avec validation et rollback automatique
+public async Task&lt;ImportResult&gt; ImportShapefileWithTransaction(string filePath)
+{
+    using (var transaction = TransactionManager.BeginTransaction("Import Shapefile"))
+    {
+        var importedFeatures = new List&lt;Feature&gt;();
+        
+        try
+        {
+            var features = ShapeFileReader.ReadFeatures(filePath);
+            
+            foreach (var feature in features)
+            {
+                // Validation avant ajout
+                var validationResult = FeatureValidator.Validate(feature);
+                if (!validationResult.IsValid)
+                {
+                    Logger.Warning($"Invalid feature {feature.ObjectID}: {validationResult.ErrorMessage}");
+                    continue;
+                }
+                
+                // Ajout à la couche
+                await layerData.AddFeatureAsync(feature);
+                importedFeatures.Add(feature);
+            }
+            
+            // Commit si tout s'est bien passé
+            transaction.Commit();
+            
+            // Commande Undo pour l'import complet
+            UndoRedoManager.AddCommand(new ImportCommand(importedFeatures, layerData));
+            
+            return new ImportResult { Success = true, ImportedCount = importedFeatures.Count };
+        }
+        catch (Exception ex)
+        {
+            // Rollback automatique en cas d'erreur
+            transaction.Rollback();
+            
+            return new ImportResult { Success = false, ErrorMessage = ex.Message };
+        }
+    }
+}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="schema-data-binding.html">← Data Binding MVVM</a></h4>
+                            <p>Liaison données et interface</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="communication-inter-modules.html">← Communication Inter-Modules</a></h4>
+                            <p>Échanges entre composants</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-validation-system.html">→ Système Validation</a></h4>
+                            <p>Contrôles qualité et intégrité</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="patterns-anti-patterns.html">→ Patterns Architecturaux</a></h4>
+                            <p>Bonnes pratiques conception</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Binding & MVVM - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>6. Data Binding & MVVM - Liaison Données-Interface</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système Data Binding</h2>
+                    <p>Le système Data Binding de Trifide 360 implémente le pattern MVVM pour séparer la logique métier de l'interface utilisateur. Il offre une liaison bidirectionnelle entre les données géospatiales et les contrôles WPF, avec notifications automatiques et synchronisation en temps réel.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>ViewModels</h4>
+                            <p>Modèles de vues MVVM</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ObservableCollection</h4>
+                            <p>Collections observables</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>PropertyBinding</h4>
+                            <p>Liaison propriétés</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Commands</h4>
+                            <p>Commandes d'action</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Converters</h4>
+                            <p>Convertisseurs de données</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Validation</h4>
+                            <p>Validation interface</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- mvvm-viewmodels-detail.html -->
+<div class="card">
+                    <h2>ViewModels MVVM - Modèles de Vues pour Données Géospatiales</h2>
+                    
+                    <div class="file-structure"><strong>ViewModelBase : abstract class, INotifyPropertyChanged, IDisposable</strong> - Classe de base pour tous les ViewModels
+├── <strong>Properties Core :</strong>
+│   ├── bool IsInitialized { get; protected set; } - ViewModel initialisé
+│   ├── bool IsBusy { get; protected set; } - Opération en cours
+│   ├── string BusyMessage { get; protected set; } - Message opération
+│   ├── bool HasErrors { get; protected set; } - Présence erreurs
+│   ├── Dictionary&lt;string, string[]&gt; ValidationErrors { get; } - Erreurs validation par propriété
+│   └── CancellationTokenSource CancellationTokenSource { get; } - Token annulation
+├── <strong>Properties MVVM :</strong>
+│   ├── ICommand RefreshCommand { get; protected set; } - Commande actualisation
+│   ├── ICommand SaveCommand { get; protected set; } - Commande sauvegarde
+│   ├── ICommand CancelCommand { get; protected set; } - Commande annulation
+│   ├── bool IsReadOnly { get; set; } - Mode lecture seule
+│   └── Dictionary&lt;string, object&gt; ViewState { get; } - État interface utilisateur
+├── <strong>Methods - INotifyPropertyChanged :</strong>
+│   ├── event PropertyChangedEventHandler PropertyChanged - Événement changement
+│   ├── protected virtual void OnPropertyChanged([CallerMemberName] string propertyName) - Notification
+│   ├── protected bool SetProperty&lt;T&gt;(ref T field, T value, [CallerMemberName] string propertyName) - Mise à jour avec notification
+│   ├── protected void RaisePropertyChanged(string propertyName) - Déclenchement explicite
+│   ├── protected void RaisePropertyChanged(params string[] propertyNames) - Multiple propriétés
+│   └── protected void RaiseAllPropertiesChanged() - Toutes propriétés
+├── <strong>Methods - Cycle de Vie :</strong>
+│   ├── public virtual async Task InitializeAsync() - Initialisation async
+│   ├── public virtual void Initialize() - Initialisation sync
+│   ├── public virtual async Task LoadDataAsync() - Chargement données async
+│   ├── public virtual void LoadData() - Chargement données sync
+│   ├── public virtual async Task SaveAsync() - Sauvegarde async
+│   ├── public virtual void Save() - Sauvegarde sync
+│   ├── public virtual void Reset() - Remise à zéro
+│   └── public virtual void Dispose() - Libération ressources
+├── <strong>Methods - État et Validation :</strong>
+│   ├── protected void SetBusy(bool isBusy, string message = null) - Définition état occupé
+│   ├── protected void AddValidationError(string propertyName, string error) - Ajout erreur validation
+│   ├── protected void RemoveValidationError(string propertyName) - Suppression erreur validation
+│   ├── protected void ClearValidationErrors() - Suppression toutes erreurs
+│   ├── protected virtual ValidationResult ValidateProperty(string propertyName, object value) - Validation propriété
+│   └── protected virtual ValidationResult ValidateAll() - Validation complète
+├── <strong>Methods - Utilitaires :</strong>
+│   ├── protected void SetViewState(string key, object value) - État interface
+│   ├── protected T GetViewState&lt;T&gt;(string key, T defaultValue) - Récupération état
+│   ├── protected virtual void OnModelChanged() - Changement modèle sous-jacent
+│   └── protected virtual void OnViewStateChanged() - Changement état vue
+└── <strong>Events :</strong>
+    ├── InitializationCompleted - Initialisation terminée
+    ├── DataLoaded - Données chargées
+    ├── ValidationStateChanged - État validation changé
+    └── BusyStateChanged - État occupé changé
+
+<strong>LayerViewModel : ViewModelBase</strong> - ViewModel pour couches cartographiques
+├── <strong>Properties Data :</strong>
+│   ├── LayerData LayerData { get; set; } - Données couche sous-jacente
+│   ├── string Name { get; set; } - Nom couche
+│   ├── string Description { get; set; } - Description couche
+│   ├── GeometryType GeometryType { get; } - Type géométrie
+│   ├── int FeatureCount { get; } - Nombre features
+│   ├── Envelope Extent { get; } - Emprise couche
+│   └── SpatialReference SpatialReference { get; } - Référence spatiale
+├── <strong>Properties Visualisation :</strong>
+│   ├── bool IsVisible { get; set; } - Visibilité couche
+│   ├── double Opacity { get; set; } - Opacité (0-1)
+│   ├── IRenderer Renderer { get; set; } - Renderer symbologie
+│   ├── bool IsSelectable { get; set; } - Sélection activée
+│   ├── bool IsEditable { get; set; } - Édition activée
+│   ├── double MinScale { get; set; } - Échelle minimum affichage
+│   ├── double MaxScale { get; set; } - Échelle maximum affichage
+│   └── LayerDisplayMode DisplayMode { get; set; } - Mode affichage
+├── <strong>Properties État :</strong>
+│   ├── bool IsLoading { get; set; } - Chargement en cours
+│   ├── bool HasData { get; } - Contient données
+│   ├── bool HasErrors { get; } - Erreurs présentes
+│   ├── string ErrorMessage { get; set; } - Message erreur
+│   ├── DateTime LastRefresh { get; set; } - Dernière actualisation
+│   └── LayerStatus Status { get; set; } - Statut couche
+├── <strong>Commands :</strong>
+│   ├── ICommand ToggleVisibilityCommand { get; } - Basculer visibilité
+│   ├── ICommand ZoomToExtentCommand { get; } - Zoomer sur emprise
+│   ├── ICommand RefreshDataCommand { get; } - Actualiser données
+│   ├── ICommand OpenPropertiesCommand { get; } - Ouvrir propriétés
+│   ├── ICommand RemoveLayerCommand { get; } - Supprimer couche
+│   ├── ICommand ExportDataCommand { get; } - Exporter données
+│   └── ICommand ConfigureRendererCommand { get; } - Configurer symbologie
+├── <strong>Methods :</strong>
+│   ├── async Task LoadFeaturesAsync() - Chargement features
+│   ├── void UpdateVisibility() - Mise à jour visibilité
+│   ├── void UpdateRenderer() - Mise à jour renderer
+│   ├── LayerStatistics GetStatistics() - Statistiques couche
+│   ├── void ApplyFilter(QueryFilter filter) - Application filtre
+│   └── void ClearFilter() - Suppression filtre
+
+<strong>FeatureViewModel : ViewModelBase, IEditableObject</strong> - ViewModel pour feature individuelle
+├── <strong>Properties Core :</strong>
+│   ├── Feature Feature { get; set; } - Feature sous-jacente
+│   ├── long ObjectID { get; } - Identifiant unique
+│   ├── Geometry Geometry { get; set; } - Géométrie feature
+│   ├── GeometryType GeometryType { get; } - Type géométrie
+│   ├── Dictionary&lt;string, object&gt; Attributes { get; } - Attributs feature
+│   └── FeatureSchema Schema { get; } - Schéma feature
+├── <strong>Properties État :</strong>
+│   ├── bool IsSelected { get; set; } - Feature sélectionnée
+│   ├── bool IsEditing { get; set; } - En cours édition
+│   ├── bool HasChanges { get; } - Modifications présentes
+│   ├── bool IsValid { get; } - Feature valide
+│   ├── FeatureState State { get; } - État feature
+│   └── Dictionary&lt;string, object&gt; OriginalValues { get; } - Valeurs originales
+├── <strong>Properties Display :</strong>
+│   ├── string DisplayText { get; } - Texte affichage
+│   ├── Symbol Symbol { get; set; } - Symbole affichage
+│   ├── bool IsHighlighted { get; set; } - Mise en surbrillance
+│   ├── Color HighlightColor { get; set; } - Couleur surbrillance
+│   └── FeatureTooltip Tooltip { get; } - Info-bulle
+├── <strong>Indexer :</strong>
+│   └── object this[string fieldName] { get; set; } - Accès attributs par nom
+├── <strong>Commands :</strong>
+│   ├── ICommand EditCommand { get; } - Commencer édition
+│   ├── ICommand SaveChangesCommand { get; } - Sauvegarder modifications
+│   ├── ICommand CancelChangesCommand { get; } - Annuler modifications
+│   ├── ICommand DeleteCommand { get; } - Supprimer feature
+│   ├── ICommand ZoomToFeatureCommand { get; } - Zoomer sur feature
+│   ├── ICommand CopyAttributesCommand { get; } - Copier attributs
+│   └── ICommand ShowDetailsCommand { get; } - Afficher détails
+├── <strong>Methods - IEditableObject :</strong>
+│   ├── void BeginEdit() - Début édition
+│   ├── void EndEdit() - Fin édition
+│   └── void CancelEdit() - Annulation édition
+├── <strong>Methods - Attributs :</strong>
+│   ├── T GetAttribute&lt;T&gt;(string fieldName) - Récupération attribut typé
+│   ├── void SetAttribute(string fieldName, object value) - Définition attribut
+│   ├── bool HasAttribute(string fieldName) - Test existence attribut
+│   ├── ValidationResult ValidateAttribute(string fieldName) - Validation attribut
+│   └── void ResetAttribute(string fieldName) - Remise à zéro attribut
+├── <strong>Methods - Géométrie :</strong>
+│   ├── void UpdateGeometry(Geometry newGeometry) - Mise à jour géométrie
+│   ├── ValidationResult ValidateGeometry() - Validation géométrie
+│   ├── Envelope GetExtent() - Emprise géométrie
+│   └── Point GetCentroid() - Centroïde géométrie
+
+<strong>MapViewModel : ViewModelBase</strong> - ViewModel pour carte principale
+├── <strong>Properties Carte :</strong>
+│   ├── Map Map { get; set; } - Carte ArcGIS
+│   ├── MapView MapView { get; set; } - Vue carte
+│   ├── Viewpoint CurrentViewpoint { get; set; } - Point de vue actuel
+│   ├── SpatialReference SpatialReference { get; set; } - Référence spatiale
+│   ├── Envelope VisibleExtent { get; } - Emprise visible
+│   └── double MapScale { get; } - Échelle carte
+├── <strong>Properties Collections :</strong>
+│   ├── ObservableCollection&lt;LayerViewModel&gt; Layers { get; } - Couches carte
+│   ├── ObservableCollection&lt;FeatureViewModel&gt; SelectedFeatures { get; } - Features sélectionnées
+│   ├── LayerViewModel SelectedLayer { get; set; } - Couche sélectionnée
+│   ├── ObservableCollection&lt;Bookmark&gt; Bookmarks { get; } - Signets
+│   └── ObservableCollection&lt;BasemapViewModel&gt; Basemaps { get; } - Fonds de carte
+├── <strong>Properties Navigation :</strong>
+│   ├── bool CanZoomIn { get; } - Zoom avant possible
+│   ├── bool CanZoomOut { get; } - Zoom arrière possible
+│   ├── bool CanPan { get; } - Déplacement possible
+│   ├── MapTool ActiveTool { get; set; } - Outil actif
+│   ├── SelectionMode SelectionMode { get; set; } - Mode sélection
+│   └── MeasurementMode MeasurementMode { get; set; } - Mode mesure
+├── <strong>Commands Navigation :</strong>
+│   ├── ICommand ZoomInCommand { get; } - Zoom avant
+│   ├── ICommand ZoomOutCommand { get; } - Zoom arrière
+│   ├── ICommand PanCommand { get; } - Déplacement
+│   ├── ICommand ZoomToFullExtentCommand { get; } - Zoom étendue complète
+│   ├── ICommand ZoomToPreviousExtentCommand { get; } - Étendue précédente
+│   ├── ICommand ZoomToNextExtentCommand { get; } - Étendue suivante
+│   └── ICommand RefreshMapCommand { get; } - Actualisation carte
+├── <strong>Commands Outils :</strong>
+│   ├── ICommand SelectToolCommand { get; } - Outil sélection
+│   ├── ICommand MeasureDistanceCommand { get; } - Mesure distance
+│   ├── ICommand MeasureAreaCommand { get; } - Mesure surface
+│   ├── ICommand IdentifyCommand { get; } - Identification
+│   ├── ICommand CreateFeatureCommand { get; } - Création feature
+│   └── ICommand EditFeatureCommand { get; } - Édition feature
+├── <strong>Methods :</strong>
+│   ├── async Task AddLayerAsync(LayerViewModel layer) - Ajout couche
+│   ├── void RemoveLayer(LayerViewModel layer) - Suppression couche
+│   ├── void SetViewpoint(Viewpoint viewpoint) - Définition point de vue
+│   ├── Task&lt;IdentifyLayerResult[]&gt; IdentifyLayersAsync(Point location) - Identification
+│   ├── void SelectFeatures(Envelope extent) - Sélection features
+│   └── void ClearSelection() - Suppression sélection
+
+<strong>DataGridViewModel&lt;T&gt; : ViewModelBase</strong> - ViewModel pour grilles de données
+├── <strong>Properties Data :</strong>
+│   ├── ObservableCollection&lt;T&gt; Items { get; set; } - Éléments grille
+│   ├── ICollectionView ItemsView { get; } - Vue collection filtrée/triée
+│   ├── T SelectedItem { get; set; } - Élément sélectionné
+│   ├── IList SelectedItems { get; set; } - Éléments sélectionnés multiples
+│   ├── int SelectedIndex { get; set; } - Index sélectionné
+│   └── int TotalItemCount { get; } - Nombre total éléments
+├── <strong>Properties Filtrage :</strong>
+│   ├── string FilterText { get; set; } - Texte filtre
+│   ├── Dictionary&lt;string, object&gt; ColumnFilters { get; } - Filtres par colonne
+│   ├── bool IsFilterActive { get; } - Filtre actif
+│   ├── Predicate&lt;object&gt; CustomFilter { get; set; } - Filtre personnalisé
+│   └── int FilteredItemCount { get; } - Nombre éléments filtrés
+├── <strong>Properties Tri :</strong>
+│   ├── string SortColumn { get; set; } - Colonne tri
+│   ├── ListSortDirection SortDirection { get; set; } - Direction tri
+│   ├── List&lt;SortDescription&gt; SortDescriptions { get; } - Tris multiples
+│   └── bool CanSort { get; set; } - Tri autorisé
+├── <strong>Properties Pagination :</strong>
+│   ├── int PageSize { get; set; } - Taille page
+│   ├── int CurrentPage { get; set; } - Page courante
+│   ├── int PageCount { get; } - Nombre pages
+│   ├── bool CanGoToPreviousPage { get; } - Page précédente possible
+│   └── bool CanGoToNextPage { get; } - Page suivante possible
+├── <strong>Commands :</strong>
+│   ├── ICommand AddItemCommand { get; } - Ajouter élément
+│   ├── ICommand DeleteSelectedCommand { get; } - Supprimer sélectionnés
+│   ├── ICommand RefreshCommand { get; } - Actualiser données
+│   ├── ICommand ClearFilterCommand { get; } - Effacer filtre
+│   ├── ICommand ExportCommand { get; } - Exporter données
+│   ├── ICommand FirstPageCommand { get; } - Première page
+│   ├── ICommand PreviousPageCommand { get; } - Page précédente
+│   ├── ICommand NextPageCommand { get; } - Page suivante
+│   └── ICommand LastPageCommand { get; } - Dernière page
+├── <strong>Methods :</strong>
+│   ├── void ApplyFilter() - Application filtre
+│   ├── void ClearFilter() - Suppression filtre
+│   ├── void ApplySort(string columnName, ListSortDirection direction) - Application tri
+│   ├── void ClearSort() - Suppression tri
+│   ├── void GoToPage(int pageNumber) - Navigation page
+│   ├── void AddItem(T item) - Ajout élément
+│   ├── void RemoveItem(T item) - Suppression élément
+│   └── void RefreshView() - Actualisation vue</div>
+                </div>
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- observable-collections-detail.html -->
+<div class="card">
+                    <h2>Collections Observables - Synchronisation Automatique</h2>
+                    
+                    <div class="file-structure"><strong>ObservableFeatureCollection : ObservableCollection&lt;FeatureViewModel&gt;, INotifyCollectionChanged</strong> - Collection observable pour features
+├── <strong>Properties Core :</strong>
+│   ├── FeatureTable SourceTable { get; set; } - Table source données
+│   ├── QueryFilter ActiveFilter { get; set; } - Filtre actif
+│   ├── string[] SortFields { get; set; } - Champs de tri
+│   ├── SortOrder SortOrder { get; set; } - Ordre tri
+│   ├── bool AutoRefresh { get; set; } - Actualisation automatique
+│   └── TimeSpan RefreshInterval { get; set; } - Intervalle actualisation
+├── <strong>Properties État :</strong>
+│   ├── bool IsLoading { get; protected set; } - Chargement en cours
+│   ├── bool HasChanges { get; protected set; } - Modifications non sauvées
+│   ├── int ModifiedCount { get; } - Nombre éléments modifiés
+│   ├── int AddedCount { get; } - Nombre éléments ajoutés
+│   ├── int DeletedCount { get; } - Nombre éléments supprimés
+│   └── DateTime LastRefresh { get; } - Dernière actualisation
+├── <strong>Properties Filtrage :</strong>
+│   ├── bool IsFiltered { get; } - Filtre appliqué
+│   ├── int TotalCount { get; } - Total avant filtre
+│   ├── int FilteredCount { get; } - Total après filtre
+│   ├── Predicate&lt;FeatureViewModel&gt; CustomPredicate { get; set; } - Prédicat personnalisé
+│   └── Dictionary&lt;string, object&gt; FilterCriteria { get; } - Critères filtre
+├── <strong>Methods - Chargement :</strong>
+│   ├── async Task LoadFromTableAsync(FeatureTable table) - Chargement depuis table
+│   ├── async Task RefreshAsync() - Actualisation complète
+│   ├── void LoadItem(Feature feature) - Chargement feature individuelle
+│   ├── void UnloadItem(FeatureViewModel item) - Déchargement feature
+│   ├── async Task LoadMoreAsync(int count) - Chargement incrémental
+│   └── void ClearItems() - Vidage collection
+├── <strong>Methods - Filtrage :</strong>
+│   ├── void ApplyFilter(QueryFilter filter) - Application filtre
+│   ├── void ApplyPredicate(Predicate&lt;FeatureViewModel&gt; predicate) - Application prédicat
+│   ├── void ClearFilter() - Suppression filtre
+│   ├── ObservableFeatureCollection CreateFilteredView(QueryFilter filter) - Vue filtrée
+│   ├── void AddFilterCriteria(string field, object value) - Ajout critère
+│   └── void RemoveFilterCriteria(string field) - Suppression critère
+├── <strong>Methods - Tri :</strong>
+│   ├── void Sort(string fieldName, SortOrder order) - Tri simple
+│   ├── void Sort(IComparer&lt;FeatureViewModel&gt; comparer) - Tri personnalisé
+│   ├── void AddSort(string fieldName, SortOrder order) - Ajout tri
+│   ├── void ClearSort() - Suppression tri
+│   └── void ApplySortDescriptions(SortDescriptionCollection sorts) - Tris multiples
+├── <strong>Methods - Modifications :</strong>
+│   ├── void BeginUpdate() - Début mise à jour batch
+│   ├── void EndUpdate() - Fin mise à jour batch
+│   ├── async Task SaveChangesAsync() - Sauvegarde modifications
+│   ├── void AcceptChanges() - Validation modifications
+│   ├── void RejectChanges() - Annulation modifications
+│   ├── bool HasUnsavedChanges() - Test modifications non sauvées
+│   └── ChangeTrackingInfo GetChangeInfo() - Informations modifications
+├── <strong>Events :</strong>
+│   ├── CollectionChanged - Changement collection (hérité)
+│   ├── FilterChanged - Changement filtre
+│   ├── SortChanged - Changement tri
+│   ├── LoadingStateChanged - Changement état chargement
+│   └── ChangesDetected - Modifications détectées
+└── <strong>Methods - Recherche :</strong>
+    ├── FeatureViewModel FindByObjectID(long objectId) - Recherche par ID
+    ├── IEnumerable&lt;FeatureViewModel&gt; FindByAttribute(string field, object value) - Recherche par attribut
+    ├── FeatureViewModel FindNearest(Point location) - Plus proche géographiquement
+    └── IEnumerable&lt;FeatureViewModel&gt; Search(string searchText) - Recherche textuelle
+
+<strong>FilteredObservableCollection&lt;T&gt; : ObservableCollection&lt;T&gt;</strong> - Collection observable avec filtrage temps réel
+├── <strong>Properties :</strong>
+│   ├── ObservableCollection&lt;T&gt; SourceCollection { get; } - Collection source
+│   ├── Predicate&lt;T&gt; Filter { get; set; } - Fonction filtre
+│   ├── ICollectionView View { get; } - Vue WPF filtrée
+│   ├── bool AutoRefreshFilter { get; set; } - Actualisation auto filtre
+│   ├── bool IsFilterActive { get; } - Filtre actif
+│   └── int UnfilteredCount { get; } - Nombre éléments avant filtre
+├── <strong>Constructors :</strong>
+│   ├── FilteredObservableCollection(ObservableCollection&lt;T&gt; source) - Depuis collection source
+│   ├── FilteredObservableCollection(ObservableCollection&lt;T&gt; source, Predicate&lt;T&gt; filter) - Avec filtre initial
+│   └── FilteredObservableCollection(IEnumerable&lt;T&gt; items, Predicate&lt;T&gt; filter) - Depuis énumération
+├── <strong>Methods :</strong>
+│   ├── void SetFilter(Predicate&lt;T&gt; filter) - Définition filtre
+│   ├── void ClearFilter() - Suppression filtre
+│   ├── void RefreshFilter() - Actualisation filtre
+│   ├── bool PassesFilter(T item) - Test passage filtre
+│   ├── void AddToSource(T item) - Ajout à source
+│   └── void RemoveFromSource(T item) - Suppression de source
+
+<strong>SortedObservableCollection&lt;T&gt; : ObservableCollection&lt;T&gt;</strong> - Collection observable avec tri automatique
+├── <strong>Properties :</strong>
+│   ├── IComparer&lt;T&gt; Comparer { get; set; } - Comparateur tri
+│   ├── bool IsSorted { get; } - Collection triée
+│   ├── bool AutoSort { get; set; } - Tri automatique
+│   ├── SortOrder SortOrder { get; set; } - Ordre tri
+│   └── string SortProperty { get; set; } - Propriété tri
+├── <strong>Constructors :</strong>
+│   ├── SortedObservableCollection() - Collection vide
+│   ├── SortedObservableCollection(IComparer&lt;T&gt; comparer) - Avec comparateur
+│   └── SortedObservableCollection(IEnumerable&lt;T&gt; items, IComparer&lt;T&gt; comparer) - Avec éléments
+├── <strong>Methods :</strong>
+│   ├── void SetComparer(IComparer&lt;T&gt; comparer) - Définition comparateur
+│   ├── void Sort() - Tri manuel
+│   ├── void Sort(IComparer&lt;T&gt; comparer) - Tri avec comparateur
+│   ├── void Sort(Comparison&lt;T&gt; comparison) - Tri avec fonction
+│   ├── int GetSortedIndex(T item) - Index insertion triée
+│   └── new void Add(T item) - Ajout trié
+└── <strong>Override :</strong>
+    ├── protected override void InsertItem(int index, T item) - Insertion avec tri
+    └── protected override void SetItem(int index, T item) - Remplacement avec tri
+
+<strong>GroupedObservableCollection&lt;TKey, TValue&gt; : ObservableCollection&lt;ObservableGrouping&lt;TKey, TValue&gt;&gt;</strong> - Collection groupée
+├── <strong>Properties :</strong>
+│   ├── Func&lt;TValue, TKey&gt; GroupSelector { get; set; } - Fonction groupement
+│   ├── IComparer&lt;TKey&gt; GroupComparer { get; set; } - Comparateur groupes
+│   ├── ObservableCollection&lt;TValue&gt; SourceItems { get; } - Éléments source
+│   ├── bool AutoGroup { get; set; } - Groupement automatique
+│   └── Dictionary&lt;TKey, ObservableGrouping&lt;TKey, TValue&gt;&gt; Groups { get; } - Groupes indexés
+├── <strong>Methods :</strong>
+│   ├── void SetGrouping(Func&lt;TValue, TKey&gt; selector) - Définition groupement
+│   ├── void RefreshGrouping() - Actualisation groupement
+│   ├── void AddSourceItem(TValue item) - Ajout élément source
+│   ├── void RemoveSourceItem(TValue item) - Suppression élément source
+│   ├── ObservableGrouping&lt;TKey, TValue&gt; GetGroup(TKey key) - Récupération groupe
+│   └── void ClearGroups() - Suppression tous groupes
+
+<strong>VirtualizingObservableCollection&lt;T&gt; : ObservableCollection&lt;T&gt;</strong> - Collection avec virtualisation
+├── <strong>Properties :</strong>
+│   ├── IDataProvider&lt;T&gt; DataProvider { get; set; } - Fournisseur données
+│   ├── int PageSize { get; set; } - Taille page
+│   ├── int LoadedPageCount { get; } - Pages chargées
+│   ├── int TotalItemCount { get; set; } - Total éléments
+│   ├── bool IsVirtualizing { get; set; } - Virtualisation active
+│   └── Dictionary&lt;int, T&gt; LoadedItems { get; } - Éléments chargés
+├── <strong>Methods :</strong>
+│   ├── async Task&lt;T&gt; GetItemAsync(int index) - Récupération élément async
+│   ├── T GetItem(int index) - Récupération élément sync
+│   ├── async Task LoadPageAsync(int pageIndex) - Chargement page
+│   ├── void UnloadPage(int pageIndex) - Déchargement page
+│   ├── bool IsItemLoaded(int index) - Test élément chargé
+│   └── void ClearLoadedItems() - Suppression éléments chargés
+
+<strong>ConcurrentObservableCollection&lt;T&gt; : ObservableCollection&lt;T&gt;</strong> - Collection thread-safe
+├── <strong>Properties :</strong>
+│   ├── object SyncRoot { get; } - Objet synchronisation
+│   ├── bool IsSynchronized { get; } - Thread-safe
+│   ├── Dispatcher UIDispatcher { get; set; } - Dispatcher UI
+│   └── bool AutoDispatchToUI { get; set; } - Dispatch auto vers UI
+├── <strong>Methods - Thread Safety :</strong>
+│   ├── void AddOnUIThread(T item) - Ajout thread UI
+│   ├── void RemoveOnUIThread(T item) - Suppression thread UI
+│   ├── void ClearOnUIThread() - Vidage thread UI
+│   ├── void BeginInvoke(Action action) - Invocation async UI
+│   └── void Invoke(Action action) - Invocation sync UI
+├── <strong>Override Thread-Safe :</strong>
+│   ├── protected override void InsertItem(int index, T item) - Insertion thread-safe
+│   ├── protected override void RemoveItem(int index) - Suppression thread-safe
+│   ├── protected override void SetItem(int index, T item) - Modification thread-safe
+│   └── protected override void ClearItems() - Vidage thread-safe
+
+<strong>ChangeTrackingObservableCollection&lt;T&gt; : ObservableCollection&lt;T&gt;</strong> - Collection avec suivi modifications
+├── <strong>Properties :</strong>
+│   ├── bool IsTrackingChanges { get; set; } - Suivi modifications actif
+│   ├── List&lt;T&gt; AddedItems { get; } - Éléments ajoutés
+│   ├── List&lt;T&gt; RemovedItems { get; } - Éléments supprimés
+│   ├── List&lt;ItemChange&lt;T&gt;&gt; ModifiedItems { get; } - Éléments modifiés
+│   ├── bool HasChanges { get; } - Modifications présentes
+│   └── int ChangeCount { get; } - Nombre modifications
+├── <strong>Methods :</strong>
+│   ├── void BeginTracking() - Début suivi
+│   ├── void EndTracking() - Fin suivi
+│   ├── void AcceptChanges() - Validation modifications
+│   ├── void RejectChanges() - Annulation modifications
+│   ├── ChangeSet&lt;T&gt; GetChangeSet() - Ensemble modifications
+│   ├── void ApplyChangeSet(ChangeSet&lt;T&gt; changeSet) - Application modifications
+│   └── void ClearChangeTracking() - Suppression historique
+├── <strong>Events :</strong>
+│   ├── ItemAdded - Élément ajouté
+│   ├── ItemRemoved - Élément supprimé
+│   ├── ItemModified - Élément modifié
+│   └── ChangesAccepted - Modifications validées
+
+<strong>ObservableGrouping&lt;TKey, TValue&gt; : ObservableCollection&lt;TValue&gt;</strong> - Groupe observable
+├── <strong>Properties :</strong>
+│   ├── TKey Key { get; } - Clé groupe
+│   ├── string DisplayName { get; set; } - Nom affichage
+│   ├── bool IsExpanded { get; set; } - Groupe étendu
+│   ├── int TotalCount { get; } - Nombre total éléments
+│   └── object GroupData { get; set; } - Données groupe
+├── <strong>Methods :</strong>
+│   ├── void UpdateDisplayName() - Mise à jour nom
+│   ├── void SortItems(IComparer&lt;TValue&gt; comparer) - Tri éléments
+│   └── TValue[] GetItemsArray() - Tableau éléments
+
+<strong>CollectionSynchronizer&lt;T&gt; : IDisposable</strong> - Synchroniseur collections
+├── <strong>Properties :</strong>
+│   ├── ObservableCollection&lt;T&gt; SourceCollection { get; } - Collection source
+│   ├── ObservableCollection&lt;T&gt; TargetCollection { get; } - Collection cible
+│   ├── Func&lt;T, T&gt; ItemConverter { get; set; } - Convertisseur éléments
+│   ├── bool IsSynchronizing { get; set; } - Synchronisation active
+│   └── SynchronizationMode Mode { get; set; } - Mode synchronisation
+├── <strong>Methods :</strong>
+│   ├── void StartSynchronization() - Début synchronisation
+│   ├── void StopSynchronization() - Arrêt synchronisation
+│   ├── void SynchronizeNow() - Synchronisation immédiate
+│   ├── void SetItemConverter(Func&lt;T, T&gt; converter) - Définition convertisseur
+│   └── void Dispose() - Libération ressources</div>
+                </div>
+                <div class="card">
+                    <h2>Patterns et Interfaces MVVM</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>INotifyPropertyChanged</h4>
+                            <ul>
+                                <li><strong>PropertyChanged</strong> - Événement changement propriété</li>
+                                <li><strong>OnPropertyChanged</strong> - Déclenchement notification</li>
+                                <li><strong>SetProperty</strong> - Mise à jour avec notification</li>
+                                <li><strong>RaisePropertyChanged</strong> - Notification explicite</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ICommand</h4>
+                            <ul>
+                                <li><strong>Execute</strong> - Exécution commande</li>
+                                <li><strong>CanExecute</strong> - Test exécution possible</li>
+                                <li><strong>CanExecuteChanged</strong> - Changement état</li>
+                                <li><strong>RelayCommand</strong> - Implémentation générique</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>IDataErrorInfo</h4>
+                            <ul>
+                                <li><strong>Error</strong> - Erreur globale objet</li>
+                                <li><strong>this[columnName]</strong> - Erreur propriété</li>
+                                <li><strong>HasErrors</strong> - Présence erreurs</li>
+                                <li><strong>ValidationRules</strong> - Règles validation</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>IValueConverter</h4>
+                            <ul>
+                                <li><strong>Convert</strong> - Conversion source → cible</li>
+                                <li><strong>ConvertBack</strong> - Conversion cible → source</li>
+                                <li><strong>TargetType</strong> - Type cible</li>
+                                <li><strong>Parameter</strong> - Paramètre conversion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- property-binding-detail.html -->
+<div class="card">
+                    <h2>Property Binding - Liaison Propriétés Bidirectionnelle</h2>
+                    
+                    <div class="file-structure"><strong>PropertyBinding</strong> - Système de liaison propriétés WPF ↔ ViewModels
+├── <strong>Binding Modes :</strong>
+│   ├── OneWay - Source → Target uniquement (lecture seule)
+│   ├── TwoWay - Source ↔ Target (lecture/écriture)
+│   ├── OneTime - Source → Target (une fois seulement)
+│   ├── OneWayToSource - Target → Source (inverse)
+│   └── Default - Mode par défaut selon propriété
+├── <strong>Binding Sources :</strong>
+│   ├── DataContext - Contexte données automatique
+│   ├── ElementName - Référence élément nommé
+│   ├── RelativeSource - Source relative (Self, Parent, TemplatedParent)
+│   ├── Source - Source explicite
+│   └── StaticResource - Ressource statique
+├── <strong>Path Expressions :</strong>
+│   ├── Simple Property - "{Binding PropertyName}"
+│   ├── Nested Property - "{Binding Parent.Child.Property}"
+│   ├── Indexer - "{Binding Items[0].Name}"
+│   ├── Collection Current - "{Binding /Name}" (ICollectionView)
+│   └── Attached Property - "{Binding (Grid.Row)}"
+└── <strong>Binding Options :</strong>
+    ├── UpdateSourceTrigger - Moment mise à jour (PropertyChanged, LostFocus, Explicit)
+    ├── ValidatesOnDataErrors - Validation erreurs données
+    ├── ValidatesOnExceptions - Validation exceptions
+    ├── NotifyOnValidationError - Notification erreurs
+    ├── StringFormat - Format affichage
+    ├── TargetNullValue - Valeur si source null
+    ├── FallbackValue - Valeur si binding échoue
+    └── Delay - Délai avant mise à jour
+
+<strong>TwoWayBinding&lt;TSource, TTarget&gt;</strong> - Binding bidirectionnel typé
+├── <strong>Properties Core :</strong>
+│   ├── TSource SourceValue { get; set; } - Valeur source
+│   ├── TTarget TargetValue { get; set; } - Valeur cible
+│   ├── Expression&lt;Func&lt;TSource&gt;&gt; SourceExpression { get; } - Expression source
+│   ├── Expression&lt;Func&lt;TTarget&gt;&gt; TargetExpression { get; } - Expression cible
+│   ├── Func&lt;TSource, TTarget&gt; SourceToTarget { get; set; } - Conversion source → cible
+│   ├── Func&lt;TTarget, TSource&gt; TargetToSource { get; set; } - Conversion cible → source
+│   └── BindingMode Mode { get; set; } - Mode liaison
+├── <strong>Properties État :</strong>
+│   ├── bool IsSourceToTargetValid { get; } - Conversion source → cible valide
+│   ├── bool IsTargetToSourceValid { get; } - Conversion cible → source valide
+│   ├── Exception LastConversionError { get; } - Dernière erreur conversion
+│   ├── bool IsSynchronizing { get; } - Synchronisation en cours
+│   ├── DateTime LastSync { get; } - Dernière synchronisation
+│   └── bool AutoSync { get; set; } - Synchronisation automatique
+├── <strong>Methods :</strong>
+│   ├── void SyncSourceToTarget() - Synchronisation source → cible
+│   ├── void SyncTargetToSource() - Synchronisation cible → source
+│   ├── void SyncBoth() - Synchronisation bidirectionnelle
+│   ├── bool TryConvertSourceToTarget(out TTarget result) - Tentative conversion
+│   ├── bool TryConvertTargetToSource(out TSource result) - Tentative conversion inverse
+│   ├── void SetConverter(IValueConverter converter) - Définition convertisseur
+│   ├── void ClearConverter() - Suppression convertisseur
+│   └── void Dispose() - Libération ressources
+└── <strong>Events :</strong>
+    ├── SourceChanged - Changement source
+    ├── TargetChanged - Changement cible
+    ├── ConversionError - Erreur conversion
+    └── SyncCompleted - Synchronisation terminée
+
+<strong>PropertyBindingManager</strong> - Gestionnaire bindings propriétés
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, PropertyBinding&gt; Bindings { get; } - Bindings enregistrés
+│   ├── List&lt;WeakReference&gt; TargetObjects { get; } - Objets cibles (weak reference)
+│   ├── bool AutoCleanupDisposed { get; set; } - Nettoyage automatique objets supprimés
+│   ├── TimeSpan CleanupInterval { get; set; } - Intervalle nettoyage
+│   └── int ActiveBindingsCount { get; } - Nombre bindings actifs
+├── <strong>Methods - Registration :</strong>
+│   ├── PropertyBinding&lt;T&gt; CreateBinding&lt;T&gt;(object source, string sourcePath, object target, string targetPath) - Création binding
+│   ├── void RegisterBinding(string key, PropertyBinding binding) - Enregistrement binding
+│   ├── void UnregisterBinding(string key) - Suppression binding
+│   ├── PropertyBinding GetBinding(string key) - Récupération binding
+│   ├── bool HasBinding(string key) - Test existence binding
+│   └── void ClearBindings() - Suppression tous bindings
+├── <strong>Methods - Lifecycle :</strong>
+│   ├── void StartAllBindings() - Démarrage tous bindings
+│   ├── void StopAllBindings() - Arrêt tous bindings
+│   ├── void RefreshAllBindings() - Actualisation tous bindings
+│   ├── void ValidateAllBindings() - Validation tous bindings
+│   ├── void CleanupDisposedTargets() - Nettoyage objets supprimés
+│   └── BindingHealthReport GetHealthReport() - Rapport santé bindings
+├── <strong>Methods - Batch Operations :</strong>
+│   ├── void BeginUpdate() - Début mise à jour batch
+│   ├── void EndUpdate() - Fin mise à jour batch
+│   ├── void SuspendBinding(string key) - Suspension binding
+│   ├── void ResumeBinding(string key) - Reprise binding
+│   └── void UpdateBindings(params string[] keys) - Mise à jour sélective
+└── <strong>Events :</strong>
+    ├── BindingRegistered - Binding enregistré
+    ├── BindingUnregistered - Binding supprimé
+    ├── BindingError - Erreur binding
+    └── CleanupCompleted - Nettoyage terminé
+
+<strong>DependencyPropertyBinding</strong> - Binding pour DependencyProperty
+├── <strong>Properties :</strong>
+│   ├── DependencyObject Target { get; set; } - Objet cible
+│   ├── DependencyProperty Property { get; set; } - Propriété dépendance
+│   ├── object Source { get; set; } - Source binding
+│   ├── string Path { get; set; } - Chemin propriété
+│   ├── BindingMode Mode { get; set; } - Mode binding
+│   └── IValueConverter Converter { get; set; } - Convertisseur
+├── <strong>Methods :</strong>
+│   ├── void Bind() - Établissement binding
+│   ├── void Unbind() - Suppression binding
+│   ├── void UpdateTarget() - Mise à jour cible
+│   ├── void UpdateSource() - Mise à jour source
+│   ├── object GetTargetValue() - Récupération valeur cible
+│   ├── void SetTargetValue(object value) - Définition valeur cible
+│   ├── object GetSourceValue() - Récupération valeur source
+│   └── void SetSourceValue(object value) - Définition valeur source
+└── <strong>Events :</strong>
+    ├── TargetUpdated - Cible mise à jour
+    ├── SourceUpdated - Source mise à jour
+    └── BindingError - Erreur binding
+
+<strong>AttachedPropertyBinding</strong> - Binding pour propriétés attachées
+├── <strong>Attached Properties :</strong>
+│   ├── BindingSource - Source binding attachée
+│   ├── BindingPath - Chemin binding attaché
+│   ├── BindingConverter - Convertisseur attaché
+│   ├── BindingMode - Mode binding attaché
+│   └── BindingValidation - Validation attachée
+├── <strong>Methods :</strong>
+│   ├── static void SetBindingSource(DependencyObject obj, object value) - Définition source
+│   ├── static object GetBindingSource(DependencyObject obj) - Récupération source
+│   ├── static void SetBindingPath(DependencyObject obj, string value) - Définition chemin
+│   ├── static string GetBindingPath(DependencyObject obj) - Récupération chemin
+│   ├── static void CreateBinding(DependencyObject target, DependencyProperty property) - Création binding
+│   └── static void RemoveBinding(DependencyObject target, DependencyProperty property) - Suppression binding
+└── <strong>Callbacks :</strong>
+    ├── OnBindingSourceChanged - Changement source
+    ├── OnBindingPathChanged - Changement chemin
+    └── OnBindingModeChanged - Changement mode
+
+<strong>MultiBinding</strong> - Binding multiple sources
+├── <strong>Properties :</strong>
+│   ├── Collection&lt;BindingBase&gt; Bindings { get; } - Collection bindings
+│   ├── IMultiValueConverter Converter { get; set; } - Convertisseur multi-valeurs
+│   ├── object ConverterParameter { get; set; } - Paramètre convertisseur
+│   ├── CultureInfo ConverterCulture { get; set; } - Culture convertisseur
+│   └── BindingMode Mode { get; set; } - Mode binding
+├── <strong>Methods :</strong>
+│   ├── void AddBinding(BindingBase binding) - Ajout binding
+│   ├── void RemoveBinding(BindingBase binding) - Suppression binding
+│   ├── void ClearBindings() - Suppression tous bindings
+│   ├── object[] GetSourceValues() - Récupération toutes valeurs sources
+│   ├── void UpdateAllSources() - Mise à jour toutes sources
+│   └── bool ValidateAllSources() - Validation toutes sources
+└── <strong>Interface IMultiValueConverter :</strong>
+    ├── Convert(object[] values, Type targetType, object parameter, CultureInfo culture) - Conversion
+    └── ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) - Conversion inverse
+
+<strong>PropertyChangeNotifier</strong> - Notificateur changements propriétés
+├── <strong>Properties :</strong>
+│   ├── WeakReference TargetRef { get; } - Référence faible cible
+│   ├── PropertyInfo Property { get; } - Information propriété
+│   ├── string PropertyPath { get; } - Chemin propriété
+│   ├── bool IsValid { get; } - Notificateur valide
+│   └── object CurrentValue { get; } - Valeur actuelle
+├── <strong>Methods :</strong>
+│   ├── void Subscribe() - Abonnement notifications
+│   ├── void Unsubscribe() - Désabonnement notifications
+│   ├── void CheckForChanges() - Vérification changements
+│   ├── void ForceNotification() - Notification forcée
+│   └── void Dispose() - Libération ressources
+└── <strong>Events :</strong>
+    ├── PropertyChanged - Propriété changée
+    ├── ValueChanged - Valeur changée
+    └── TargetDisposed - Cible supprimée
+
+<strong>BindingExpressionBuilder</strong> - Constructeur expressions binding
+├── <strong>Static Methods :</strong>
+│   ├── Binding CreateBinding(object source, string path) - Création binding simple
+│   ├── Binding CreateTwoWayBinding(object source, string path) - Création binding bidirectionnel
+│   ├── MultiBinding CreateMultiBinding(params BindingBase[] bindings) - Création multi-binding
+│   ├── Binding CreateElementBinding(string elementName, string path) - Binding vers élément
+│   ├── Binding CreateRelativeBinding(RelativeSourceMode mode, string path) - Binding relatif
+│   ├── Binding CreateStaticBinding(Type staticType, string path) - Binding statique
+│   └── Binding CreateResourceBinding(string resourceKey) - Binding ressource
+├── <strong>Fluent API :</strong>
+│   ├── BindingBuilder Source(object source) - Définition source
+│   ├── BindingBuilder Path(string path) - Définition chemin
+│   ├── BindingBuilder Mode(BindingMode mode) - Définition mode
+│   ├── BindingBuilder Converter(IValueConverter converter) - Définition convertisseur
+│   ├── BindingBuilder Validation(bool validate) - Activation validation
+│   ├── BindingBuilder Format(string format) - Définition format
+│   ├── BindingBuilder Delay(int milliseconds) - Définition délai
+│   └── Binding Build() - Construction binding final
+└── <strong>Validation Helpers :</strong>
+    ├── bool ValidatePath(object source, string path) - Validation chemin
+    ├── Type GetPathType(object source, string path) - Type propriété
+    ├── bool IsPathWritable(object source, string path) - Propriété modifiable
+    └── PropertyInfo GetPropertyInfo(object source, string path) - Information propriété
+
+<strong>BindingValidationRule</strong> - Règle validation binding
+├── <strong>Properties :</strong>
+│   ├── string ErrorMessage { get; set; } - Message erreur
+│   ├── ValidationStep ValidationStep { get; set; } - Étape validation
+│   ├── bool ValidatesOnTargetUpdated { get; set; } - Validation sur mise à jour cible
+│   └── CultureInfo Culture { get; set; } - Culture validation
+├── <strong>Abstract Methods :</strong>
+│   ├── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation valeur
+│   └── ValidationResult Validate(object value, CultureInfo cultureInfo, BindingExpressionBase owner) - Validation complète
+├── <strong>Built-in Rules :</strong>
+│   ├── NotNullValidationRule - Validation non-null
+│   ├── RangeValidationRule&lt;T&gt; - Validation plage valeurs
+│   ├── RegexValidationRule - Validation expression régulière
+│   ├── LengthValidationRule - Validation longueur chaîne
+│   ├── NumericValidationRule - Validation numérique
+│   └── CustomValidationRule - Validation personnalisée
+└── <strong>Validation Context :</strong>
+    ├── BindingGroup - Groupe bindings
+    ├── ValidationError - Erreur validation
+    ├── ValidationResult - Résultat validation
+    └── ValidationStep - Étape validation (RawProposedValue, ConvertedProposedValue, UpdatedValue, CommittedValue)
+
+<strong>PropertyPathResolver</strong> - Résolveur chemins propriétés
+├── <strong>Methods :</strong>
+│   ├── object ResolvePath(object source, string path) - Résolution chemin complet
+│   ├── PropertyInfo[] GetPathProperties(Type sourceType, string path) - Propriétés chemin
+│   ├── bool TrySetValue(object source, string path, object value) - Définition valeur
+│   ├── bool TryGetValue(object source, string path, out object value) - Récupération valeur
+│   ├── Type GetPathType(Type sourceType, string path) - Type final chemin
+│   ├── bool IsPathValid(Type sourceType, string path) - Validation chemin
+│   ├── string[] SplitPath(string path) - Division chemin segments
+│   └── string NormalizePath(string path) - Normalisation chemin
+├── <strong>Indexer Support :</strong>
+│   ├── ParseIndexer(string segment) - Analyse indexeur
+│   ├── ResolveIndexedProperty(object source, string propertyName, object[] indices) - Propriété indexée
+│   └── GetIndexerType(Type type) - Type indexeur
+└── <strong>Collection Support :</strong>
+    ├── ResolveCollectionPath(IEnumerable collection, string path) - Chemin collection
+    ├── GetCollectionCurrentItem(ICollectionView view) - Élément actuel collection
+    └── SetCollectionCurrentItem(ICollectionView view, object item) - Définition élément actuel</div>
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- commands-system-detail.html -->
+<div class="card">
+                    <h2>Commands System - Système de Commandes MVVM</h2>
+                    
+                    <div class="file-structure"><strong>ICommand Interface</strong> - Interface de base pour toutes les commandes
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter) - Test si commande peut s'exécuter
+│   ├── void Execute(object parameter) - Exécution commande
+│   └── event EventHandler CanExecuteChanged - Changement état exécution
+├── <strong>WPF Integration :</strong>
+│   ├── Command Binding - Liaison commande → contrôle
+│   ├── Input Binding - Liaison geste → commande
+│   ├── Key Binding - Liaison touche → commande
+│   └── Mouse Binding - Liaison souris → commande
+└── <strong>Command Sources :</strong>
+    ├── Button.Command - Bouton commande
+    ├── MenuItem.Command - Item menu commande
+    ├── Hyperlink.Command - Lien hypertexte commande
+    └── InputBinding.Command - Geste entrée commande
+
+<strong>RelayCommand : ICommand</strong> - Implémentation commande de base
+├── <strong>Properties :</strong>
+│   ├── Action&lt;object&gt; ExecuteAction { get; } - Action d'exécution
+│   ├── Func&lt;object, bool&gt; CanExecuteFunc { get; } - Fonction test exécution
+│   ├── string Name { get; set; } - Nom commande
+│   ├── string Description { get; set; } - Description commande
+│   ├── object Tag { get; set; } - Données utilisateur
+│   └── bool IsEnabled { get; set; } - Commande activée
+├── <strong>Constructors :</strong>
+│   ├── RelayCommand(Action execute) - Action simple
+│   ├── RelayCommand(Action execute, Func&lt;bool&gt; canExecute) - Avec condition
+│   ├── RelayCommand(Action&lt;object&gt; execute) - Avec paramètre
+│   ├── RelayCommand(Action&lt;object&gt; execute, Func&lt;object, bool&gt; canExecute) - Complet
+│   └── RelayCommand(Action&lt;object&gt; execute, Func&lt;object, bool&gt; canExecute, string name) - Avec nom
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter) - Test exécution (ICommand)
+│   ├── void Execute(object parameter) - Exécution (ICommand)
+│   ├── void RaiseCanExecuteChanged() - Notification changement état
+│   ├── void SetCanExecuteFunc(Func&lt;object, bool&gt; canExecuteFunc) - Redéfinition condition
+│   ├── void SetExecuteAction(Action&lt;object&gt; executeAction) - Redéfinition action
+│   └── RelayCommand WithCondition(Func&lt;object, bool&gt; condition) - Fluent API
+├── <strong>Events :</strong>
+│   ├── CanExecuteChanged - Changement condition exécution
+│   ├── Executing - Avant exécution
+│   ├── Executed - Après exécution
+│   └── ExecutionFailed - Échec exécution
+└── <strong>Static Helpers :</strong>
+    ├── RelayCommand Create(Action execute) - Création rapide
+    ├── RelayCommand Create&lt;T&gt;(Action&lt;T&gt; execute) - Création typée
+    ├── RelayCommand CreateAsync(Func&lt;Task&gt; execute) - Version async
+    └── RelayCommand Disabled - Commande toujours désactivée
+
+<strong>AsyncRelayCommand : ICommand</strong> - Commande asynchrone
+├── <strong>Properties :</strong>
+│   ├── Func&lt;object, Task&gt; AsyncExecuteFunc { get; } - Fonction async
+│   ├── Func&lt;object, bool&gt; CanExecuteFunc { get; } - Fonction test exécution
+│   ├── bool IsExecuting { get; } - Exécution en cours
+│   ├── Task CurrentExecution { get; } - Tâche courante
+│   ├── CancellationToken CancellationToken { get; } - Token annulation
+│   ├── bool CancelOnExecute { get; set; } - Annulation précédente exécution
+│   ├── bool AllowConcurrentExecutions { get; set; } - Exécutions simultanées
+│   └── TimeSpan ExecutionTimeout { get; set; } - Délai expiration
+├── <strong>Constructors :</strong>
+│   ├── AsyncRelayCommand(Func&lt;Task&gt; execute) - Async simple
+│   ├── AsyncRelayCommand(Func&lt;Task&gt; execute, Func&lt;bool&gt; canExecute) - Avec condition
+│   ├── AsyncRelayCommand(Func&lt;object, Task&gt; execute) - Avec paramètre
+│   ├── AsyncRelayCommand(Func&lt;object, Task&gt; execute, Func&lt;object, bool&gt; canExecute) - Complet
+│   └── AsyncRelayCommand(Func&lt;CancellationToken, Task&gt; execute) - Avec cancellation
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter) - Test exécution
+│   ├── void Execute(object parameter) - Exécution (lance async)
+│   ├── Task ExecuteAsync(object parameter) - Exécution async directe
+│   ├── Task ExecuteAsync(object parameter, CancellationToken cancellationToken) - Avec annulation
+│   ├── void Cancel() - Annulation exécution
+│   ├── void CancelAll() - Annulation toutes exécutions
+│   ├── Task WaitForExecutionAsync() - Attente fin exécution
+│   └── void SetTimeout(TimeSpan timeout) - Définition délai
+├── <strong>Events :</strong>
+│   ├── CanExecuteChanged - Changement condition exécution
+│   ├── ExecutionStarted - Début exécution
+│   ├── ExecutionCompleted - Fin exécution
+│   ├── ExecutionCanceled - Exécution annulée
+│   ├── ExecutionFailed - Échec exécution
+│   └── ProgressChanged - Progression exécution
+└── <strong>Exception Handling :</strong>
+    ├── Action&lt;Exception&gt; ExceptionHandler - Gestionnaire exceptions
+    ├── bool ContinueOnCapturedContext { get; set; } - Contexte capture
+    └── void HandleException(Exception ex) - Traitement exception
+
+<strong>ParameterizedCommand&lt;T&gt; : ICommand</strong> - Commande avec paramètre typé
+├── <strong>Properties :</strong>
+│   ├── Action&lt;T&gt; ExecuteAction { get; } - Action typée
+│   ├── Func&lt;T, bool&gt; CanExecuteFunc { get; } - Test typé
+│   ├── Type ParameterType { get; } - Type paramètre
+│   ├── T DefaultParameter { get; set; } - Paramètre par défaut
+│   └── bool ValidateParameterType { get; set; } - Validation type paramètre
+├── <strong>Constructors :</strong>
+│   ├── ParameterizedCommand(Action&lt;T&gt; execute) - Action typée simple
+│   ├── ParameterizedCommand(Action&lt;T&gt; execute, Func&lt;T, bool&gt; canExecute) - Avec condition
+│   └── ParameterizedCommand(Action&lt;T&gt; execute, Func&lt;T, bool&gt; canExecute, T defaultParameter) - Complet
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter) - Test avec conversion
+│   ├── void Execute(object parameter) - Exécution avec conversion
+│   ├── bool CanExecuteTyped(T parameter) - Test typé direct
+│   ├── void ExecuteTyped(T parameter) - Exécution typée directe
+│   ├── T ConvertParameter(object parameter) - Conversion paramètre
+│   └── bool IsValidParameter(object parameter) - Validation paramètre
+└── <strong>Type Safety :</strong>
+    ├── bool TryConvertParameter(object parameter, out T converted) - Tentative conversion
+    ├── Exception CreateParameterException(object parameter) - Exception paramètre
+    └── void ValidateParameterType(object parameter) - Validation type
+
+<strong>CompositeCommand : ICommand</strong> - Commande composite (plusieurs commandes)
+├── <strong>Properties :</strong>
+│   ├── ObservableCollection&lt;ICommand&gt; Commands { get; } - Collection commandes
+│   ├── bool ExecuteAllCommands { get; set; } - Exécution toutes commandes
+│   ├── bool CanExecuteAllRequired { get; set; } - Toutes commandes doivent pouvoir s'exécuter
+│   ├── bool StopOnFirstFailure { get; set; } - Arrêt première erreur
+│   ├── List&lt;Exception&gt; ExecutionExceptions { get; } - Exceptions exécution
+│   └── CommandExecutionMode ExecutionMode { get; set; } - Mode exécution (Sequential, Parallel)
+├── <strong>Methods :</strong>
+│   ├── void AddCommand(ICommand command) - Ajout commande
+│   ├── void RemoveCommand(ICommand command) - Suppression commande
+│   ├── void ClearCommands() - Suppression toutes commandes
+│   ├── bool CanExecute(object parameter) - Test toutes commandes
+│   ├── void Execute(object parameter) - Exécution toutes commandes
+│   ├── async Task ExecuteAsync(object parameter) - Exécution async
+│   ├── ICommand[] GetExecutableCommands(object parameter) - Commandes exécutables
+│   └── void RaiseCanExecuteChanged() - Notification changement
+├── <strong>Execution Modes :</strong>
+│   ├── Sequential - Exécution séquentielle
+│   ├── Parallel - Exécution parallèle
+│   ├── FirstSuccess - Première réussie
+│   └── AllOrNothing - Toutes ou aucune
+└── <strong>Events :</strong>
+    ├── CanExecuteChanged - Changement condition
+    ├── CommandAdded - Commande ajoutée
+    ├── CommandRemoved - Commande supprimée
+    └── ExecutionReport - Rapport exécution
+
+<strong>UndoRedoCommand : ICommand</strong> - Commande avec annulation/rétablissement
+├── <strong>Properties :</strong>
+│   ├── Action&lt;object&gt; ExecuteAction { get; } - Action principale
+│   ├── Action&lt;object&gt; UndoAction { get; } - Action annulation
+│   ├── Func&lt;object, bool&gt; CanExecuteFunc { get; } - Test exécution
+│   ├── Func&lt;object, bool&gt; CanUndoFunc { get; } - Test annulation
+│   ├── string DisplayName { get; set; } - Nom affichage
+│   ├── DateTime ExecutedAt { get; } - Moment exécution
+│   ├── bool IsExecuted { get; } - Commande exécutée
+│   ├── bool IsUndone { get; } - Commande annulée
+│   └── object ExecutionParameter { get; } - Paramètre exécution
+├── <strong>Constructors :</strong>
+│   ├── UndoRedoCommand(Action&lt;object&gt; execute, Action&lt;object&gt; undo) - Actions simple
+│   ├── UndoRedoCommand(Action&lt;object&gt; execute, Action&lt;object&gt; undo, Func&lt;object, bool&gt; canExecute) - Avec condition
+│   └── UndoRedoCommand(Action&lt;object&gt; execute, Action&lt;object&gt; undo, string displayName) - Avec nom
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter) - Test exécution
+│   ├── void Execute(object parameter) - Exécution avec sauvegarde
+│   ├── bool CanUndo(object parameter) - Test annulation
+│   ├── void Undo(object parameter) - Annulation commande
+│   ├── bool CanRedo(object parameter) - Test rétablissement
+│   ├── void Redo(object parameter) - Rétablissement commande
+│   └── void Reset() - Remise à zéro état
+└── <strong>State Management :</strong>
+    ├── CommandState State { get; } - État commande (NotExecuted, Executed, Undone)
+    ├── object GetExecutionSnapshot() - Instantané exécution
+    └── void RestoreExecutionSnapshot(object snapshot) - Restauration instantané
+
+<strong>CommandManager</strong> - Gestionnaire global commandes
+├── <strong>Static Properties :</strong>
+│   ├── ICollection&lt;ICommand&gt; RegisteredCommands { get; } - Commandes enregistrées
+│   ├── bool IsEnabled { get; set; } - Gestionnaire activé
+│   ├── TimeSpan RequerySuggestedDelay { get; set; } - Délai requery
+│   └── ICommandHistory History { get; set; } - Historique commandes
+├── <strong>Static Methods :</strong>
+│   ├── void RegisterCommand(ICommand command, string name) - Enregistrement commande
+│   ├── void UnregisterCommand(string name) - Suppression commande
+│   ├── ICommand GetCommand(string name) - Récupération commande
+│   ├── void InvalidateRequerySuggested() - Invalidation requery
+│   ├── void AddCanExecuteChangedHandler(EventHandler handler) - Ajout handler
+│   ├── void RemoveCanExecuteChangedHandler(EventHandler handler) - Suppression handler
+│   ├── void BeginUpdate() - Début mise à jour batch
+│   ├── void EndUpdate() - Fin mise à jour batch
+│   ├── bool IsInUpdate { get; } - Mise à jour en cours
+│   └── void RefreshCommandStates() - Actualisation états commandes
+├── <strong>Static Events :</strong>
+│   ├── RequerySuggested - Requery suggéré
+│   ├── CommandRegistered - Commande enregistrée
+│   ├── CommandUnregistered - Commande supprimée
+│   └── CommandExecuted - Commande exécutée
+└── <strong>Batch Operations :</strong>
+    ├── BatchCommandExecution - Exécution batch
+    ├── SuspendCanExecuteChanged - Suspension notifications
+    └── ResumeCanExecuteChanged - Reprise notifications
+
+<strong>CommandHistory</strong> - Historique commandes (Undo/Redo)
+├── <strong>Properties :</strong>
+│   ├── Stack&lt;UndoRedoCommand&gt; UndoStack { get; } - Pile annulation
+│   ├── Stack&lt;UndoRedoCommand&gt; RedoStack { get; } - Pile rétablissement
+│   ├── int MaxHistorySize { get; set; } - Taille max historique
+│   ├── int UndoCount { get; } - Nombre annulations disponibles
+│   ├── int RedoCount { get; } - Nombre rétablissements disponibles
+│   ├── bool CanUndo { get; } - Annulation possible
+│   ├── bool CanRedo { get; } - Rétablissement possible
+│   └── UndoRedoCommand CurrentCommand { get; } - Commande courante
+├── <strong>Methods :</strong>
+│   ├── void ExecuteCommand(UndoRedoCommand command, object parameter) - Exécution avec historique
+│   ├── void Undo() - Annulation dernière commande
+│   ├── void Redo() - Rétablissement dernière commande
+│   ├── void UndoMultiple(int count) - Annulations multiples
+│   ├── void RedoMultiple(int count) - Rétablissements multiples
+│   ├── void ClearHistory() - Suppression historique
+│   ├── void ClearUndoHistory() - Suppression pile annulation
+│   ├── void ClearRedoHistory() - Suppression pile rétablissement
+│   ├── UndoRedoCommand[] GetUndoCommands() - Commandes annulation
+│   ├── UndoRedoCommand[] GetRedoCommands() - Commandes rétablissement
+│   └── void SetMaxHistorySize(int size) - Définition taille max
+├── <strong>Events :</strong>
+│   ├── CommandExecuted - Commande exécutée
+│   ├── CommandUndone - Commande annulée
+│   ├── CommandRedone - Commande rétablie
+│   ├── HistoryChanged - Historique modifié
+│   └── HistoryCleared - Historique supprimé
+└── <strong>Serialization :</strong>
+    ├── string SerializeHistory() - Sérialisation historique
+    ├── void DeserializeHistory(string data) - Désérialisation historique
+    └── bool CanSerialize { get; } - Historique sérialisable
+
+<strong>RoutedCommand</strong> - Commande routée WPF
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom commande
+│   ├── Type OwnerType { get; } - Type propriétaire
+│   ├── InputGestureCollection InputGestures { get; } - Gestes entrée
+│   └── CommandBinding[] CommandBindings { get; } - Liaisons commande
+├── <strong>Static Predefined :</strong>
+│   ├── ApplicationCommands - Commandes application (Copy, Cut, Paste, etc.)
+│   ├── ComponentCommands - Commandes composant (ScrollUp, ScrollDown, etc.)
+│   ├── NavigationCommands - Commandes navigation (BrowseBack, BrowseForward, etc.)
+│   ├── MediaCommands - Commandes média (Play, Pause, Stop, etc.)
+│   └── EditingCommands - Commandes édition (Undo, Redo, etc.)
+├── <strong>Methods :</strong>
+│   ├── bool CanExecute(object parameter, IInputElement target) - Test avec cible
+│   ├── void Execute(object parameter, IInputElement target) - Exécution avec cible
+│   ├── void AddInputGesture(InputGesture gesture) - Ajout geste
+│   ├── void RemoveInputGesture(InputGesture gesture) - Suppression geste
+│   └── CommandBinding CreateCommandBinding(ExecutedRoutedEventHandler executed, CanExecuteRoutedEventHandler canExecute) - Création liaison
+└── <strong>Routing :</strong>
+    ├── RoutedEvent ExecutedEvent - Événement exécution
+    ├── RoutedEvent CanExecuteEvent - Événement test exécution
+    └── CommandManager.AddExecutedHandler/RemoveExecutedHandler - Gestionnaires globaux
+
+<strong>KeyGestureCommand</strong> - Commande avec geste clavier
+├── <strong>Properties :</strong>
+│   ├── KeyGesture KeyGesture { get; set; } - Geste clavier
+│   ├── Key Key { get; set; } - Touche principale
+│   ├── ModifierKeys Modifiers { get; set; } - Touches modificatrices
+│   ├── string GestureText { get; set; } - Texte geste affiché
+│   └── bool IsGlobal { get; set; } - Geste global application
+├── <strong>Constructors :</strong>
+│   ├── KeyGestureCommand(Key key, Action execute) - Touche simple
+│   ├── KeyGestureCommand(Key key, ModifierKeys modifiers, Action execute) - Avec modificateurs
+│   ├── KeyGestureCommand(KeyGesture gesture, Action execute) - Geste complet
+│   └── KeyGestureCommand(string gestureText, Action execute) - Depuis texte
+├── <strong>Methods :</strong>
+│   ├── bool MatchesGesture(KeyEventArgs e) - Test correspondance geste
+│   ├── void RegisterGlobalHotkey() - Enregistrement raccourci global
+│   ├── void UnregisterGlobalHotkey() - Suppression raccourci global
+│   ├── static KeyGestureCommand FromString(string gesture, Action execute) - Création depuis chaîne
+│   └── string GetGestureDisplayString() - Chaîne affichage geste
+└── <strong>Static Helpers :</strong>
+    ├── KeyGestureCommand Ctrl(Key key, Action execute) - Raccourci Ctrl+
+    ├── KeyGestureCommand Alt(Key key, Action execute) - Raccourci Alt+
+    ├── KeyGestureCommand Shift(Key key, Action execute) - Raccourci Shift+
+    └── KeyGestureCommand CtrlShift(Key key, Action execute) - Raccourci Ctrl+Shift+</div>
+                <!-- INSERTION FICHIER 5 ICI -->
+                <!-- converters-validation-detail.html -->
+<div class="card">
+                    <h2>Converters & Validation - Conversion Données et Validation Interface</h2>
+                    
+                    <div class="file-structure"><strong>IValueConverter Interface</strong> - Interface de base convertisseurs WPF
+├── <strong>Methods :</strong>
+│   ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion source → cible
+│   └── object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) - Conversion cible → source
+├── <strong>Usage Patterns :</strong>
+│   ├── OneWay Binding - Seulement Convert() utilisé
+│   ├── TwoWay Binding - Convert() et ConvertBack() utilisés
+│   ├── Parameter Support - object parameter pour configuration
+│   └── Culture Support - CultureInfo pour localisation
+└── <strong>Return Values :</strong>
+    ├── Converted Value - Valeur convertie
+    ├── DependencyProperty.UnsetValue - Pas de conversion
+    ├── Binding.DoNothing - Pas de mise à jour
+    └── null - Valeur nulle
+
+<strong>GeometryConverter : IValueConverter</strong> - Conversion géométries GISMind ↔ ArcGIS
+├── <strong>Supported Types :</strong>
+│   ├── GISMind.Point ↔ MapPoint - Points géoréférencés
+│   ├── GISMind.Polyline ↔ Polyline - Lignes et polylignes
+│   ├── GISMind.Polygon ↔ Polygon - Polygones fermés
+│   ├── GISMind.MultiPoint ↔ Multipoint - Collections points
+│   └── GISMind.MultiPatch ↔ Multipatch - Géométries 3D complexes
+├── <strong>Properties :</strong>
+│   ├── SpatialReference TargetSpatialReference { get; set; } - Référence spatiale cible
+│   ├── bool PreserveZ { get; set; } - Conservation coordonnées Z
+│   ├── bool PreserveM { get; set; } - Conservation valeurs M
+│   ├── CoordinatePrecision Precision { get; set; } - Précision coordonnées
+│   └── GeometryValidationMode ValidationMode { get; set; } - Mode validation
+├── <strong>Methods Convert :</strong>
+│   ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion principale
+│   ├── MapPoint ConvertPoint(GISMind.Point point) - Conversion point spécialisée
+│   ├── Polyline ConvertPolyline(GISMind.Polyline polyline) - Conversion polyligne
+│   ├── Polygon ConvertPolygon(GISMind.Polygon polygon) - Conversion polygone
+│   ├── GeometryCollection ConvertMultiGeometry(object multiGeometry) - Multi-géométries
+│   └── bool TryConvert(object value, Type targetType, out object result) - Tentative conversion
+├── <strong>Methods ConvertBack :</strong>
+│   ├── object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) - Conversion inverse
+│   ├── GISMind.Point ConvertBackPoint(MapPoint mapPoint) - Retour point
+│   ├── GISMind.Polyline ConvertBackPolyline(Polyline polyline) - Retour polyligne
+│   ├── GISMind.Polygon ConvertBackPolygon(Polygon polygon) - Retour polygone
+│   └── bool TryConvertBack(object value, Type targetType, out object result) - Tentative conversion inverse
+├── <strong>Validation Methods :</strong>
+│   ├── bool IsValidGeometry(object geometry) - Validation géométrie
+│   ├── ValidationResult ValidateGeometry(object geometry) - Validation détaillée
+│   ├── void FixGeometryIssues(ref object geometry) - Correction automatique
+│   └── List&lt;GeometryError&gt; GetGeometryErrors(object geometry) - Erreurs géométriques
+└── <strong>Projection Support :</strong>
+    ├── object ProjectGeometry(object geometry, SpatialReference targetSR) - Reprojection
+    ├── bool CanProject(SpatialReference sourceSR, SpatialReference targetSR) - Test projection possible
+    └── ProjectionTransformation GetTransformation(SpatialReference source, SpatialReference target) - Transformation
+
+<strong>CoordinateConverter : IValueConverter</strong> - Conversion coordonnées et formats
+├── <strong>Coordinate Formats :</strong>
+│   ├── DecimalDegrees - Degrés décimaux (45.123456)
+│   ├── DegreesMinutesSeconds - Degrés Minutes Secondes (45°07'24.44")
+│   ├── DegreesDecimalMinutes - Degrés Minutes décimales (45°07.4073')
+│   ├── UTM - Universal Transverse Mercator
+│   ├── MGRS - Military Grid Reference System
+│   └── Custom - Format personnalisé
+├── <strong>Properties :</strong>
+│   ├── CoordinateFormat SourceFormat { get; set; } - Format source
+│   ├── CoordinateFormat TargetFormat { get; set; } - Format cible
+│   ├── int DecimalPlaces { get; set; } - Nombre décimales
+│   ├── string Separator { get; set; } - Séparateur coordonnées
+│   ├── bool ShowHemisphere { get; set; } - Affichage hémisphères
+│   └── CultureInfo NumberCulture { get; set; } - Culture nombres
+├── <strong>Methods :</strong>
+│   ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion format
+│   ├── string FormatCoordinate(double coordinate, CoordinateFormat format) - Format coordonnée
+│   ├── double ParseCoordinate(string coordinateString, CoordinateFormat format) - Analyse coordonnée
+│   ├── bool TryParseCoordinate(string input, CoordinateFormat format, out double result) - Tentative analyse
+│   ├── string GetFormatPattern(CoordinateFormat format) - Motif format
+│   └── CoordinateFormat DetectFormat(string coordinateString) - Détection format automatique
+└── <strong>Validation :</strong>
+    ├── bool IsValidCoordinate(string coordinate, CoordinateFormat format) - Validation coordonnée
+    ├── ValidationResult ValidateCoordinateRange(double coordinate, CoordinateType type) - Validation plage
+    └── string GetCoordinateExample(CoordinateFormat format) - Exemple format
+
+<strong>NumberConverter : IValueConverter</strong> - Conversion nombres et unités
+├── <strong>Number Formats :</strong>
+│   ├── Integer - Entiers
+│   ├── Decimal - Décimaux
+│   ├── Currency - Monétaire  
+│   ├── Percentage - Pourcentage
+│   ├── Scientific - Notation scientifique
+│   └── Engineering - Notation ingénierie
+├── <strong>Properties :</strong>
+│   ├── string Format { get; set; } - Format nombre (.NET)
+│   ├── int DecimalPlaces { get; set; } - Décimales
+│   ├── bool UseGroupSeparator { get; set; } - Séparateur milliers
+│   ├── string NullDisplayText { get; set; } - Texte si null
+│   ├── double Multiplier { get; set; } - Multiplicateur
+│   └── string Unit { get; set; } - Unité affichée
+├── <strong>Methods :</strong>
+│   ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion affichage
+│   ├── object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) - Analyse retour
+│   ├── string FormatNumber(double number, string format, CultureInfo culture) - Format nombre
+│   ├── bool TryParseNumber(string text, CultureInfo culture, out double result) - Analyse nombre
+│   └── double RoundToDecimalPlaces(double value, int decimalPlaces) - Arrondi
+└── <strong>Unit Conversion :</strong>
+    ├── Dictionary&lt;string, double&gt; UnitConversions { get; } - Facteurs conversion
+    ├── void AddUnitConversion(string unit, double factor) - Ajout conversion
+    └── double ConvertUnit(double value, string fromUnit, string toUnit) - Conversion unité
+
+<strong>BooleanConverter : IValueConverter</strong> - Conversion booléens et états
+├── <strong>Conversion Types :</strong>
+│   ├── BoolToVisibility - bool → Visibility (Visible/Collapsed)
+│   ├── BoolToString - bool → string personnalisé
+│   ├── BoolToColor - bool → Color/Brush
+│   ├── BoolToIcon - bool → Icon/Image
+│   └── BoolToObject - bool → object quelconque
+├── <strong>Properties :</strong>
+│   ├── object TrueValue { get; set; } - Valeur si true
+│   ├── object FalseValue { get; set; } - Valeur si false
+│   ├── object NullValue { get; set; } - Valeur si null
+│   ├── bool InvertLogic { get; set; } - Inversion logique
+│   └── BooleanConversionMode Mode { get; set; } - Mode conversion
+├── <strong>Predefined Converters :</strong>
+│   ├── BoolToVisibilityConverter - Visibilité standard
+│   ├── InverseBoolToVisibilityConverter - Visibilité inversée
+│   ├── BoolToStringConverter - Chaîne personnalisée
+│   ├── BoolToBrushConverter - Couleur conditionnelle
+│   └── BoolToEnabledConverter - État activation
+└── <strong>Methods :</strong>
+    ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion bool
+    ├── object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) - Retour bool
+    └── bool ParseBoolean(object value) - Analyse booléen
+
+<strong>DateTimeConverter : IValueConverter</strong> - Conversion dates et heures
+├── <strong>Format Types :</strong>
+│   ├── ShortDate - Date courte
+│   ├── LongDate - Date longue  
+│   ├── ShortTime - Heure courte
+│   ├── LongTime - Heure longue
+│   ├── DateTime - Date et heure
+│   ├── Relative - Temps relatif (il y a 2h)
+│   └── Custom - Format personnalisé
+├── <strong>Properties :</strong>
+│   ├── string DateTimeFormat { get; set; } - Format DateTime
+│   ├── DateTimeKind Kind { get; set; } - Type DateTime (Local, UTC, Unspecified)
+│   ├── bool ShowRelativeTime { get; set; } - Affichage temps relatif
+│   ├── TimeSpan RelativeThreshold { get; set; } - Seuil temps relatif
+│   ├── string NullDateText { get; set; } - Texte si date nulle
+│   └── CultureInfo DateCulture { get; set; } - Culture dates
+├── <strong>Methods :</strong>
+│   ├── object Convert(object value, Type targetType, object parameter, CultureInfo culture) - Conversion affichage
+│   ├── object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) - Analyse date
+│   ├── string FormatDateTime(DateTime dateTime, string format, CultureInfo culture) - Format date
+│   ├── string GetRelativeTime(DateTime dateTime) - Temps relatif
+│   ├── bool TryParseDateTime(string text, CultureInfo culture, out DateTime result) - Analyse date
+│   └── DateTime AdjustDateTimeKind(DateTime dateTime, DateTimeKind targetKind) - Ajustement type
+└── <strong>Relative Time :</strong>
+    ├── string GetRelativeTimeString(TimeSpan timeSpan) - Chaîne temps relatif
+    ├── bool IsWithinRelativeThreshold(TimeSpan timeSpan) - Test seuil
+    └── Dictionary&lt;TimeSpan, string&gt; RelativeTimeFormats { get; } - Formats relatifs
+
+<strong>ValidationRule : abstract</strong> - Classe de base validation
+├── <strong>Properties :</strong>
+│   ├── ValidationStep ValidationStep { get; set; } - Étape validation
+│   ├── bool ValidatesOnTargetUpdated { get; set; } - Validation mise à jour cible
+│   └── CultureInfo Culture { get; set; } - Culture validation
+├── <strong>Abstract Methods :</strong>
+│   └── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation valeur
+├── <strong>Validation Steps :</strong>
+│   ├── RawProposedValue - Valeur brute proposée
+│   ├── ConvertedProposedValue - Valeur convertie proposée
+│   ├── UpdatedValue - Valeur mise à jour
+│   └── CommittedValue - Valeur confirmée
+└── <strong>Built-in Rules :</strong>
+    ├── ExceptionValidationRule - Validation exceptions
+    ├── DataErrorValidationRule - Validation IDataErrorInfo
+    └── NotifyDataErrorValidationRule - Validation INotifyDataErrorInfo
+
+<strong>GeometryValidationRule : ValidationRule</strong> - Validation géométries
+├── <strong>Properties :</strong>
+│   ├── GeometryType AllowedGeometryTypes { get; set; } - Types géométrie autorisés
+│   ├── bool RequireValidTopology { get; set; } - Topologie valide requise
+│   ├── bool AllowEmptyGeometry { get; set; } - Géométrie vide autorisée
+│   ├── Envelope ValidExtent { get; set; } - Emprise valide
+│   ├── double MinimumArea { get; set; } - Surface minimum
+│   ├── double MinimumLength { get; set; } - Longueur minimum
+│   └── SpatialReference RequiredSpatialReference { get; set; } - Référence spatiale requise
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation géométrie
+│   ├── bool IsValidGeometryType(Geometry geometry) - Test type géométrie
+│   ├── bool IsValidTopology(Geometry geometry) - Test topologie
+│   ├── bool IsWithinValidExtent(Geometry geometry) - Test emprise
+│   ├── bool MeetsMinimumSize(Geometry geometry) - Test taille minimum
+│   └── List&lt;string&gt; GetGeometryErrors(Geometry geometry) - Erreurs géométrie
+└── <strong>Validation Results :</strong>
+    ├── GeometryValidationResult - Résultat validation géométrie
+    ├── List&lt;ValidationError&gt; GeometryErrors - Erreurs géométriques
+    └── bool CanAutoFix - Correction automatique possible
+
+<strong>CoordinateValidationRule : ValidationRule</strong> - Validation coordonnées
+├── <strong>Properties :</strong>
+│   ├── CoordinateType CoordinateType { get; set; } - Type coordonnée (Latitude, Longitude, X, Y, Z)
+│   ├── double MinValue { get; set; } - Valeur minimum
+│   ├── double MaxValue { get; set; } - Valeur maximum
+│   ├── int MaxDecimalPlaces { get; set; } - Décimales maximum
+│   ├── CoordinateFormat ExpectedFormat { get; set; } - Format attendu
+│   └── bool AllowNegativeValues { get; set; } - Valeurs négatives autorisées
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation coordonnée
+│   ├── bool IsValidCoordinateRange(double coordinate) - Test plage valide
+│   ├── bool IsValidDecimalPrecision(double coordinate) - Test précision
+│   ├── ValidationResult ValidateLatitude(double latitude) - Validation latitude
+│   ├── ValidationResult ValidateLongitude(double longitude) - Validation longitude
+│   └── string GetCoordinateRangeError(double coordinate) - Message erreur plage
+└── <strong>Coordinate Ranges :</strong>
+    ├── LatitudeRange (-90 to 90) - Plage latitude
+    ├── LongitudeRange (-180 to 180) - Plage longitude
+    ├── UTMEastingRange - Plage UTM Est
+    └── UTMNorthingRange - Plage UTM Nord
+
+<strong>NumericValidationRule : ValidationRule</strong> - Validation valeurs numériques
+├── <strong>Properties :</strong>
+│   ├── double MinValue { get; set; } - Valeur minimum
+│   ├── double MaxValue { get; set; } - Valeur maximum
+│   ├── bool AllowEmpty { get; set; } - Valeur vide autorisée
+│   ├── bool AllowNegative { get; set; } - Valeurs négatives autorisées
+│   ├── bool IntegerOnly { get; set; } - Entiers seulement
+│   ├── int MaxDecimalPlaces { get; set; } - Décimales maximum
+│   └── string Unit { get; set; } - Unité valeur
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation numérique
+│   ├── bool TryParseValue(object value, out double result) - Analyse valeur
+│   ├── bool IsInRange(double value) - Test dans plage
+│   ├── bool HasValidPrecision(double value) - Test précision valide
+│   └── string GetRangeErrorMessage() - Message erreur plage
+└── <strong>Specialized Rules :</strong>
+    ├── PositiveNumberRule - Nombres positifs seulement
+    ├── PercentageRule - Pourcentages (0-100)
+    ├── AngleRule - Angles (0-360)
+    └── ScaleRule - Échelles cartographiques
+
+<strong>StringValidationRule : ValidationRule</strong> - Validation chaînes caractères
+├── <strong>Properties :</strong>
+│   ├── int MinLength { get; set; } - Longueur minimum
+│   ├── int MaxLength { get; set; } - Longueur maximum
+│   ├── bool AllowEmpty { get; set; } - Chaîne vide autorisée
+│   ├── bool AllowWhitespace { get; set; } - Espaces autorisés
+│   ├── string RegexPattern { get; set; } - Motif regex
+│   ├── string[] ForbiddenWords { get; set; } - Mots interdits
+│   └── StringComparison ComparisonMode { get; set; } - Mode comparaison
+├── <strong>Methods :</strong>
+│   ├── ValidationResult Validate(object value, CultureInfo cultureInfo) - Validation chaîne
+│   ├── bool IsValidLength(string value) - Test longueur
+│   ├── bool MatchesRegexPattern(string value) - Test regex
+│   ├── bool ContainsForbiddenWords(string value) - Test mots interdits
+│   └── string SanitizeString(string value) - Nettoyage chaîne
+└── <strong>Predefined Patterns :</strong>
+    ├── EmailPattern - Email valide
+    ├── PhonePattern - Numéro téléphone
+    ├── PostalCodePattern - Code postal
+    └── AlphaNumericPattern - Alphanumérique
+
+<strong>ValidationErrorTemplateSelector</strong> - Sélecteur template erreur
+├── <strong>Properties :</strong>
+│   ├── DataTemplate DefaultErrorTemplate { get; set; } - Template par défaut
+│   ├── Dictionary&lt;Type, DataTemplate&gt; ErrorTemplates { get; } - Templates par type
+│   ├── Dictionary&lt;string, DataTemplate&gt; NamedTemplates { get; } - Templates nommés
+│   └── bool UseValidationErrorType { get; set; } - Utiliser type erreur
+├── <strong>Methods :</strong>
+│   ├── DataTemplate SelectTemplate(object item, DependencyObject container) - Sélection template
+│   ├── void RegisterTemplate(Type errorType, DataTemplate template) - Enregistrement template
+│   ├── void RegisterTemplate(string name, DataTemplate template) - Template nommé
+│   └── DataTemplate GetTemplateForError(ValidationError error) - Template pour erreur
+└── <strong>Error Types :</strong>
+    ├── GeometryValidationError - Erreur géométrie
+    ├── CoordinateValidationError - Erreur coordonnée
+    ├── NumericValidationError - Erreur numérique
+    └── StringValidationError - Erreur chaîne
+
+<strong>MultiValueConverter : IMultiValueConverter</strong> - Convertisseur multi-valeurs
+├── <strong>Interface Methods :</strong>
+│   ├── object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) - Conversion multi → simple
+│   └── object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) - Conversion simple → multi
+├── <strong>Specialized Converters :</strong>
+│   ├── CoordinateMultiConverter - Conversion X,Y → Point
+│   ├── ExtentMultiConverter - Conversion MinX,MinY,MaxX,MaxY → Envelope
+│   ├── StringFormatMultiConverter - Format composite
+│   ├── BooleanAndMultiConverter - ET logique multiple
+│   ├── BooleanOrMultiConverter - OU logique multiple
+│   └── ArithmeticMultiConverter - Opérations arithmétiques
+└── <strong>Usage Examples :</strong>
+    ├── MultiBinding pour coordonnées séparées
+    ├── Calcul surface depuis longueur/largeur
+    ├── Validation composite multiple champs
+    └── Format texte avec plusieurs valeurs</div>
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="examples-section">
+                        <h3>ViewModel de Base</h3>
+                        <div class="code-block">// ViewModel pour gestion couche cartographique
+public class LayerViewModel : ViewModelBase
+{
+    private LayerData _layerData;
+    private bool _isVisible = true;
+    private double _transparency = 1.0;
+    
+    public LayerData LayerData
+    {
+        get => _layerData;
+        set => SetProperty(ref _layerData, value);
+    }
+    
+    public bool IsVisible
+    {
+        get => _isVisible;
+        set
+        {
+            if (SetProperty(ref _isVisible, value))
+            {
+                UpdateLayerVisibility();
+            }
+        }
+    }
+    
+    public double Transparency
+    {
+        get => _transparency;
+        set => SetProperty(ref _transparency, Math.Max(0, Math.Min(1, value)));
+    }
+    
+    public ICommand ToggleVisibilityCommand { get; }
+    public ICommand RemoveLayerCommand { get; }
+    
+    public LayerViewModel(LayerData layerData)
+    {
+        _layerData = layerData;
+        ToggleVisibilityCommand = new RelayCommand(ToggleVisibility);
+        RemoveLayerCommand = new RelayCommand(RemoveLayer, CanRemoveLayer);
+    }
+}</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Collection Observable</h3>
+                        <div class="code-block">// Collection observable pour features
+public class FeatureCollectionViewModel : ViewModelBase
+{
+    private ObservableCollection&lt;FeatureViewModel&gt; _features;
+    private FeatureViewModel _selectedFeature;
+    
+    public ObservableCollection&lt;FeatureViewModel&gt; Features
+    {
+        get => _features;
+        set => SetProperty(ref _features, value);
+    }
+    
+    public FeatureViewModel SelectedFeature
+    {
+        get => _selectedFeature;
+        set => SetProperty(ref _selectedFeature, value);
+    }
+    
+    // Commandes
+    public ICommand AddFeatureCommand { get; }
+    public ICommand DeleteSelectedCommand { get; }
+    public ICommand RefreshCommand { get; }
+    
+    public FeatureCollectionViewModel()
+    {
+        _features = new ObservableCollection&lt;FeatureViewModel&gt;();
+        AddFeatureCommand = new RelayCommand(AddNewFeature);
+        DeleteSelectedCommand = new RelayCommand(DeleteSelected, () => SelectedFeature != null);
+        RefreshCommand = new AsyncRelayCommand(RefreshFeaturesAsync);
+    }
+}</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <h3>Binding XAML</h3>
+                        <div class="code-block">&lt;!-- Binding bidirectionnel avec validation --&gt;
+&lt;DataGrid ItemsSource="{Binding Features}" 
+          SelectedItem="{Binding SelectedFeature}"
+          AutoGenerateColumns="False"&gt;
+    &lt;DataGrid.Columns&gt;
+        &lt;DataGridTextColumn Header="Nom" 
+                           Binding="{Binding Name, ValidatesOnDataErrors=True}" /&gt;
+        &lt;DataGridTextColumn Header="Surface" 
+                           Binding="{Binding Area, StringFormat=N2, ValidatesOnDataErrors=True}" /&gt;
+        &lt;DataGridCheckBoxColumn Header="Visible" 
+                               Binding="{Binding IsVisible}" /&gt;
+        &lt;DataGridTemplateColumn Header="Actions"&gt;
+            &lt;DataGridTemplateColumn.CellTemplate&gt;
+                &lt;DataTemplate&gt;
+                    &lt;Button Command="{Binding DeleteCommand}" Content="Supprimer" /&gt;
+                &lt;/DataTemplate&gt;
+            &lt;/DataGridTemplateColumn.CellTemplate&gt;
+        &lt;/DataGridTemplateColumn&gt;
+    &lt;/DataGrid.Columns&gt;
+&lt;/DataGrid&gt;</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-validation-system.html">← Système Validation</a></h4>
+                            <p>Validation et contrôles qualité</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-transaction-system.html">→ Gestion Transactions</a></h4>
+                            <p>Transactions et historique</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="visualisation-2d-3d.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage MVVM dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes Support Feature System - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>Classes Support - Système Feature</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble des Classes Support</h2>
+                    <p>Les classes support du système Feature fournissent des fonctionnalités avancées pour la gestion d'ensembles de données, la sélection interactive, et les opérations utilitaires. Elles complètent les classes principales Feature, FeatureCollection et AttributeTable.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>FeatureSet</h4>
+                            <p>Ensemble structuré avec métadonnées</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>SelectionManager</h4>
+                            <p>Gestion sélections interactives</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ValidationResult</h4>
+                            <p>Résultats de validation</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Enums</h4>
+                            <p>Types et états</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>FeatureSet - Ensemble Structuré avec Métadonnées</h2>
+                    
+                    <div class="file-structure"><strong>FeatureSet : IDisposable</strong> - Ensemble structuré de features avec métadonnées
+├── <strong>Properties Core :</strong>
+│   ├── FeatureCollection Features { get; } - Collection de features
+│   ├── FeatureSchema Schema { get; } - Schéma commun
+│   ├── SpatialReference SpatialReference { get; set; } - Système coordonnées
+│   ├── Envelope Extent { get; } - Emprise calculée
+│   ├── string Name { get; set; } - Nom ensemble
+│   └── string Description { get; set; } - Description
+├── <strong>Properties Metadata :</strong>
+│   ├── Dictionary&lt;string, object&gt; Metadata { get; } - Métadonnées ensemble
+│   ├── DateTime CreatedDate { get; } - Date de création
+│   ├── DateTime LastModified { get; } - Dernière modification
+│   ├── string Source { get; set; } - Source des données
+│   ├── string Author { get; set; } - Auteur
+│   ├── int Version { get; set; } - Version ensemble
+│   └── Dictionary&lt;string, string&gt; Tags { get; } - Étiquettes catégorisation
+├── <strong>Constructors :</strong>
+│   ├── FeatureSet() - Ensemble vide
+│   ├── FeatureSet(string name) - Avec nom
+│   ├── FeatureSet(FeatureSchema schema) - Avec schéma prédéfini
+│   └── FeatureSet(FeatureCollection features, FeatureSchema

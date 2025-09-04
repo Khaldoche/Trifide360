@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moteurs de Rendu - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .embedded-section {
+            border: none;
+            width: 100%;
+            min-height: 800px;
+            background: transparent;
+        }
+        .section-placeholder {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>2. Moteurs de Rendu - Système de Symbologie</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système de Rendu</h2>
+                    <p>Le système de rendu de Trifide 360 gère la représentation visuelle des données géospatiales. Il utilise une architecture basée sur des renderers spécialisés qui transforment les features en symboles graphiques selon des règles de symbologie configurables.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>IRenderer</h4>
+                            <p>Interface de base du rendu</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>SimpleRenderer</h4>
+                            <p>Symbole unique pour tous</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>UniqueValueRenderer</h4>
+                            <p>Rendu par valeurs uniques</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>ClassBreaksRenderer</h4>
+                            <p>Rendu par classes numériques</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Symbol</h4>
+                            <p>Symboles graphiques</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Legend</h4>
+                            <p>Gestion légendes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Interface IRenderer - Contrat de Base</h2>
+                    
+                    <div class="file-structure"><strong>IRenderer : interface</strong> - Contrat de base pour tous les moteurs de rendu
+├── <strong>Properties Core :</strong>
+│   ├── string Name { get; set; } - Nom du renderer
+│   ├── string Description { get; set; } - Description fonctionnelle
+│   ├── GeometryType TargetGeometryType { get; } - Type géométrie cible
+│   ├── bool IsVisible { get; set; } - Visibilité du rendu
+│   └── double Transparency { get; set; } - Transparence globale (0-1)
+├── <strong>Properties Configuration :</strong>
+│   ├── string FieldName { get; set; } - Champ source pour le rendu
+│   ├── RenderingMode Mode { get; set; } - Mode de rendu (Fast/Quality)
+│   ├── bool UseAntiAliasing { get; set; } - Anti-aliasing activé
+│   └── Dictionary&lt;string, object&gt; CustomProperties { get; } - Propriétés étendues
+├── <strong>Methods - Rendu :</strong>
+│   ├── Symbol GetSymbol(Feature feature) - Obtient symbole pour feature
+│   ├── Symbol GetDefaultSymbol() - Symbole par défaut
+│   ├── bool CanRender(Feature feature) - Test si feature peut être rendue
+│   ├── RenderResult Render(Feature feature, RenderContext context) - Rendu complet
+│   └── void InvalidateCache() - Invalidation cache rendus
+├── <strong>Methods - Légende :</strong>
+│   ├── LegendItem[] GetLegendItems() - Éléments de légende
+│   ├── bool HasLegend { get; } - Test présence légende
+│   ├── void UpdateLegend() - Mise à jour légende
+│   └── LegendInfo GetLegendInfo() - Informations légende complètes
+├── <strong>Methods - Configuration :</strong>
+│   ├── IRenderer Clone() - Copie profonde du renderer
+│   ├── void CopyFrom(IRenderer source) - Copie configuration depuis autre renderer
+│   ├── string Serialize() - Sérialisation configuration (JSON)
+│   ├── void Deserialize(string config) - Désérialisation configuration
+│   └── ValidationResult ValidateConfiguration() - Validation configuration
+├── <strong>Events :</strong>
+│   ├── RendererChanged - Changement configuration renderer
+│   ├── SymbolChanged - Changement symbole
+│   ├── LegendChanged - Changement légende
+│   └── RenderingError - Erreur durant rendu
+└── <strong>Methods - Statistiques :</strong>
+    ├── RenderStatistics GetStatistics() - Statistiques performance
+    ├── void ResetStatistics() - Remise à zéro compteurs
+    └── TimeSpan GetAverageRenderTime() - Temps moyen rendu</div>
+                </div>
+
+                <div class="card">
+                    <h2>SimpleRenderer - Symbole Unique</h2>
+                    
+                    <div class="file-structure"><strong>SimpleRenderer : IRenderer</strong> - Rendu avec symbole unique pour toutes les features
+├── <strong>Properties :</strong>
+│   ├── Symbol Symbol { get; set; } - Symbole unique appliqué à tous
+│   ├── string Label { get; set; } - Étiquette pour légende
+│   ├── bool ShowInLegend { get; set; } - Affichage dans légende
+│   └── Color BackgroundColor { get; set; } - Couleur arrière-plan (optionnel)
+├── <strong>Constructors :</strong>
+│   ├── SimpleRenderer() - Renderer vide avec symbole par défaut
+│   ├── SimpleRenderer(Symbol symbol) - Avec symbole spécifié
+│   └── SimpleRenderer(Symbol symbol, string label) - Complet avec label
+├── <strong>Methods - IRenderer Implementation :</strong>
+│   ├── Symbol GetSymbol(Feature feature) - Retourne toujours le même symbole
+│   ├── Symbol GetDefaultSymbol() - Retourne Symbol property
+│   ├── bool CanRender(Feature feature) - Toujours true si géométrie compatible
+│   ├── RenderResult Render(Feature feature, RenderContext context) - Rendu direct
+│   └── LegendItem[] GetLegendItems() - Un seul élément de légende
+├── <strong>Methods - Configuration :</strong>
+│   ├── void SetSymbol(Symbol newSymbol) - Changement symbole avec validation
+│   ├── void SetSymbolFromTemplate(SymbolTemplate template) - Depuis modèle
+│   ├── SimpleRenderer Clone() - Copie profonde
+│   └── void Reset() - Retour configuration par défaut
+├── <strong>Static Factory :</strong>
+│   ├── SimpleRenderer CreateForPoints(Color color, double size) - Pour points
+│   ├── SimpleRenderer CreateForLines(Color color, double width) - Pour lignes  
+│   ├── SimpleRenderer CreateForPolygons(Color fillColor, Color outlineColor) - Pour polygones
+│   └── SimpleRenderer CreateDefault(GeometryType geometryType) - Par défaut selon type
+└── <strong>Methods - Utilitaires :</strong>
+    ├── void ApplyColorScheme(ColorScheme scheme) - Application palette
+    ├── void ScaleSymbol(double scaleFactor) - Mise à l'échelle symbole
+    └── bool IsSymbolVisible(double mapScale) - Test visibilité selon échelle</div>
+                </div>
+<div class="card">
+       <h2>UniqueValueRenderer - Rendu par Valeurs Uniques</h2>
+        
+        <div class="file-structure"><strong>UniqueValueRenderer : IRenderer</strong> - Rendu selon valeurs distinctes d'un champ
+├── <strong>Properties Core :</strong>
+│   ├── string FieldName { get; set; } - Champ source pour classification
+│   ├── Dictionary&lt;object, Symbol&gt; ValueSymbols { get; } - Mapping valeur → symbole
+│   ├── Symbol DefaultSymbol { get; set; } - Symbole pour valeurs non mappées
+│   ├── string DefaultLabel { get; set; } - Label pour symbole par défaut
+│   ├── bool ShowDefaultInLegend { get; set; } - Affichage défaut en légende
+│   └── int MaxUniqueValues { get; set; } - Limite valeurs uniques (défaut: 100)
+├── <strong>Properties Configuration :</strong>
+│   ├── bool CaseSensitive { get; set; } - Comparaison sensible à la casse
+│   ├── StringComparison ComparisonMode { get; set; } - Mode comparaison strings
+│   ├── bool AllowNullValues { get; set; } - Gestion valeurs null
+│   ├── object NullValueReplacement { get; set; } - Remplacement pour null
+│   └── Dictionary&lt;object, string&gt; ValueLabels { get; } - Labels personnalisés par valeur
+├── <strong>Constructors :</strong>
+│   ├── UniqueValueRenderer() - Renderer vide
+│   ├── UniqueValueRenderer(string fieldName) - Avec champ source
+│   ├── UniqueValueRenderer(string fieldName, Symbol defaultSymbol) - Complet
+│   └── UniqueValueRenderer(string fieldName, Dictionary&lt;object, Symbol&gt; mapping) - Avec mapping
+├── <strong>Methods - Gestion Valeurs/Symboles :</strong>
+│   ├── void AddValue(object value, Symbol symbol) - Ajout mapping valeur-symbole
+│   ├── void AddValue(object value, Symbol symbol, string label) - Avec label
+│   ├── bool RemoveValue(object value) - Suppression mapping
+│   ├── void ClearValues() - Suppression tous mappings
+│   ├── Symbol GetSymbolForValue(object value) - Récupération symbole par valeur
+│   ├── void SetSymbolForValue(object value, Symbol symbol) - Modification symbole
+│   ├── bool HasValue(object value) - Test existence valeur
+│   └── object[] GetUniqueValues() - Liste toutes valeurs mappées
+├── <strong>Methods - Auto-Configuration :</strong>
+│   ├── void GenerateFromData(FeatureCollection features) - Génération auto depuis données
+│   ├── void GenerateFromData(FeatureCollection features, ColorRamp colorRamp) - Avec palette
+│   ├── void ApplyColorRamp(ColorRamp colorRamp) - Application palette existante
+│   ├── void ApplySymbolTemplate(SymbolTemplate template) - Application modèle symboles
+│   └── void OptimizeForPerformance() - Optimisation performance
+├── <strong>Methods - IRenderer Implementation :</strong>
+│   ├── Symbol GetSymbol(Feature feature) - Symbole selon valeur feature
+│   ├── Symbol GetDefaultSymbol() - Retourne DefaultSymbol
+│   ├── bool CanRender(Feature feature) - Test si feature a champ requis
+│   ├── RenderResult Render(Feature feature, RenderContext context) - Rendu conditionnel
+│   └── LegendItem[] GetLegendItems() - Éléments légende par valeur
+├── <strong>Methods - Analyse :</strong>
+│   ├── Dictionary&lt;object, int&gt; GetValueFrequencies(FeatureCollection features) - Fréquences
+│   ├── ValueStatistics GetValueStatistics(FeatureCollection features) - Stats complètes
+│   ├── object[] GetMostCommonValues(int count) - Valeurs les plus fréquentes
+│   ├── object[] GetRareValues(int maxFrequency) - Valeurs rares
+│   └── bool ValidateAgainstData(FeatureCollection features) - Validation cohérence
+├── <strong>Static Factory :</strong>
+│   ├── UniqueValueRenderer CreateAutomatic(FeatureCollection features, string fieldName) - Auto
+│   ├── UniqueValueRenderer CreateWithColorRamp(string fieldName, ColorRamp ramp) - Avec palette
+│   └── UniqueValueRenderer CreateCategorical(string fieldName, CategoryScheme scheme) - Catégoriel
+└── <strong>Events :</strong>
+    ├── ValueAdded, ValueRemoved - Modification mappings
+    ├── DefaultSymbolChanged - Changement symbole par défaut
+    └── FieldNameChanged - Changement champ source</div>
+    </div>
+
+    <div class="card">
+        <h2>Classes Support pour UniqueValueRenderer</h2>
+        
+        <div class="file-structure"><strong>ValueStatistics : class</strong> - Statistiques détaillées des valeurs
+├── <strong>Properties :</strong>
+│   ├── string FieldName { get; } - Champ analysé
+│   ├── int TotalFeatureCount { get; } - Nombre total features
+│   ├── int UniqueValueCount { get; } - Nombre valeurs distinctes
+│   ├── int NullValueCount { get; } - Nombre valeurs null
+│   ├── Dictionary&lt;object, int&gt; ValueFrequencies { get; } - Fréquence par valeur
+│   ├── object MostCommonValue { get; } - Valeur la plus fréquente
+│   ├── object LeastCommonValue { get; } - Valeur la plus rare
+│   └── DateTime CalculationDate { get; } - Date calcul
+├── <strong>Methods :</strong>
+│   ├── double GetFrequencyPercentage(object value) - Pourcentage fréquence
+│   ├── object[] GetTopValues(int count) - Top N valeurs
+│   ├── object[] GetRareValues(int maxFrequency) - Valeurs rares
+│   ├── string GenerateReport() - Rapport textuel
+│   └── void ExportToCSV(string filePath) - Export CSV
+
+<strong>ColorRamp : class</strong> - Dégradé de couleurs
+├── <strong>Properties :</strong>
+│   ├── Color StartColor { get; set; } - Couleur début
+│   ├── Color EndColor { get; set; } - Couleur fin
+│   ├── int StepCount { get; set; } - Nombre étapes
+│   ├── ColorInterpolationMode Mode { get; set; } - Mode interpolation
+│   └── Color[] Colors { get; } - Couleurs générées
+├── <strong>Static Factory :</strong>
+│   ├── ColorRamp Rainbow { get; } - Arc-en-ciel
+│   ├── ColorRamp Grayscale { get; } - Niveaux de gris
+│   ├── ColorRamp HeatMap { get; } - Carte chaleur
+│   ├── ColorRamp CreateGradient(Color start, Color end, int steps) - Dégradé personnalisé
+│   └── ColorRamp CreateFromColors(Color[] colors) - Depuis palette
+├── <strong>Methods :</strong>
+│   ├── Color GetColor(int index) - Couleur par index
+│   ├── Color GetColorByRatio(double ratio) - Couleur par ratio (0-1)
+│   ├── Color[] GenerateColors(int count) - Génération couleurs
+│   └── ColorRamp Reverse() - Inversion dégradé
+
+<strong>SymbolTemplate : class</strong> - Modèle de symboles
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; } - Nom modèle
+│   ├── GeometryType TargetType { get; } - Type géométrie cible
+│   ├── SymbolSize BaseSize { get; set; } - Taille de base
+│   ├── Dictionary&lt;string, object&gt; Parameters { get; } - Paramètres modèle
+│   └── string Description { get; set; } - Description
+├── <strong>Methods :</strong>
+│   ├── Symbol CreateSymbol(Color color) - Création symbole coloré
+│   ├── Symbol CreateSymbol(Color color, double size) - Avec taille
+│   ├── Symbol[] CreateSymbolSet(Color[] colors) - Ensemble symboles
+│   └── bool IsCompatibleWith(GeometryType geometryType) - Test compatibilité
+└── <strong>Static Predefined :</strong>
+    ├── SymbolTemplate BasicPoints { get; } - Points basiques
+    ├── SymbolTemplate BasicLines { get; } - Lignes basiques
+    ├── SymbolTemplate BasicPolygons { get; } - Polygones basiques
+    └── SymbolTemplate Categorical { get; } - Style catégoriel</div>
+    </div>
+
+
+
+                <div class="card">
+                    <h2>ClassBreaksRenderer - Rendu par Classes Numériques</h2>
+                    
+                    <div class="file-structure"><strong>ClassBreaksRenderer : IRenderer</strong> - Rendu selon classes de valeurs numériques
+├── <strong>Properties Core :</strong>
+│   ├── string FieldName { get; set; } - Champ numérique source
+│   ├── List&lt;ClassBreak&gt; ClassBreaks { get; } - Liste des classes définies
+│   ├── Symbol DefaultSymbol { get; set; } - Symbole valeurs hors classes
+│   ├── double MinValue { get; set; } - Valeur minimale globale
+│   ├── double MaxValue { get; set; } - Valeur maximale globale
+│   └── int ClassCount { get; } - Nombre de classes définies
+├── <strong>Properties Classification :</strong>
+│   ├── ClassificationMethod Method { get; set; } - Méthode classification
+│   ├── bool IncludeMinBoundary { get; set; } - Inclusion borne inférieure
+│   ├── bool IncludeMaxBoundary { get; set; } - Inclusion borne supérieure
+│   ├── double NullValue { get; set; } - Valeur pour null/invalid
+│   └── bool ShowNullInLegend { get; set; } - Affichage null en légende
+├── <strong>Constructors :</strong>
+│   ├── ClassBreaksRenderer() - Renderer vide
+│   ├── ClassBreaksRenderer(string fieldName) - Avec champ source
+│   ├── ClassBreaksRenderer(string fieldName, int classCount) - Avec nb classes
+│   └── ClassBreaksRenderer(string fieldName, ClassBreak[] breaks) - Avec classes définies
+├── <strong>Methods - Gestion Classes :</strong>
+│   ├── void AddClassBreak(ClassBreak classBreak) - Ajout classe
+│   ├── void AddClassBreak(double minValue, double maxValue, Symbol symbol, string label) - Ajout complet
+│   ├── bool RemoveClassBreak(int index) - Suppression par index
+│   ├── void RemoveAllClassBreaks() - Suppression toutes classes
+│   ├── void InsertClassBreak(int index, ClassBreak classBreak) - Insertion position
+│   ├── ClassBreak GetClassBreakForValue(double value) - Classe pour valeur donnée
+│   ├── int GetClassIndexForValue(double value) - Index classe pour valeur
+│   └── void SortClassBreaks() - Tri classes par valeurs
+├── <strong>Methods - Classification Automatique :</strong>
+│   ├── void GenerateEqualInterval(FeatureCollection features, int classCount) - Intervalles égaux
+│   ├── void GenerateQuantile(FeatureCollection features, int classCount) - Quantiles
+│   ├── void GenerateNaturalBreaks(FeatureCollection features, int classCount) - Seuils naturels (Jenks)
+│   ├── void GenerateStandardDeviation(FeatureCollection features, double deviationCount) - Écarts-types
+│   ├── void GeneratePercentile(FeatureCollection features, double[] percentiles) - Percentiles
+│   ├── void GenerateCustomBreaks(double[] breakValues, ColorRamp colorRamp) - Seuils personnalisés
+│   └── void RecalculateFromData(FeatureCollection features) - Recalcul depuis données
+├── <strong>Methods - IRenderer Implementation :</strong>
+│   ├── Symbol GetSymbol(Feature feature) - Symbole selon classe de la valeur
+│   ├── Symbol GetDefaultSymbol() - Retourne DefaultSymbol
+│   ├── bool CanRender(Feature feature) - Test si feature a valeur numérique valide
+│   ├── RenderResult Render(Feature feature, RenderContext context) - Rendu par classe
+│   └── LegendItem[] GetLegendItems() - Éléments légende par classe
+├── <strong>Methods - Analyse Statistique :</strong>
+│   ├── ClassBreakStatistics GetStatistics(FeatureCollection features) - Stats par classe
+│   ├── double[] GetClassCenters() - Centres de classes
+│   ├── double[] GetClassWidths() - Largeurs de classes
+│   ├── Dictionary&lt;int, int&gt; GetFeatureCountByClass(FeatureCollection features) - Décompte par classe
+│   ├── double GetOptimalClassCount(FeatureCollection features) - Nb classes optimal (Sturges)
+│   └── bool ValidateClassBoundaries() - Validation cohérence bornes
+├── <strong>Methods - Configuration Avancée :</strong>
+│   ├── void ApplyColorRamp(ColorRamp ramp) - Application dégradé couleurs
+│   ├── void ApplySizeRamp(double minSize, double maxSize) - Dégradé tailles
+│   ├── void ApplyTransparencyRamp(double minAlpha, double maxAlpha) - Dégradé transparence
+│   ├── void SetSymbolTemplate(SymbolTemplate template) - Modèle symboles
+│   └── void NormalizeValues(double normalizationFactor) - Normalisation valeurs
+├── <strong>Static Factory Methods :</strong>
+│   ├── ClassBreaksRenderer CreateQuantile(FeatureCollection features, string fieldName, int classes) - Factory quantiles
+│   ├── ClassBreaksRenderer CreateEqualInterval(FeatureCollection features, string fieldName, int classes) - Factory intervalles
+│   ├── ClassBreaksRenderer CreateNaturalBreaks(FeatureCollection features, string fieldName, int classes) - Factory Jenks
+│   └── ClassBreaksRenderer CreateFromTemplate(ClassificationTemplate template) - Depuis modèle
+└── <strong>Events :</strong>
+    ├── ClassBreakAdded, ClassBreakRemoved, ClassBreakModified - Changements classes
+    ├── ClassificationMethodChanged - Changement méthode
+    └── StatisticsRecalculated - Recalcul statistiques</div>
+                </div>
+
+                <div class="card">
+                    <h2>Système de Symboles</h2>
+                    
+                    <div class="file-structure"><strong>Symbol : abstract class</strong> - Classe de base abstraite pour tous les symboles
+├── <strong>Properties Core :</strong>
+│   ├── SymbolType Type { get; } - Type de symbole (Point/Line/Fill)
+│   ├── Color Color { get; set; } - Couleur principale
+│   ├── double Size { get; set; } - Taille/épaisseur
+│   ├── double Transparency { get; set; } - Transparence (0-1)
+│   ├── string Name { get; set; } - Nom du symbole
+│   └── bool IsVisible { get; set; } - Visibilité
+├── <strong>Methods Abstraites :</strong>
+│   ├── abstract Symbol Clone() - Copie profonde
+│   ├── abstract void Draw(Graphics graphics, RenderContext context) - Rendu graphique
+│   ├── abstract Rectangle GetBounds(RenderContext context) - Rectangle englobant
+│   └── abstract bool HitTest(Point location, RenderContext context) - Test collision
+├── <strong>Methods Communes :</strong>
+│   ├── void ApplyTransformation(Matrix transform) - Application transformation
+│   ├── void SetOpacity(double opacity) - Définition opacité
+│   ├── string Serialize() - Sérialisation JSON
+│   ├── void Deserialize(string json) - Désérialisation
+│   └── ValidationResult Validate() - Validation configuration
+└── <strong>Static :</strong>
+    ├── Symbol Parse(string serialized) - Parsing depuis chaîne
+    └── Symbol CreateDefault(SymbolType type) - Symbole par défaut
+
+<strong>SimpleMarkerSymbol : Symbol</strong> - Symbole point simple
+├── <strong>Properties :</strong>
+│   ├── SimpleMarkerStyle Style { get; set; } - Style (Circle/Square/Triangle/Cross/X)
+│   ├── Color OutlineColor { get; set; } - Couleur contour
+│   ├── double OutlineWidth { get; set; } - Épaisseur contour
+│   ├── double Angle { get; set; } - Angle rotation (degrés)
+│   └── PointF Offset { get; set; } - Décalage par rapport au point
+├── <strong>Constructors :</strong>
+│   ├── SimpleMarkerSymbol() - Cercle rouge par défaut
+│   ├── SimpleMarkerSymbol(SimpleMarkerStyle style, Color color, double size)
+│   └── SimpleMarkerSymbol(SimpleMarkerStyle style, Color color, Color outlineColor, double size, double outlineWidth)
+└── <strong>Methods :</strong>
+    ├── void SetOutline(Color color, double width) - Configuration contour
+    ├── void RemoveOutline() - Suppression contour
+    └── void Rotate(double angleDegrees) - Rotation
+
+<strong>SimpleLineSymbol : Symbol</strong> - Symbole ligne simple  
+├── <strong>Properties :</strong>
+│   ├── SimpleLineStyle Style { get; set; } - Style (Solid/Dash/Dot/DashDot)
+│   ├── LineCap Cap { get; set; } - Terminaison ligne
+│   ├── LineJoin Join { get; set; } - Jointure ligne
+│   ├── float[] DashPattern { get; set; } - Motif tirets personnalisé
+│   └── double MiterLimit { get; set; } - Limite angle aigu
+├── <strong>Constructors :</strong>
+│   ├── SimpleLineSymbol() - Ligne noire continue 1px
+│   ├── SimpleLineSymbol(SimpleLineStyle style, Color color, double width)
+│   └── SimpleLineSymbol(Color color, double width, float[] customDashPattern)
+└── <strong>Methods :</strong>
+    ├── void SetDashPattern(float[] pattern) - Motif tirets
+    ├── void SetLineCaps(LineCap cap) - Style terminaisons
+    └── void SetLineJoins(LineJoin join) - Style jointures
+
+<strong>SimpleFillSymbol : Symbol</strong> - Symbole remplissage polygone
+├── <strong>Properties :</strong>
+│   ├── SimpleFillStyle Style { get; set; } - Style (Solid/Hatched/Cross/DiagonalCross)
+│   ├── SimpleLineSymbol Outline { get; set; } - Symbole contour
+│   ├── Color FillColor { get; set; } - Couleur remplissage
+│   ├── HatchStyle HatchStyle { get; set; } - Style hachures (si applicable)
+│   └── Image FillPattern { get; set; } - Motif remplissage personnalisé
+├── <strong>Constructors :</strong>
+│   ├── SimpleFillSymbol() - Remplissage gris contour noir
+│   ├── SimpleFillSymbol(SimpleFillStyle style, Color fillColor, SimpleLineSymbol outline)
+│   └── SimpleFillSymbol(Color fillColor, Color outlineColor, double outlineWidth)
+└── <strong>Methods :</strong>
+    ├── void SetOutline(SimpleLineSymbol outline) - Définition contour
+    ├── void RemoveOutline() - Suppression contour  
+    ├── void SetHatchPattern(HatchStyle hatchStyle, Color backgroundColor) - Motif hachures
+    └── void SetPatternFill(Image pattern) - Motif image</div>
+                </div>
+
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="code-block">// SimpleRenderer - même symbole pour toutes les features
+SimpleMarkerSymbol blueCircle = new SimpleMarkerSymbol(SimpleMarkerStyle.Circle, Color.Blue, 8);
+SimpleRenderer pointRenderer = new SimpleRenderer(blueCircle, "Points GPS");
+
+// Application à une couche
+layer.Renderer = pointRenderer;
+
+// ClassBreaksRenderer - rendu selon population
+ClassBreaksRenderer populationRenderer = new ClassBreaksRenderer("Population");
+
+// Classification automatique en 5 classes quantiles
+populationRenderer.GenerateQuantile(cityFeatures, 5);
+
+// Application d'un dégradé de couleurs
+ColorRamp populationRamp = ColorRamp.CreateGradient(Color.LightYellow, Color.DarkRed, 5);
+populationRenderer.ApplyColorRamp(populationRamp);
+
+// Classification manuelle personnalisée
+ClassBreaksRenderer manualRenderer = new ClassBreaksRenderer("Revenue");
+manualRenderer.AddClassBreak(0, 25000, 
+    new SimpleFillSymbol(Color.LightGreen, Color.DarkGreen, 1), "Faible");
+manualRenderer.AddClassBreak(25000, 50000,
+    new SimpleFillSymbol(Color.Yellow, Color.Orange, 1), "Moyen");
+manualRenderer.AddClassBreak(50000, 100000,
+    new SimpleFillSymbol(Color.Orange, Color.Red, 1), "Élevé");
+manualRenderer.AddClassBreak(100000, double.MaxValue,
+    new SimpleFillSymbol(Color.Red, Color.DarkRed, 2), "Très élevé");
+
+// Configuration avancée de symboles
+SimpleLineSymbol roadSymbol = new SimpleLineSymbol(Color.Black, 2);
+roadSymbol.Style = SimpleLineStyle.Solid;
+roadSymbol.Cap = LineCap.Round;
+roadSymbol.Join = LineJoin.Round;
+
+// Symbole ligne avec tirets personnalisés
+SimpleLineSymbol dashedLine = new SimpleLineSymbol(Color.Blue, 3);
+dashedLine.SetDashPattern(new float[] { 5.0f, 3.0f, 1.0f, 3.0f }); // Long-court-point-court
+
+// Symbole remplissage avec motif
+SimpleFillSymbol hatchedFill = new SimpleFillSymbol();
+hatchedFill.Style = SimpleFillStyle.Hatched;
+hatchedFill.HatchStyle = HatchStyle.Cross;
+hatchedFill.FillColor = Color.LightBlue;
+hatchedFill.SetOutline(new SimpleLineSymbol(Color.DarkBlue, 1));
+
+// Configuration transparence et rotation
+SimpleMarkerSymbol rotatedMarker = new SimpleMarkerSymbol(SimpleMarkerStyle.Triangle, Color.Green, 10);
+rotatedMarker.Angle = 45; // Rotation 45°
+rotatedMarker.Transparency = 0.7;</div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-system.html">← Classes Feature</a></h4>
+                            <p>Système Feature de base</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-schema.html">→ Schéma de Données</a></h4>
+                            <p>Structure des données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="visualisation-2d-3d.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage des renderers dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

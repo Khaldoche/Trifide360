@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes de Gestion des Données - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>Classes de Gestion des Données</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Data Management</h2>
+                    <p>Le système de gestion des données de Trifide 360 s'articule autour d'une architecture en couches permettant la manipulation efficace des données géospatiales. L'architecture privilégie la séparation des responsabilités entre stockage, validation, rendu et persistance.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>DataManager</h4>
+                            <p>Gestionnaire central des données</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>FeatureTable</h4>
+                            <p>Tables de données spatiales</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>LayerData</h4>
+                            <p>Couches cartographiques</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Renderers</h4>
+                            <p>Moteurs de rendu</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Schema</h4>
+                            <p>Définition structure données</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Validation</h4>
+                            <p>Contrôles et validation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Architecture Hiérarchique des Classes Data</h2>
+                    
+                    <div class="file-structure">DataManager (classe centrale)
+├── <strong>Properties :</strong>
+│   ├── List&lt;LayerData&gt; Layers { get; }
+│   ├── List&lt;FeatureTable&gt; Tables { get; }
+│   ├── SpatialReference DefaultSpatialReference { get; set; }
+│   ├── DataContext Context { get; }
+│   └── bool HasUnsavedChanges { get; }
+├── <strong>Methods principales :</strong>
+│   ├── LayerData AddLayer(string name, GeometryType type)
+│   ├── void RemoveLayer(LayerData layer)
+│   ├── FeatureTable CreateTable(FeatureSchema schema)
+│   ├── void SaveChanges()
+│   ├── void LoadFromFile(string filePath)
+│   └── void ExportToFile(string filePath, ExportFormat format)
+└── <strong>Events :</strong>
+    ├── LayerAdded, LayerRemoved
+    ├── DataChanged, ValidationFailed
+    └── SaveCompleted, LoadCompleted
+
+LayerData : INotifyPropertyChanged
+├── <strong>Properties :</strong>
+│   ├── string Name { get; set; }
+│   ├── GeometryType GeometryType { get; }
+│   ├── FeatureTable FeatureTable { get; }
+│   ├── IRenderer Renderer { get; set; }
+│   ├── bool IsVisible { get; set; }
+│   ├── bool IsEditable { get; set; }
+│   ├── SpatialReference SpatialReference { get; set; }
+│   └── LayerProperties Properties { get; }
+├── <strong>Methods :</strong>
+│   ├── void SetRenderer(IRenderer renderer)
+│   ├── Feature CreateFeature(Geometry geometry)
+│   ├── void AddFeature(Feature feature)
+│   ├── void RemoveFeature(Feature feature)
+│   ├── Feature[] GetFeaturesInExtent(Envelope extent)
+│   ├── Feature[] QueryFeatures(QueryFilter filter)
+│   └── ValidationResult ValidateLayer()
+└── <strong>Collections :</strong>
+    └── FeatureCollection Features { get; }
+
+FeatureTable : IDisposable, INotifyCollectionChanged
+├── <strong>Properties :</strong>
+│   ├── FeatureSchema Schema { get; }
+│   ├── int FeatureCount { get; }
+│   ├── string TableName { get; set; }
+│   ├── SpatialReference SpatialReference { get; }
+│   ├── bool SupportsEditing { get; }
+│   └── Envelope Extent { get; }
+├── <strong>Methods CRUD :</strong>
+│   ├── Feature CreateFeature()
+│   ├── Feature CreateFeature(IDictionary&lt;string, object&gt; attributes)
+│   ├── void AddFeature(Feature feature)
+│   ├── void UpdateFeature(Feature feature)
+│   ├── void DeleteFeature(Feature feature)
+│   └── void DeleteFeatures(IEnumerable&lt;Feature&gt; features)
+├── <strong>Methods Query :</strong>
+│   ├── IEnumerable&lt;Feature&gt; QueryFeatures(QueryFilter filter)
+│   ├── Feature GetFeature(object objectId)
+│   ├── int GetFeatureCount(QueryFilter filter)
+│   └── IEnumerable&lt;object&gt; GetDistinctValues(string fieldName)
+└── <strong>Events :</strong>
+    ├── FeatureAdded, FeatureUpdated, FeatureDeleted
+    └── SchemaChanged, ExtentChanged</div>
+                </div>
+
+                <div class="card">
+                    <h2>Schémas Détaillés par Domaine</h2>
+                    <p>Chaque domaine de données possède ses propres classes spécialisées avec des responsabilités clairement définies. Cliquez sur les liens pour explorer les implémentations détaillées.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-system.html">1. Système Feature</a></h4>
+                            <p><strong>Feature, FeatureCollection</strong> - Entités géographiques</p>
+                            <ul>
+                                <li>Feature (géométrie + attributs)</li>
+                                <li>FeatureCollection (gestion collections)</li>
+                                <li>FeatureSet (ensembles structurés)</li>
+                                <li>AttributeTable (table attributaire)</li>
+                            </ul>
+                            <p><em>→ Entités de base, gestion attributs</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-renderers.html">2. Moteurs de Rendu</a></h4>
+                            <p><strong>IRenderer, Symbology</strong> - Système de rendu cartographique</p>
+                            <ul>
+                                <li>SimpleRenderer (symbole unique)</li>
+                                <li>UniqueValueRenderer (valeurs uniques)</li>
+                                <li>ClassBreaksRenderer (classes)</li>
+                                <li>SymbologyEngine (moteur symboles)</li>
+                            </ul>
+                            <p><em>→ Rendu visuel, légendes, symbologie</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-schema.html">3. Schéma de Données</a></h4>
+                            <p><strong>FeatureSchema, FieldInfo</strong> - Structure des données</p>
+                            <ul>
+                                <li>FeatureSchema (définition table)</li>
+                                <li>FieldInfo (définition champ)</li>
+                                <li>FieldType (types données)</li>
+                                <li>IndexManager (indexation)</li>
+                            </ul>
+                            <p><em>→ Structure, types, contraintes, index</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-query-filter.html">4. Système de Requêtes</a></h4>
+                            <p><strong>QueryFilter, SpatialFilter</strong> - Filtrage et sélection</p>
+                            <ul>
+                                <li>QueryFilter (requêtes attributaires)</li>
+                                <li>SpatialFilter (requêtes spatiales)</li>
+                                <li>QueryBuilder (constructeur requêtes)</li>
+                                <li>FilterExpression (expressions)</li>
+                            </ul>
+                            <p><em>→ Sélection, WHERE clauses, spatial queries</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-validation-system.html">5. Système de Validation</a></h4>
+                            <p><strong>ValidationEngine, Rules</strong> - Contrôles qualité</p>
+                            <ul>
+                                <li>ValidationEngine (moteur validation)</li>
+                                <li>ValidationRule (règles métier)</li>
+                                <li>QualityAssurance (contrôle qualité)</li>
+                                <li>ErrorReporting (rapports erreurs)</li>
+                            </ul>
+                            <p><em>→ Règles métier, contrôles, rapports</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-data-binding.html">6. Data Binding & MVVM</a></h4>
+                            <p><strong>ViewModels, Observable</strong> - Liaison données-interface</p>
+                            <ul>
+                                <li>LayerViewModel (MVVM couches)</li>
+                                <li>FeatureViewModel (MVVM features)</li>
+                                <li>DataGridViewModel (grilles données)</li>
+                                <li>PropertyBinding (liaison propriétés)</li>
+                            </ul>
+                            <p><em>→ MVVM, binding, notifications UI</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-transaction-system.html">7. Gestion Transactions</a></h4>
+                            <p><strong>Transaction, UndoRedo</strong> - Gestion état et historique</p>
+                            <ul>
+                                <li>Transaction (unité de travail)</li>
+                                <li>UndoRedoManager (historique)</li>
+                                <li>ChangeTracking (suivi modifications)</li>
+                                <li>StateManager (gestion états)</li>
+                            </ul>
+                            <p><em>→ Transactions, undo/redo, état</em></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-cache-performance.html">8. Cache & Performance</a></h4>
+                            <p><strong>CacheManager, Performance</strong> - Optimisation performances</p>
+                            <ul>
+                                <li>CacheManager (gestion cache)</li>
+                                <li>SpatialIndex (index spatial)</li>
+                                <li>LoadingStrategy (stratégies chargement)</li>
+                                <li>PerformanceMonitor (monitoring)</li>
+                            </ul>
+                            <p><em>→ Cache, index, chargement, monitoring</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Métriques et Statistiques</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>Répartition des Classes</h4>
+                            <ul>
+                                <li><strong>Total classes Data :</strong> ~45 classes</li>
+                                <li><strong>Interfaces :</strong> 12 contrats</li>
+                                <li><strong>Classes abstraites :</strong> 6 bases</li>
+                                <li><strong>ViewModels MVVM :</strong> 8 classes</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Complexité par Domaine</h4>
+                            <ul>
+                                <li><strong>Feature System :</strong> Complexité moyenne</li>
+                                <li><strong>Renderers :</strong> Complexité élevée</li>
+                                <li><strong>Validation :</strong> Complexité élevée</li>
+                                <li><strong>Cache :</strong> Complexité moyenne</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Patterns Utilisés</h4>
+                            <ul>
+                                <li><strong>Repository :</strong> Accès données</li>
+                                <li><strong>Factory :</strong> Création renderers</li>
+                                <li><strong>Strategy :</strong> Algorithmes validation</li>
+                                <li><strong>Observer :</strong> Notifications changements</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Dépendances Clés</h4>
+                            <ul>
+                                <li><strong>ArcGIS Runtime :</strong> FeatureTable base</li>
+                                <li><strong>System.ComponentModel :</strong> INotifyPropertyChanged</li>
+                                <li><strong>Collections :</strong> ObservableCollection</li>
+                                <li><strong>LINQ :</strong> Requêtes intégrées</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Relations et Flux de Données</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Flux Principal de Données</h3>
+                        <div class="code-block">DataSource (Fichier/BD)
+    ↓ Loading
+FeatureTable (Structure + Données)
+    ↓ Wrapping  
+LayerData (Métadonnées + Rendu)
+    ↓ Registration
+DataManager (Orchestration)
+    ↓ Binding
+LayerViewModel (Interface MVVM)
+    ↓ Display
+MapView (Visualisation)</div>
+                    </div>
+                    
+                    <div class="flow-diagram">
+                        <h3>Cycle de Vie des Features</h3>
+                        <div class="code-block">Feature Creation
+    → Validation (Schema + Rules)
+    → Transaction Start
+    → Add to FeatureTable
+    → Update Spatial Index
+    → Refresh Renderer
+    → Notify UI (PropertyChanged)
+    → Transaction Commit</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">← Retour Hiérarchie Principale</a></h4>
+                            <p>Vue d'ensemble de toutes les classes</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-geometry.html">← Classes Géométriques</a></h4>
+                            <p>Hiérarchie des géométries</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-feature-system.html">🎯 Commencer par Feature System</a></h4>
+                            <p>Classes de base des entités</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-ui.html">→ Classes Interface</a></h4>
+                            <p>Composants interface utilisateur</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

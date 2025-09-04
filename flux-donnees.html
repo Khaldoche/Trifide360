@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flux de Données - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link active">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>🌊 Architecture des Flux de Données</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble de l'Architecture</h2>
+                    <p>Trifide 360 implémente une architecture de flux de données multi-niveaux optimisée pour les performances et la scalabilité des données géospatiales volumineuses. L'architecture privilégie le streaming temps réel et la minimisation des transferts de données.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>📥 Ingestion</h4>
+                            <p>Readers spécialisés multi-formats</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🔄 Transformation</h4>
+                            <p>Pipeline de traitement et validation</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>💾 Stockage</h4>
+                            <p>FeatureTables ArcGIS en mémoire</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🎨 Rendu</h4>
+                            <p>Graphics Overlays haute performance</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🌐 Distribution</h4>
+                            <p>IPC vers Unity 3D temps réel</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📤 Export</h4>
+                            <p>Writers universels multi-destinations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Pipeline Principal de Chargement</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Flux Complet d'Import de Données</h3>
+                        <div class="code-block">
+📁 Fichier Source (SHP, LAS, CSV, MX, E57)
+    ↓
+🔍 File Format Detection & Validation
+    ↓
+📖 Specialized Reader Selection (ShapeFileReader, LASReader, etc.)
+    ↓
+⚡ Parallel Data Parsing & Stream Processing
+    ↓
+✅ Geometry & Attribute Validation Engine
+    ↓ (Invalid data → Error Log + User Notification)
+    ↓
+🔄 Coordinate System Transformation (if needed)
+    ↓
+🏗️ GISMind Geometry Object Creation
+    ↓
+📊 ArcGIS FeatureTable Population
+    ↓
+🎨 Renderer & Symbology Application
+    ↓
+🗺️ Graphics Overlay Creation & GPU Upload
+    ↓
+🖥️ Map Display Refresh
+    ↓
+💾 Optional Project Persistence
+                        </div>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🚀 Optimisations Performance</h4>
+                            <ul>
+                                <li><strong>Parsing parallèle :</strong> Multi-threading pour gros fichiers</li>
+                                <li><strong>Streaming progressif :</strong> Affichage incrémental</li>
+                                <li><strong>Memory pooling :</strong> Réutilisation objets géométriques</li>
+                                <li><strong>Lazy loading :</strong> Chargement à la demande</li>
+                                <li><strong>Cache intelligent :</strong> Données fréquemment accédées</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔒 Contrôles Qualité</h4>
+                            <ul>
+                                <li><strong>Validation format :</strong> Structure fichier correcte</li>
+                                <li><strong>Géométrie valide :</strong> Topologie et contraintes</li>
+                                <li><strong>Attributs cohérents :</strong> Types et domaines</li>
+                                <li><strong>Projection valide :</strong> Système de référence</li>
+                                <li><strong>Limites spatiales :</strong> Étendue géographique</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Pipeline d'Édition Interactive</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Flux de Création/Modification d'Entités</h3>
+                        <div class="code-block">
+👆 User Input (Mouse/Keyboard/Touch)
+    ↓
+🎯 Input Event Capture (MapView Events)
+    ↓
+📐 Coordinate Conversion (Screen → Map → Data)
+    ↓
+🧲 Snapping Engine Application (if enabled)
+    ↓
+✅ Real-time Geometry Validation
+    ↓ (Invalid → Visual Feedback + Error Message)
+    ↓
+🎨 Temporary Graphics Display (Rubber Band Effect)
+    ↓
+📝 Attribute Form Presentation (if required)
+    ↓
+🏗️ Feature Creation/Modification
+    ↓
+📊 FeatureTable Update (Add/Update/Delete)
+    ↓
+🗺️ Graphics Overlay Refresh
+    ↓
+💾 Undo/Redo Stack Management
+    ↓
+🔄 Unity 3D Synchronization (if active)
+    ↓
+💿 Auto-save (background thread)
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h4>⚡ Optimisations Temps Réel</h4>
+                        <ul>
+                            <li><strong>Validation asynchrone :</strong> Non-bloquante pour l'utilisateur</li>
+                            <li><strong>Feedback immédiat :</strong> Indicateurs visuels instantanés</li>
+                            <li><strong>Batch operations :</strong> Groupement modifications multiples</li>
+                            <li><strong>Selective refresh :</strong> Mise à jour zones modifiées uniquement</li>
+                            <li><strong>Transaction management :</strong> Opérations atomiques</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Communication Inter-Processus (WPF ↔ Unity)</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Architecture Dual-Channel Haute Performance</h3>
+                        <div class="code-block">
+🖥️ WPF Main Process                    🎮 Unity 3D Process
+        ↓                                        ↑
+🌐 TCP Socket Client  ↔↔ COMMANDS ↔↔  TCP Socket Server
+        ↓                                        ↑
+📡 Command Queue              ↔↔              Command Processor
+        ↓                                        ↑
+💾 Memory-Mapped Files ↔↔ DATA (60FPS) ↔↔  Shared Memory Reader
+        ↓                                        ↑
+🗂️ Serialized Data                              Data Deserializer
+        ↓                                        ↑
+🔄 Background Thread            ↔↔              Unity Main Thread
+
+📊 Data Types Transferred:
+   • Camera Positions & Orientations (16ms intervals)
+   • Geometric Objects (Points, Lines, Polygons)  
+   • Transformation Matrices (4x4 double precision)
+   • Selection States & Highlighting Info
+   • GPS Trajectories & Real-time Positions
+                        </div>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🚀 Canal TCP - Commandes</h4>
+                            <ul>
+                                <li><strong>Port :</strong> 8888 (configurable)</li>
+                                <li><strong>Protocole :</strong> JSON over TCP</li>
+                                <li><strong>Commandes :</strong> MOVE_CAMERA, SELECT_OBJECT, ADD_GEOMETRY</li>
+                                <li><strong>Latence :</strong> < 5ms local</li>
+                                <li><strong>Fiabilité :</strong> TCP garantit livraison</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💾 Memory-Mapped Files - Données</h4>
+                            <ul>
+                                <li><strong>Taille :</strong> 64MB buffer circulaire</li>
+                                <li><strong>Fréquence :</strong> 60 FPS (16.7ms)</li>
+                                <li><strong>Format :</strong> Binary serialization optimisée</li>
+                                <li><strong>Synchronisation :</strong> Mutex + événements</li>
+                                <li><strong>Compression :</strong> LZ4 temps réel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Gestion des Données Volumineuses (LiDAR)</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Pipeline Traitement Nuages de Points Massifs</h3>
+                        <div class="code-block">
+📁 Large Point Cloud File (LAS/LAZ - GB size)
+    ↓
+🔍 File Header Analysis + Spatial Index Reading
+    ↓
+📊 Point Density Calculation + LOD Planning
+    ↓
+⚡ Chunked Loading Strategy (Spatial Tiles)
+    ↓
+🎯 Viewport-based Culling + Distance LOD
+    ↓
+🔄 Background Streaming (Multiple Threads)
+    ↓
+💾 GPU Memory Management (VRAM Buffer Pool)
+    ↓
+🎨 Shader-based Rendering (Point Sprites + Instancing)
+    ↓
+🖥️ Real-time Display (Millions of Points @ 60fps)
+    ↓
+♻️ Memory Cleanup (LRU Cache Eviction)
+
+Optimizations Applied:
+• Octree Spatial Indexing for fast queries
+• Frustum Culling eliminates off-screen points  
+• Level-of-Detail reduces distant point density
+• GPU Compute Shaders for parallel processing
+• Asynchronous I/O prevents UI blocking
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <h4>📈 Métriques de Performance Typiques</h4>
+                        <ul>
+                            <li><strong>Chargement initial :</strong> 50M points en ~3 secondes</li>
+                            <li><strong>Streaming :</strong> 10M points/seconde en arrière-plan</li>
+                            <li><strong>Mémoire GPU :</strong> 2GB pour 100M points affichés</li>
+                            <li><strong>Frame rate :</strong> 60 FPS maintenu avec 500M+ points</li>
+                            <li><strong>Latence interaction :</strong> < 16ms pour sélection/zoom</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Pipeline d'Export et Persistance</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Flux de Sauvegarde Projet et Export Données</h3>
+                        <div class="code-block">
+📊 Active Project State (FeatureTables + UI State + Settings)
+    ↓
+🔍 Export Format Selection (Shapefile, CSV, KML, Project Archive)
+    ↓
+⚙️ Data Preparation & Coordinate Transformation
+    ↓
+🗂️ Serialization Process (Binary + XML Metadata)
+    ↓
+📁 File Generation (Parallel for multiple outputs)
+    ↓
+✅ Output Validation & Integrity Check
+    ↓
+💾 File System Write (Atomic operations)
+    ↓
+📋 Export Report Generation
+    ↓
+🔄 Background Backup Creation (if enabled)
+
+Project Archive Contents:
+📦 project.trf3d
+ ├── 📄 metadata.xml (Project info + timestamps)
+ ├── 📁 data/ (All FeatureTables as binary)
+ ├── 📁 symbology/ (Renderer configurations)
+ ├── 📁 settings/ (UI layout + user preferences)
+ └── 📁 cache/ (Temporary data + thumbnails)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Gestion Mémoire et Cache</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>💾 Stratégie de Cache Multi-Niveaux</h4>
+                            <ul>
+                                <li><strong>L1 - RAM Cache :</strong> Géométries actives (512MB)</li>
+                                <li><strong>L2 - Disk Cache :</strong> Fichiers traités (2GB)</li>
+                                <li><strong>L3 - GPU Cache :</strong> Textures et vertex buffers</li>
+                                <li><strong>Éviction LRU :</strong> Moins récemment utilisées</li>
+                                <li><strong>Prédiction :</strong> Préchargement données probables</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🗑️ Garbage Collection Optimization</h4>
+                            <ul>
+                                <li><strong>Object pooling :</strong> Réutilisation Geometry objects</li>
+                                <li><strong>String interning :</strong> Attributs texte dédupliqués</li>
+                                <li><strong>Event unsubscription :</strong> Prévention memory leaks</li>
+                                <li><strong>Large object heap :</strong> Évitement fragmentation</li>
+                                <li><strong>GC monitoring :</strong> Métriques temps réel</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Monitoring des Ressources</h4>
+                            <ul>
+                                <li><strong>Memory usage :</strong> RAM + GPU tracking</li>
+                                <li><strong>I/O statistics :</strong> Lecture/écriture fichiers</li>
+                                <li><strong>Network traffic :</strong> Communication Unity</li>
+                                <li><strong>Thread utilization :</strong> CPU cores usage</li>
+                                <li><strong>Performance counters :</strong> Métriques Windows</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚠️ Gestion Situations Critiques</h4>
+                            <ul>
+                                <li><strong>Memory pressure :</strong> Libération automatique cache</li>
+                                <li><strong>Disk space low :</strong> Nettoyage fichiers temporaires</li>
+                                <li><strong>GPU overload :</strong> Réduction qualité rendu</li>
+                                <li><strong>Thread deadlock :</strong> Détection et récupération</li>
+                                <li><strong>Unity disconnect :</strong> Mode dégradé 2D uniquement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Patterns d'Architecture Appliqués</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🏗️ Producer-Consumer</h4>
+                            <ul>
+                                <li><strong>File readers :</strong> Producteurs de données</li>
+                                <li><strong>Rendering engine :</strong> Consommateur affichage</li>
+                                <li><strong>Thread-safe queues :</strong> Communication async</li>
+                                <li><strong>Backpressure handling :</strong> Gestion surcharge</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Pipeline Pattern</h4>
+                            <ul>
+                                <li><strong>Étapes séquentielles :</strong> Parse → Validate → Transform → Display</li>
+                                <li><strong>Filtres configurables :</strong> Ajout/suppression étapes</li>
+                                <li><strong>Parallélisation :</strong> Étapes indépendantes simultanées</li>
+                                <li><strong>Error handling :</strong> Gestion échecs par étape</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📡 Publish-Subscribe</h4>
+                            <ul>
+                                <li><strong>Data change events :</strong> Notifications modifications</li>
+                                <li><strong>UI updates :</strong> Abonnements composants interface</li>
+                                <li><strong>Unity synchronization :</strong> Événements inter-processus</li>
+                                <li><strong>Loose coupling :</strong> Modules indépendants</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Command Pattern</h4>
+                            <ul>
+                                <li><strong>Undo/Redo :</strong> Historique opérations réversibles</li>
+                                <li><strong>Unity commands :</strong> Messages inter-processus</li>
+                                <li><strong>Batch operations :</strong> Groupement commandes</li>
+                                <li><strong>Transaction logs :</strong> Audit trail complet</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="mapping-fonctions-code.html">⬅️ Mapping Fonctions ↔ Code</a></h4>
+                            <p>Correspondances détaillées</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">➡️ Hiérarchie des Classes</a></h4>
+                            <p>Organisation orientée objet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
+                            <p>Architecture IPC détaillée</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
+                            <p>Organisation fichiers source</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création Interactive - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link active">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>✏️ Création et Édition Interactive</h1>
+                
+                <div class="card">
+                    <h2>Outils de Création Géométrique</h2>
+                    
+                    <h3>Types de Géométries Supportées</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📍 Points</h4>
+                            <ul>
+                                <li><strong>Coordonnées précises :</strong> X, Y, Z avec précision sub-métrique</li>
+                                <li><strong>Valeurs M :</strong> Support des mesures linéaires</li>
+                                <li><strong>Création multiple :</strong> Clic simple ou coordonnées</li>
+                                <li><strong>Validation temps réel :</strong> Contrôle domaines spatiaux</li>
+                                <li><strong>Snapping intelligent :</strong> Accrochage aux entités existantes</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📏 Polylignes</h4>
+                            <ul>
+                                <li><strong>Édition vertex :</strong> Ajout, suppression, déplacement</li>
+                                <li><strong>Courbes et arcs :</strong> Géométries courbes supportées</li>
+                                <li><strong>Fermeture automatique :</strong> Détection boucles fermées</li>
+                                <li><strong>Calcul temps réel :</strong> Longueur, angles, azimuts</li>
+                                <li><strong>Lissage :</strong> Algorithmes de généralisation</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔷 Polygones</h4>
+                            <ul>
+                                <li><strong>Contours complexes :</strong> Polygones avec îlots</li>
+                                <li><strong>Validation topologique :</strong> Contrôle auto-intersections</li>
+                                <li><strong>Calcul automatique :</strong> Surface, périmètre temps réel</li>
+                                <li><strong>Opérations booléennes :</strong> Union, intersection, différence</li>
+                                <li><strong>Simplification :</strong> Réduction nombre de vertex</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔗 Multi-Géométries</h4>
+                            <ul>
+                                <li><strong>Collections :</strong> MultiPoint, MultiLineString, MultiPolygon</li>
+                                <li><strong>Gestion parties :</strong> Ajout/suppression composants</li>
+                                <li><strong>Relations spatiales :</strong> Topologie entre parties</li>
+                                <li><strong>Opérations groupées :</strong> Modifications simultanées</li>
+                                <li><strong>Validation globale :</strong> Cohérence de l'ensemble</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>Sources de Création Multiples</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>🗺️ Carte 2D</h4>
+                            <p>Digitalisation directe sur fond</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🌐 Vue Panoramique</h4>
+                            <p>Création depuis images 360°</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>☁️ Nuage de Points</h4>
+                            <p>Extraction depuis données LiDAR</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📐 Coordonnées</h4>
+                            <p>Saisie directe précise</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📱 GPS Temps Réel</h4>
+                            <p>Positionnement GNSS</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📏 Station Totale</h4>
+                            <p>Import levés topographiques</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Outils d'Aide à la Création</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🧲 Snapping Intelligent</h4>
+                            <ul>
+                                <li><strong>Vertex :</strong> Accrochage aux points existants</li>
+                                <li><strong>Edges :</strong> Alignement sur arêtes</li>
+                                <li><strong>Perpendiculaire :</strong> Angles droits automatiques</li>
+                                <li><strong>Parallèle :</strong> Lignes parallèles guidées</li>
+                                <li><strong>Distance fixe :</strong> Espacement prédéfini</li>
+                                <li><strong>Grille :</strong> Alignement sur grille de référence</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📐 Outils de Mesure</h4>
+                            <ul>
+                                <li><strong>Distance :</strong> Mesure entre deux points</li>
+                                <li><strong>Surface :</strong> Calcul aire polygones</li>
+                                <li><strong>Angles :</strong> Mesure angles géodésiques</li>
+                                <li><strong>Périmètre :</strong> Longueur totale contours</li>
+                                <li><strong>Azimut :</strong> Direction géographique</li>
+                                <li><strong>Pente :</strong> Inclinaison terrain 3D</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Guides Visuels</h4>
+                            <ul>
+                                <li><strong>Aperçu temps réel :</strong> Géométrie en cours</li>
+                                <li><strong>Rubber band :</strong> Ligne élastique de suivi</li>
+                                <li><strong>Crosshairs :</strong> Réticule de précision</li>
+                                <li><strong>Grid overlay :</strong> Grille de référence</li>
+                                <li><strong>Tolerance zones :</strong> Zones de tolérance</li>
+                                <li><strong>Dimension lines :</strong> Cotation automatique</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Validation Temps Réel</h4>
+                            <ul>
+                                <li><strong>Géométrie valide :</strong> Contrôle topologie</li>
+                                <li><strong>Domaines spatiaux :</strong> Limites géographiques</li>
+                                <li><strong>Contraintes métier :</strong> Règles personnalisées</li>
+                                <li><strong>Feedback visuel :</strong> Indicateurs colorés</li>
+                                <li><strong>Messages erreur :</strong> Explications détaillées</li>
+                                <li><strong>Suggestions :</strong> Corrections automatiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Édition d'Attributs Avancée</h2>
+                    
+                    <h3>Types d'Attributs Supportés</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>📝 Text</h4>
+                            <p>Chaînes avec validation</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🔢 Numérique</h4>
+                            <p>Entiers, réels, décimaux</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📅 Date/Heure</h4>
+                            <p>Timestamps précis</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>☑️ Booléen</h4>
+                            <p>Vrai/Faux</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📋 Listes</h4>
+                            <p>Valeurs prédéfinies</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🗂️ BLOB</h4>
+                            <p>Données binaires</p>
+                        </div>
+                    </div>
+
+                    <h3>Système de Validation Avancé</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🔒 Contraintes de Domaine</h4>
+                            <ul>
+                                <li><strong>Plages numériques :</strong> Min/max pour valeurs</li>
+                                <li><strong>Longueurs texte :</strong> Limites de caractères</li>
+                                <li><strong>Expressions régulières :</strong> Formats spécifiques</li>
+                                <li><strong>Listes codifiées :</strong> Valeurs autorisées</li>
+                                <li><strong>Relations :</strong> Dépendances entre champs</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚙️ Règles Métier</h4>
+                            <ul>
+                                <li><strong>Validation croisée :</strong> Cohérence multi-attributs</li>
+                                <li><strong>Calculs automatiques :</strong> Champs dérivés</li>
+                                <li><strong>Workflows :</strong> Séquences d'états</li>
+                                <li><strong>Déclencheurs :</strong> Actions automatiques</li>
+                                <li><strong>Scripts personnalisés :</strong> Logique métier complexe</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🖥️ Interface Adaptative</h4>
+                            <ul>
+                                <li><strong>Formulaires dynamiques :</strong> UI générée automatiquement</li>
+                                <li><strong>Saisie assistée :</strong> Auto-complétion intelligente</li>
+                                <li><strong>Validation temps réel :</strong> Feedback immédiat</li>
+                                <li><strong>Tooltips contextuelles :</strong> Aide contextuelle</li>
+                                <li><strong>Formatage automatique :</strong> Normalisation données</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Audit et Traçabilité</h4>
+                            <ul>
+                                <li><strong>Historique complet :</strong> Toutes les modifications</li>
+                                <li><strong>Utilisateur/timestamp :</strong> Qui et quand</li>
+                                <li><strong>Versioning :</strong> États antérieurs des entités</li>
+                                <li><strong>Journal détaillé :</strong> Log de toutes les opérations</li>
+                                <li><strong>Rollback :</strong> Retour à états précédents</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Workflow de Création Interactif</h2>
+                    
+                    <div class="flow-diagram">
+                        <h4>Pipeline de Création d'Entité</h4>
+                        <div class="code-block">
+User Input → Validation Géométrie → Validation Attributs → Feature Creation → Map Update → Persistence
+    ↓              ↓                      ↓                    ↓                ↓            ↓
+Snapping      Topology Check        Domain Rules         FeatureTable      Graphics      Database
+Guides        Self-Intersection     Business Logic       Addition          Refresh       Transaction
+                                                                                           
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h4>✨ Expérience Utilisateur Optimisée</h4>
+                        <ul>
+                            <li><strong>Feedback immédiat :</strong> Validation en temps réel sans attente</li>
+                            <li><strong>Undo/Redo :</strong> Annulation/rétablissement d'opérations multiples</li>
+                            <li><strong>Transactions :</strong> Opérations atomiques pour cohérence</li>
+                            <li><strong>Sauvegarde automatique :</strong> Protection contre les pertes</li>
+                            <li><strong>Modes d'édition :</strong> Contextes spécialisés par tâche</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Gestion de Projets Intégrée</h2>
+                    
+                    <h3>Système de Projets</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>💾 Sauvegarde Intelligente</h4>
+                            <ul>
+                                <li><strong>États complets :</strong> Snapshots de l'application</li>
+                                <li><strong>Sauvegarde incrémentale :</strong> Optimisation espace</li>
+                                <li><strong>Auto-sauvegarde :</strong> Protection automatique</li>
+                                <li><strong>Compression :</strong> Réduction taille fichiers</li>
+                                <li><strong>Vérification intégrité :</strong> Contrôle corruption</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📂 Organisation Projets</h4>
+                            <ul>
+                                <li><strong>Arborescence :</strong> Structure hiérarchique</li>
+                                <li><strong>Métadonnées riches :</strong> Description, tags, dates</li>
+                                <li><strong>Templates :</strong> Modèles projet prédéfinis</li>
+                                <li><strong>Favoris :</strong> Accès rapide projets importants</li>
+                                <li><strong>Recherche avancée :</strong> Filtres multiples</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⏱️ Historique et Versions</h4>
+                            <ul>
+                                <li><strong>Fichiers récents :</strong> Accès rapide derniers projets</li>
+                                <li><strong>Timeline :</strong> Historique modifications</li>
+                                <li><strong>Branches :</strong> Versions alternatives</li>
+                                <li><strong>Merge :</strong> Fusion de modifications</li>
+                                <li><strong>Backup automatique :</strong> Copies de sécurité</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>👥 Collaboration</h4>
+                            <ul>
+                                <li><strong>Verrouillage :</strong> Édition exclusive</li>
+                                <li><strong>Notifications :</strong> Changements en temps réel</li>
+                                <li><strong>Commentaires :</strong> Annotations collaboratives</li>
+                                <li><strong>Synchronisation :</strong> Partage modifications</li>
+                                <li><strong>Permissions :</strong> Droits d'accès granulaires</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Interface Personnalisable</h2>
+                    
+                    <h3>Docking Manager Avancé</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🪟 Gestion Fenêtres</h4>
+                            <ul>
+                                <li><strong>Fenêtres flottantes :</strong> Détachement libre</li>
+                                <li><strong>Ancrage flexible :</strong> Zones d'ancrage multiples</li>
+                                <li><strong>Onglets groupés :</strong> Organisation par thème</li>
+                                <li><strong>Auto-masquage :</strong> Optimisation espace écran</li>
+                                <li><strong>Multi-écrans :</strong> Support configurations multiples</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚙️ Layouts Personnalisés</h4>
+                            <ul>
+                                <li><strong>Profils utilisateur :</strong> Configurations sauvegardées</li>
+                                <li><strong>Layouts métier :</strong> Arrangements spécialisés</li>
+                                <li><strong>Reset rapide :</strong> Retour configuration par défaut</li>
+                                <li><strong>Import/Export :</strong> Partage configurations</li>
+                                <li><strong>Adaptation automatique :</strong> Selon taille écran</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎨 Personnalisation UI</h4>
+                            <ul>
+                                <li><strong>Thèmes visuels :</strong> Clair, sombre, contrasté</li>
+                                <li><strong>Tailles polices :</strong> Accessibilité visuelle</li>
+                                <li><strong>Couleurs :</strong> Personnalisation palette</li>
+                                <li><strong>Icônes :</strong> Jeux d'icônes alternatifs</li>
+                                <li><strong>Raccourcis :</strong> Personnalisation complète</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Performance UI</h4>
+                            <ul>
+                                <li><strong>Rendu optimisé :</strong> Refresh sélectif</li>
+                                <li><strong>Virtualisation :</strong> Listes grandes données</li>
+                                <li><strong>Lazy loading :</strong> Chargement à la demande</li>
+                                <li><strong>Cache UI :</strong> Éléments fréquents</li>
+                                <li><strong>Responsive :</strong> Adaptation résolution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="visualisation-2d-3d.html">⬅️ Visualisation 2D/3D</a></h4>
+                            <p>Rendu cartographique et Unity</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="fonctionnalites-metier.html">⬅️ Retour Fonctionnalités Métier</a></h4>
+                            <p>Vue d'ensemble des capacités</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">➡️ Structure du Code</a></h4>
+                            <p>Architecture technique détaillée</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="mapping-fonctions-code.html">➡️ Mapping Fonctions ↔ Code</a></h4>
+                            <p>Correspondances code source</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

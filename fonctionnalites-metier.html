@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue d'Ensemble - Trifide 360</title>
+    <title>Fonctionnalités Métier - Trifide 360</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+
     <div class="container">
         <nav class="sidebar">
             <div class="logo">
@@ -21,10 +23,10 @@
                     <a href="index.html" class="nav-link-ok">🏠 Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="vue-ensemble.html" class="nav-link-ok active">Vue d'Ensemble</a>
+                    <a href="vue-ensemble.html" class="nav-link-ok">Vue d'Ensemble</a>
                 </li>
                 <li class="nav-item">
-                    <a href="fonctionnalites-metier.html" class="nav-link-ok submenu-toggle">
+                    <a href="fonctionnalites-metier.html" class="nav-link-ok active submenu-toggle">
                     Fonctionnalités Métier <span class="arrow">▼</span>
                     </a>
                     <ul class="nav-submenu">
@@ -63,61 +65,66 @@
 
         <main class="main-content">
             <section class="section active">
-                <h1 class="h1-ok">Architecture Trifide 360</h1>
+                <h1 class="h1-ok">Fonctionnalités Métier</h1>
 
                 <div class="card">
-                    <h2>Description Générale</h2>
-                    <p><strong>Trifide 360</strong> est une plateforme géomatique professionnelle intégrée développée en C# avec WPF. Elle combine cartographie avancée, visualisation 3D et outils d'arpentage dans une solution multi-processus sophistiquée.</p>
+                    <h2>Vue d'Ensemble des Capacités</h2>
+                    <p>Trifide 360 intègre l'ensemble des fonctionnalités nécessaires aux professionnels de la géomatique dans une plateforme unifiée.</p>
                     
-                    <div class="tech-stack">
-                        <div class="tech-item-ok">
-                            <h4>WPF + Syncfusion</h4>
-                            <p>Interface utilisateur</p>
+                    <div class="features-grid">
+                        <div class="feature-card-ok">
+                            <h4>🌍 Données Géospatiales</h4>
+                            <p>Gestion complète des données spatiales avec support multi-formats et systèmes de projection avancés.</p>
+                            <ul>
+                                <li>Import/Export Shapefile, LAS, CSV, MX</li>
+                                <li>Projections WGS84, NAD83, UTM, MTM</li>
+                                <li>Validation et correction automatiques</li>
+                            </ul>
+                            <a href="donnees-geospatiales.html" class="nav-link" style="color: var(--primary-color); margin-top: 10px; display: inline-block;">➡️ Détails complets</a>
                         </div>
-                        <div class="tech-item-ok">
-                            <h4>ArcGIS Runtime</h4>
-                            <p>Cartographie</p>
+                        <div class="feature-card-ok">
+                            <h4>🎨 Visualisation Avancée</h4>
+                            <p class="small-gap">Rendu cartographique professionnel avec intégration 3D temps réel via Unity Engine.</p>
+                            <ul>
+                                <li>Cartes 2D multi-couches ArcGIS</li>
+                                <li>Navigation panoramique 360°</li>
+                                <li>Nuages de points LiDAR</li>
+                            </ul>
+                            <a href="visualisation-2d-3d.html" class="nav-link" style="color: var(--primary-color); margin-top: 10px; display: inline-block;">➡️ Détails complets</a>
                         </div>
-                        <div class="tech-item-ok">
-                            <h4>Unity Engine</h4>
-                            <p>Visualisation 3D</p>
+                        <div class="feature-card-ok">
+                            <h4>✏️ Création Interactive</h4>
+                            <p class="small-gap">Outils d'édition géométrique avec validation temps réel et gestion de projets intégrée.</p>
+
+                            <ul>
+                                <li>Création points, lignes, polygones</li>
+                                <li>Édition d'attributs avec contraintes</li>
+                                <li>Traitement par workflow </li>
+                            </ul>
+                            <a href="creation-interactive.html" class="nav-link" style="color: var(--primary-color); margin-top: 10px; display: inline-block;">➡️ Détails complets</a>
                         </div>
-                        <div class="tech-item-ok">
-                            <h4>GISMind</h4>
-                            <p>Bibliothèque géométrique</p>
+                        <div class="feature-card-ok">
+                            <h4>🔧 Outils Métier</h4>
+                            <p>Fonctionnalités spécialisées pour l'arpentage, la topographie et la cartographie mobile.</p>
+                            <ul>
+                                <li>Mesures géodésiques précises</li>
+                                <li>Traitement Mobile Mapping</li>
+                                <li>Export formats professionnels</li>
+                            </ul>
+                            <a href="outils-metier.html" class="nav-link" style="color: var(--primary-color); margin-top: 10px; display: inline-block;">➡️ Détails complets</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Caractéristiques Techniques</h2>
-                    <ul>
-                        <li><span class="badge-ok">Version</span> 2.0.5</li>
-                        <li><span class="badge-ok">Langage</span> C# / WPF</li>
-                        <li><span class="badge-ok">Architecture</span> Multi-processus avec IPC</li>
-                        <li><span class="badge-ok">Domaine</span> Géomatique, SIG, Arpentage</li>
-                        <li><span class="badge-ok">Communication</span> TCP + Memory-Mapped Files (60 FPS)</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h2>Domaines d'Application</h2>
-                    <div class="features-grid">
-                        <div class="feature-card-ok">
-                            <h4>Arpentage</h4>
-                            <p>Outils de mesure précis, gestion des coordonnées géodésiques</p>
-                        </div>
-                        <div class="feature-card-ok">
-                            <h4>Topographie</h4>
-                            <p>Traitement de nuages de points, modélisation terrain</p>
-                        </div>
-                        <div class="feature-card-ok">
-                            <h4>Cartographie Mobile</h4>
-                            <p>Intégration données GPS, navigation panoramique</p>
-                        </div>
-                        <div class="feature-card-ok">
-                            <h4>Traitement LiDAR</h4>
-                            <p>Visualisation et analyse de nuages de points massifs</p>
+                    <h2>Workflow Intégré</h2>
+                    <div class="flow-diagram-ok">
+                        <div class="code-block">
+Import Données → Validation Qualité → Visualisation 2D/3D → Édition Interactive → Export Métier
+        ↓              ↓                    ↓                    ↓                   ↓
+   Multi-formats   Géométrie &         ArcGIS Runtime      Création temps       Formats
+   LAS, SHP, MX    Attributs          + Unity 3D          réel avec           standards
+                                                          validation          professionnels
                         </div>
                     </div>
                 </div>
@@ -130,8 +137,8 @@
                             <p>Informations générales sur le projet</p>
                         </div>
                         <div class="feature-card">
-                            <h4><a href="fonctionnalites-metier.html">➡️ Fonctionnalités Métier</a></h4>
-                            <p>Capacités géomatiques, données, visualisation et édition</p>
+                            <h4><a href="vue-ensemble.html">⬅️ Vue d'Ensemble</a></h4>
+                            <p>Architecture générale, technologies utilisées et domaines d'application</p>
                         </div>
                         <div class="feature-card">
                             <h4><a href="structure-code.html">➡️ Structure du Code</a></h4>
@@ -170,5 +177,14 @@
             </section>
         </main>
     </div>
+<script>
+  document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      const item = this.closest('.nav-item');
+      item.classList.toggle('open');
+    });
+  });
+</script>
 </body>
 </html>

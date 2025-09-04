@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache et Performance - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-data-binding.html" class="nav-link">Data Binding & MVVM</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-transaction-system.html" class="nav-link">Gestion des Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a href="cache-performance-system.html" class="nav-link active">Cache et Performance</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>8. Cache et Optimisation Performance</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système de Cache et Performance</h2>
+                    <p>Le système de cache et d'optimisation performance de Trifide 360 assure des temps de réponse optimaux lors du traitement de données géospatiales massives. Il combine cache multi-niveaux, optimisation mémoire, techniques de virtualisation et monitoring performance pour maintenir la fluidité de l'interface utilisateur même avec des datasets volumineux.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>Cache Multi-Niveaux</h4>
+                            <p>L1, L2, L3 avec éviction LRU</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Virtualisation UI</h4>
+                            <p>Rendu adaptatif grandes collections</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Optimisation Mémoire</h4>
+                            <p>GC tuning, pooling objets</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Parallélisation</h4>
+                            <p>Task Parallel Library, async/await</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Monitoring Performance</h4>
+                            <p>Métriques temps réel</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>Optimisation Réseau</h4>
+                            <p>Compression, batch requests</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INSERTION FICHIER 1 ICI -->
+                <!-- cache-system-detail.html -->
+<div class="card">
+                    <h2>Système de Cache Multi-Niveaux - Optimisation Accès Données</h2>
+                    
+                    <div class="file-structure"><strong>CacheManager : Singleton</strong> - Gestionnaire central cache multi-niveaux
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;string, ICacheLevel&gt; CacheLevels { get; } - Niveaux cache (L1, L2, L3)
+│   ├── CacheConfiguration Configuration { get; set; } - Configuration globale
+│   ├── bool IsEnabled { get; set; } - Cache activé globalement
+│   ├── CacheStatistics Statistics { get; } - Statistiques performance
+│   ├── long TotalMemoryUsage { get; } - Utilisation mémoire totale
+│   ├── double HitRatio { get; } - Ratio succès cache global
+│   ├── TimeSpan DefaultTtl { get; set; } - TTL par défaut (Time To Live)
+│   └── int MaxConcurrentOperations { get; set; } - Opérations simultanées max
+├── <strong>Properties Monitoring :</strong>
+│   ├── long TotalRequests { get; } - Total requêtes
+│   ├── long CacheHits { get; } - Succès cache
+│   ├── long CacheMisses { get; } - Échecs cache
+│   ├── Dictionary&lt;string, CacheLevelMetrics&gt; LevelMetrics { get; } - Métriques par niveau
+│   ├── List&lt;CacheOperation&gt; RecentOperations { get; } - Opérations récentes
+│   ├── DateTime LastOptimization { get; } - Dernière optimisation
+│   └── CacheHealthStatus HealthStatus { get; } - État santé cache
+├── <strong>Methods - Operations :</strong>
+│   ├── T Get&lt;T&gt;(string key) - Récupération valeur typée
+│   ├── Task&lt;T&gt; GetAsync&lt;T&gt;(string key) - Récupération asynchrone
+│   ├── void Set&lt;T&gt;(string key, T value, TimeSpan? ttl = null) - Stockage valeur
+│   ├── Task SetAsync&lt;T&gt;(string key, T value, TimeSpan? ttl = null) - Stockage async
+│   ├── bool TryGet&lt;T&gt;(string key, out T value) - Tentative récupération
+│   ├── bool Contains(string key) - Test existence clé
+│   ├── void Remove(string key) - Suppression entrée
+│   ├── void Clear() - Vidage complet cache
+│   └── void ClearLevel(string levelName) - Vidage niveau spécifique
+├── <strong>Methods - Batch Operations :</strong>
+│   ├── Dictionary&lt;string, T&gt; GetMultiple&lt;T&gt;(IEnumerable&lt;string&gt; keys) - Récupération multiple
+│   ├── Task&lt;Dictionary&lt;string, T&gt;&gt; GetMultipleAsync&lt;T&gt;(IEnumerable&lt;string&gt; keys) - Récup multiple async
+│   ├── void SetMultiple&lt;T&gt;(Dictionary&lt;string, T&gt; items, TimeSpan? ttl = null) - Stockage multiple
+│   ├── void RemoveMultiple(IEnumerable&lt;string&gt; keys) - Suppression multiple
+│   ├── void RefreshMultiple(IEnumerable&lt;string&gt; keys) - Actualisation multiple
+│   └── Task WarmupAsync(IEnumerable&lt;string&gt; keys) - Préchauffage cache
+├── <strong>Methods - Management :</strong>
+│   ├── void OptimizeCache() - Optimisation performance cache
+│   ├── void CompactCache() - Compactage cache (défragmentation)
+│   ├── void EvictExpired() - Éviction entrées expirées
+│   ├── void EvictLeastUsed(int count) - Éviction moins utilisées
+│   ├── CacheReport GenerateReport() - Rapport détaillé
+│   ├── void ConfigureLevel(string levelName, CacheLevelConfig config) - Config niveau
+│   ├── void EnableLevel(string levelName) - Activation niveau
+│   └── void DisableLevel(string levelName) - Désactivation niveau
+└── <strong>Events :</strong>
+    ├── CacheHit - Succès cache
+    ├── CacheMiss - Échec cache
+    ├── ItemEvicted - Entrée évincée
+    ├── ItemExpired - Entrée expirée
+    ├── LevelFull - Niveau plein
+    ├── OptimizationCompleted - Optimisation terminée
+    └── HealthCheckFailed - Échec contrôle santé
+
+<strong>ICacheLevel</strong> - Interface niveau cache
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom niveau (L1, L2, L3)
+│   ├── CacheLevelType Type { get; } - Type niveau
+│   ├── long Capacity { get; set; } - Capacité maximale
+│   ├── long CurrentSize { get; } - Taille actuelle
+│   ├── double FillRatio { get; } - Ratio remplissage
+│   ├── bool IsEnabled { get; set; } - Niveau activé
+│   ├── CacheEvictionPolicy EvictionPolicy { get; set; } - Politique éviction
+│   ├── TimeSpan DefaultTtl { get; set; } - TTL par défaut niveau
+│   └── CacheLevelStatistics Statistics { get; } - Statistiques niveau
+├── <strong>Methods :</strong>
+│   ├── bool TryGet(string key, out object value) - Tentative récupération
+│   ├── Task&lt;CacheResult&gt; TryGetAsync(string key) - Récupération async
+│   ├── void Set(string key, object value, TimeSpan ttl) - Stockage
+│   ├── Task SetAsync(string key, object value, TimeSpan ttl) - Stockage async
+│   ├── bool Contains(string key) - Test existence
+│   ├── void Remove(string key) - Suppression
+│   ├── void Clear() - Vidage niveau
+│   ├── void Evict(int count) - Éviction forcée
+│   ├── void Compact() - Compactage niveau
+│   └── CacheLevelReport GetReport() - Rapport niveau
+└── <strong>Level Types :</strong>
+    ├── MemoryCache - Cache mémoire (L1)
+    ├── DiskCache - Cache disque (L2)
+    ├── DatabaseCache - Cache base données (L3)
+    ├── NetworkCache - Cache réseau
+    └── CustomCache - Cache personnalisé
+
+<strong>L1MemoryCache : ICacheLevel</strong> - Cache mémoire haute performance
+├── <strong>Properties :</strong>
+│   ├── ConcurrentDictionary&lt;string, CacheEntry&gt; Cache { get; } - Stockage thread-safe
+│   ├── long MaxMemorySize { get; set; } - Taille mémoire max (bytes)
+│   ├── int MaxItems { get; set; } - Nombre max éléments
+│   ├── TimeSpan ScanInterval { get; set; } - Intervalle scan expiration
+│   ├── double EvictionThreshold { get; set; } - Seuil éviction (0.8 = 80%)
+│   ├── bool EnableCompression { get; set; } - Compression grandes valeurs
+│   ├── int CompressionThreshold { get; set; } - Seuil compression (bytes)
+│   └── MemoryCacheOptions Options { get; set; } - Options spécifiques
+├── <strong>Methods :</strong>
+│   ├── bool TryGet(string key, out object value) - Récupération O(1)
+│   ├── void Set(string key, object value, TimeSpan ttl) - Stockage O(1)
+│   ├── void TouchEntry(string key) - Mise à jour accès (LRU)
+│   ├── CacheEntry GetEntry(string key) - Entrée complète avec métadonnées
+│   ├── void EvictLRU(int count) - Éviction Least Recently Used
+│   ├── void EvictLFU(int count) - Éviction Least Frequently Used
+│   ├── void EvictBySize() - Éviction basée taille mémoire
+│   ├── long CalculateMemoryUsage() - Calcul utilisation mémoire
+│   └── void OptimizeMemoryLayout() - Optimisation layout mémoire
+├── <strong>Compression :</strong>
+│   ├── byte[] Compress(object value) - Compression valeur
+│   ├── object Decompress(byte[] data) - Décompression valeur
+│   ├── bool ShouldCompress(object value) - Test compression nécessaire
+│   └── CompressionRatio GetCompressionRatio() - Ratio compression
+└── <strong>Thread Safety :</strong>
+    ├── ConcurrentDictionary - Structure thread-safe
+    ├── ReaderWriterLockSlim - Verrous fins
+    ├── Interlocked operations - Opérations atomiques
+    └── Lock-free algorithms - Algorithmes sans verrous
+
+<strong>L2DiskCache : ICacheLevel</strong> - Cache disque persistant
+├── <strong>Properties :</strong>
+│   ├── string CacheDirectory { get; set; } - Répertoire cache
+│   ├── long MaxDiskSize { get; set; } - Taille disque max
+│   ├── bool EnableEncryption { get; set; } - Chiffrement fichiers
+│   ├── SerializationFormat Format { get; set; } - Format sérialisation
+│   ├── bool EnableCompression { get; set; } - Compression fichiers
+│   ├── FileSystemWatcher DirectoryWatcher { get; } - Surveillance répertoire
+│   ├── ConcurrentDictionary&lt;string, FileInfo&gt; FileIndex { get; } - Index fichiers
+│   └── DiskCacheOptions Options { get; set; } - Options disque
+├── <strong>Methods :</strong>
+│   ├── bool TryGet(string key, out object value) - Lecture fichier
+│   ├── Task&lt;CacheResult&gt; TryGetAsync(string key) - Lecture async
+│   ├── void Set(string key, object value, TimeSpan ttl) - Écriture fichier
+│   ├── Task SetAsync(string key, object value, TimeSpan ttl) - Écriture async
+│   ├── string GetFilePath(string key) - Chemin fichier pour clé
+│   ├── void SerializeToFile(string filePath, object value) - Sérialisation
+│   ├── object DeserializeFromFile(string filePath) - Désérialisation
+│   ├── void CleanupExpiredFiles() - Nettoyage fichiers expirés
+│   ├── void CompactDiskSpace() - Défragmentation espace disque
+│   └── DiskCacheStatistics GetDiskStatistics() - Statistiques disque
+├── <strong>File Management :</strong>
+│   ├── File naming strategy - Stratégie nommage fichiers
+│   ├── Directory structure - Structure répertoires
+│   ├── Temp file handling - Gestion fichiers temporaires
+│   ├── Atomic operations - Opérations atomiques fichiers
+│   └── Cleanup policies - Politiques nettoyage
+├── <strong>Serialization :</strong>
+│   ├── Binary - Sérialisation binaire rapide
+│   ├── JSON - Format JSON lisible
+│   ├── MessagePack - Format compact
+│   ├── Custom - Sérialiseur personnalisé
+│   └── Protobuf - Protocol Buffers
+└── <strong>Security :</strong>
+    ├── AES encryption - Chiffrement AES-256
+    ├── Key management - Gestion clés chiffrement
+    ├── File integrity - Intégrité fichiers
+    └── Access control - Contrôle accès fichiers
+
+<strong>L3DatabaseCache : ICacheLevel</strong> - Cache base données
+├── <strong>Properties :</strong>
+│   ├── string ConnectionString { get; set; } - Chaîne connexion
+│   ├── string TableName { get; set; } - Nom table cache
+│   ├── DatabaseProvider Provider { get; set; } - Fournisseur BD
+│   ├── bool EnableBatching { get; set; } - Opérations batch
+│   ├── int BatchSize { get; set; } - Taille batch
+│   ├── TimeSpan BatchTimeout { get; set; } - Délai batch
+│   ├── bool EnablePooling { get; set; } - Pool connexions
+│   └── DatabaseCacheOptions Options { get; set; } - Options BD
+├── <strong>Methods :</strong>
+│   ├── bool TryGet(string key, out object value) - Requête SELECT
+│   ├── Task&lt;CacheResult&gt; TryGetAsync(string key) - SELECT async
+│   ├── void Set(string key, object value, TimeSpan ttl) - INSERT/UPDATE
+│   ├── Task SetAsync(string key, object value, TimeSpan ttl) - INSERT/UPDATE async
+│   ├── void CreateCacheTable() - Création table cache
+│   ├── void EnsureTableExists() - Vérification existence table
+│   ├── void ExecuteBatch(List&lt;CacheOperation&gt; operations) - Opérations batch
+│   ├── void CleanupExpiredEntries() - Nettoyage entrées expirées
+│   ├── void OptimizeIndexes() - Optimisation index
+│   └── DatabaseCacheStatistics GetDatabaseStatistics() - Stats BD
+├── <strong>Table Schema :</strong>
+│   ├── CacheKey (VARCHAR, PRIMARY KEY) - Clé cache
+│   ├── CacheValue (BLOB/TEXT) - Valeur sérialisée
+│   ├── CreatedAt (DATETIME) - Date création
+│   ├── ExpiresAt (DATETIME) - Date expiration
+│   ├── AccessCount (INT) - Nombre accès
+│   ├── LastAccessedAt (DATETIME) - Dernier accès
+│   ├── ValueSize (BIGINT) - Taille valeur
+│   └── ValueHash (VARCHAR) - Hash intégrité
+├── <strong>Query Optimization :</strong>
+│   ├── Primary key index - Index clé primaire
+│   ├── Expiration index - Index expiration
+│   ├── Access frequency index - Index fréquence
+│   └── Composite indexes - Index composites
+└── <strong>Maintenance :</strong>
+    ├── Automated cleanup - Nettoyage automatique
+    ├── Statistics updates - Mise à jour stats
+    ├── Index rebuilding - Reconstruction index
+    └── Archival policies - Politiques archivage
+
+<strong>GeospatialCache</strong> - Cache spécialisé données géospatiales
+├── <strong>Properties :</strong>
+│   ├── SpatialIndex SpatialIndex { get; } - Index spatial (R-Tree)
+│   ├── Dictionary&lt;Envelope, List&lt;string&gt;&gt; ExtentCache { get; } - Cache par emprise
+│   ├── ConcurrentDictionary&lt;string, GeometryInfo&gt; GeometryMetadata { get; } - Métadonnées géo
+│   ├── CoordinateSystem DefaultCRS { get; set; } - Système coordonnées par défaut
+│   ├── double SpatialTolerance { get; set; } - Tolérance spatiale
+│   ├── bool EnableProjectionCache { get; set; } - Cache projections
+│   └── GeospatialCacheOptions Options { get; set; } - Options géospatiales
+├── <strong>Methods - Spatial Queries :</strong>
+│   ├── List&lt;T&gt; GetByExtent&lt;T&gt;(Envelope extent) - Récupération par emprise
+│   ├── List&lt;T&gt; GetByDistance&lt;T&gt;(Point center, double radius) - Par distance
+│   ├── List&lt;T&gt; GetIntersecting&lt;T&gt;(Geometry geometry) - Géométries intersectantes
+│   ├── List&lt;T&gt; GetContained&lt;T&gt;(Geometry container) - Géométries contenues
+│   ├── List&lt;T&gt; GetNearestNeighbors&lt;T&gt;(Point point, int count) - Plus proches voisins
+│   ├── bool HasSpatialIntersection(string key, Geometry geometry) - Test intersection
+│   ├── void InvalidateByExtent(Envelope extent) - Invalidation par emprise
+│   └── void RefreshSpatialIndex() - Actualisation index spatial
+├── <strong>Methods - Projection :</strong>
+│   ├── T GetProjected&lt;T&gt;(string key, CoordinateSystem targetCRS) - Récup avec projection
+│   ├── void CacheProjection(string key, CoordinateSystem sourceCRS, CoordinateSystem targetCRS, object projectedValue) - Cache projection
+│   ├── bool HasProjectedVersion(string key, CoordinateSystem crs) - Test version projetée
+│   ├── void InvalidateProjections(string key) - Invalidation projections
+│   └── ProjectionCacheStatistics GetProjectionStats() - Stats projections
+├── <strong>Spatial Index :</strong>
+│   ├── R-Tree implementation - Implémentation R-Tree
+│   ├── Bulk loading - Chargement masse
+│   ├── Dynamic updates - Mises à jour dynamiques
+│   ├── Query optimization - Optimisation requêtes
+│   └── Memory efficiency - Efficacité mémoire
+└── <strong>Geometry Types :</strong>
+    ├── Point - Points individuels
+    ├── Polyline - Lignes et chemins
+    ├── Polygon - Polygones fermés
+    ├── Multigeometry - Collections géométriques
+    └── GeometryCollection - Collections mixtes
+
+<strong>CacheEvictionPolicy</strong> - Politiques d'éviction
+├── <strong>LRU (Least Recently Used) :</strong>
+│   ├── LinkedHashMap structure - Structure LinkedHashMap
+│   ├── O(1) access time - Temps accès constant
+│   ├── Automatic ordering - Tri automatique
+│   └── Memory efficient - Efficace mémoire
+├── <strong>LFU (Least Frequently Used) :</strong>
+│   ├── Frequency counter - Compteur fréquence
+│   ├── Min-heap structure - Structure min-heap
+│   ├── Periodic cleanup - Nettoyage périodique
+│   └── Frequency decay - Décroissance fréquence
+├── <strong>TTL (Time To Live) :</strong>
+│   ├── Absolute expiration - Expiration absolue
+│   ├── Sliding expiration - Expiration glissante
+│   ├── Background scanning - Scan arrière-plan
+│   └── Lazy eviction - Éviction paresseuse
+├── <strong>Size-based Eviction :</strong>
+│   ├── Memory threshold - Seuil mémoire
+│   ├── Item count limit - Limite nombre éléments
+│   ├── Size calculation - Calcul taille
+│   └── Proportional eviction - Éviction proportionnelle
+└── <strong>Custom Policies :</strong>
+    ├── Business logic - Logique métier
+    ├── Priority-based - Basé priorité
+    ├── Cost-based - Basé coût
+    └── Hybrid strategies - Stratégies hybrides
+
+<strong>CacheStatistics</strong> - Métriques et statistiques cache
+├── <strong>Performance Metrics :</strong>
+│   ├── long TotalRequests { get; } - Total requêtes
+│   ├── long CacheHits { get; } - Succès cache
+│   ├── long CacheMisses { get; } - Échecs cache
+│   ├── double HitRatio { get; } - Ratio succès
+│   ├── TimeSpan AverageAccessTime { get; } - Temps accès moyen
+│   ├── TimeSpan AverageSetTime { get; } - Temps stockage moyen
+│   ├── long ThroughputPerSecond { get; } - Débit par seconde
+│   └── Dictionary&lt;string, long&gt; OperationCounts { get; } - Compteurs opérations
+├── <strong>Memory Metrics :</strong>
+│   ├── long TotalMemoryUsage { get; } - Usage mémoire total
+│   ├── long AverageItemSize { get; } - Taille moyenne élément
+│   ├── long LargestItemSize { get; } - Plus gros élément
+│   ├── int ItemCount { get; } - Nombre éléments
+│   ├── double MemoryEfficiency { get; } - Efficacité mémoire
+│   └── MemoryDistribution GetMemoryDistribution() - Distribution mémoire
+├── <strong>Eviction Metrics :</strong>
+│   ├── long TotalEvictions { get; } - Total évictions
+│   ├── long ExpiredEvictions { get; } - Évictions expiration
+│   ├── long PolicyEvictions { get; } - Évictions politique
+│   ├── double EvictionRate { get; } - Taux éviction
+│   └── Dictionary&lt;string, long&gt; EvictionReasons { get; } - Raisons éviction
+└── <strong>Methods :</strong>
+    ├── void Reset() - Remise zéro statistiques
+    ├── CacheReport GenerateReport() - Génération rapport
+    ├── void StartProfiling() - Démarrage profilage
+    ├── void StopProfiling() - Arrêt profilage
+    └── PerformanceSnapshot CreateSnapshot() - Instantané performance</div>
+                <!-- INSERTION FICHIER 2 ICI -->
+                <!-- memory-optimization-detail.html -->
+
+                    <h2>Optimisation Mémoire - Gestion Avancée et Object Pooling</h2>
+                    
+                    <div class="file-structure"><strong>MemoryManager : Singleton</strong> - Gestionnaire central optimisation mémoire
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;Type, IObjectPool&gt; ObjectPools { get; } - Pools d'objets par type
+│   ├── MemoryConfiguration Configuration { get; set; } - Configuration mémoire
+│   ├── GCSettings GCSettings { get; set; } - Paramètres Garbage Collector
+│   ├── long MaxMemoryUsage { get; set; } - Usage mémoire maximum autorisé
+│   ├── double MemoryPressureThreshold { get; set; } - Seuil pression mémoire (0.8 = 80%)
+│   ├── TimeSpan GCOptimizationInterval { get; set; } - Intervalle optimisation GC
+│   ├── bool EnableObjectPooling { get; set; } - Object pooling activé
+│   └── MemoryOptimizationLevel OptimizationLevel { get; set; } - Niveau optimisation
+├── <strong>Properties Monitoring :</strong>
+│   ├── MemoryStatistics Statistics { get; } - Statistiques utilisation mémoire
+│   ├── long CurrentMemoryUsage { get; } - Usage mémoire actuel
+│   ├── long PeakMemoryUsage { get; } - Usage mémoire pic
+│   ├── double MemoryPressure { get; } - Pression mémoire actuelle
+│   ├── int Gen0Collections { get; } - Collections génération 0
+│   ├── int Gen1Collections { get; } - Collections génération 1
+│   ├── int Gen2Collections { get; } - Collections génération 2
+│   ├── TimeSpan TotalGCTime { get; } - Temps total GC
+│   └── List&lt;MemoryAllocation&gt; LargeAllocations { get; } - Allocations importantes
+├── <strong>Methods - Pool Management :</strong>
+│   ├── T Rent&lt;T&gt;() where T : class, new() - Location objet depuis pool
+│   ├── void Return&lt;T&gt;(T item) where T : class - Retour objet au pool
+│   ├── IObjectPool&lt;T&gt; GetPool&lt;T&gt;() where T : class - Récupération pool typé
+│   ├── void RegisterPool&lt;T&gt;(IObjectPool&lt;T&gt; pool) where T : class - Enregistrement pool
+│   ├── void CreatePool&lt;T&gt;(int initialSize, int maxSize) where T : class, new() - Création pool
+│   ├── void WarmUpPools() - Préchauffage tous pools
+│   ├── void ClearPools() - Vidage tous pools
+│   └── PoolStatistics GetPoolStatistics() - Statistiques pools
+├── <strong>Methods - GC Optimization :</strong>
+│   ├── void OptimizeGC() - Optimisation Garbage Collector
+│   ├── void ForceGC(int generation) - Garbage collection forcée
+│   ├── void TuneGCSettings() - Ajustement paramètres GC
+│   ├── void EnableServerGC() - Activation Server GC
+│   ├── void EnableWorkstationGC() - Activation Workstation GC
+│   ├── void SetGCLatencyMode(GCLatencyMode mode) - Mode latence GC
+│   ├── void ConfigureLargeObjectHeap() - Configuration LOH
+│   └── GCPerformanceMetrics GetGCMetrics() - Métriques GC
+├── <strong>Methods - Memory Pressure :</strong>
+│   ├── void CheckMemoryPressure() - Vérification pression mémoire
+│   ├── void HandleHighMemoryPressure() - Gestion haute pression
+│   ├── void TriggerMemoryCleanup() - Déclenchement nettoyage
+│   ├── void CompactMemory() - Compactage mémoire
+│   ├── void ReleaseUnusedMemory() - Libération mémoire inutilisée
+│   ├── MemoryPressureLevel AssessMemoryPressure() - Évaluation pression
+│   └── void RegisterMemoryPressureCallback(Action callback) - Callback pression
+├── <strong>Methods - Large Objects :</strong>
+│   ├── void TrackLargeAllocation(object obj, long size) - Suivi allocation importante
+│   ├── void ReleaseLargeObject(object obj) - Libération gros objet
+│   ├── List&lt;LargeObjectInfo&gt; GetLargeObjects() - Liste gros objets
+│   ├── void CompactLargeObjectHeap() - Compactage LOH
+│   ├── long CalculateObjectSize(object obj) - Calcul taille objet
+│   └── void EnableLargeObjectMonitoring() - Monitoring gros objets
+└── <strong>Events :</strong>
+    ├── MemoryPressureChanged - Changement pression mémoire
+    ├── GCOccurred - Garbage collection survenue
+    ├── LargeObjectAllocated - Gros objet alloué
+    ├── MemoryThresholdExceeded - Seuil mémoire dépassé
+    ├── PoolCreated - Pool créé
+    ├── PoolDestroyed - Pool détruit
+    └── OptimizationCompleted - Optimisation terminée
+
+<strong>IObjectPool&lt;T&gt;</strong> - Interface générique pool d'objets
+├── <strong>Properties :</strong>
+│   ├── int Capacity { get; } - Capacité maximale pool
+│   ├── int Count { get; } - Nombre objets disponibles
+│   ├── int TotalCreated { get; } - Total objets créés
+│   ├── int TotalRented { get; } - Total objets loués
+│   ├── int TotalReturned { get; } - Total objets retournés
+│   ├── double HitRatio { get; } - Ratio succès pool
+│   ├── bool IsHealthy { get; } - Pool en bonne santé
+│   └── ObjectPoolStatistics Statistics { get; } - Statistiques pool
+├── <strong>Methods :</strong>
+│   ├── T Rent() - Location objet
+│   ├── bool TryRent(out T item) - Tentative location
+│   ├── void Return(T item) - Retour objet
+│   ├── void Clear() - Vidage pool
+│   ├── void WarmUp(int count) - Préchauffage pool
+│   ├── void Trim() - Réduction taille pool
+│   ├── T CreateNew() - Création nouvel objet
+│   ├── bool ValidateObject(T item) - Validation objet
+│   ├── void ResetObject(T item) - Remise à zéro objet
+│   └── void Dispose() - Libération pool
+└── <strong>Pool Types :</strong>
+    ├── ConcurrentObjectPool - Pool thread-safe
+    ├── PartitionedObjectPool - Pool partitionné
+    ├── LifoObjectPool - Pool LIFO (pile)
+    ├── FifoObjectPool - Pool FIFO (queue)
+    └── CustomObjectPool - Pool personnalisé
+
+<strong>GeometryObjectPool</strong> - Pool spécialisé objets géométriques
+├── <strong>Properties :</strong>
+│   ├── ObjectPool&lt;Point&gt; PointPool { get; } - Pool points
+│   ├── ObjectPool&lt;Polyline&gt; PolylinePool { get; } - Pool polylignes
+│   ├── ObjectPool&lt;Polygon&gt; PolygonPool { get; } - Pool polygones
+│   ├── ObjectPool&lt;MultiPoint&gt; MultiPointPool { get; } - Pool multipoints
+│   ├── ObjectPool&lt;GeometryCollection&gt; CollectionPool { get; } - Pool collections
+│   ├── int DefaultPointPoolSize { get; set; } - Taille pool points par défaut
+│   ├── int DefaultPolylinePoolSize { get; set; } - Taille pool polylignes
+│   └── bool EnableGeometryValidation { get; set; } - Validation géométries
+├── <strong>Methods - Point Management :</strong>
+│   ├── Point RentPoint() - Location point
+│   ├── Point RentPoint(double x, double y) - Location point avec coordonnées
+│   ├── Point RentPoint(double x, double y, double z) - Location point 3D
+│   ├── void ReturnPoint(Point point) - Retour point
+│   ├── void ResetPoint(Point point) - Remise à zéro point
+│   └── List&lt;Point&gt; RentPointList(int capacity) - Location liste points
+├── <strong>Methods - Polyline Management :</strong>
+│   ├── Polyline RentPolyline() - Location polyligne
+│   ├── Polyline RentPolyline(int capacity) - Location avec capacité
+│   ├── void ReturnPolyline(Polyline polyline) - Retour polyligne
+│   ├── void ResetPolyline(Polyline polyline) - Remise à zéro polyligne
+│   ├── void ClearPolylinePoints(Polyline polyline) - Vidage points
+│   └── void OptimizePolyline(Polyline polyline) - Optimisation polyligne
+├── <strong>Methods - Polygon Management :</strong>
+│   ├── Polygon RentPolygon() - Location polygone
+│   ├── void ReturnPolygon(Polygon polygon) - Retour polygone
+│   ├── void ResetPolygon(Polygon polygon) - Remise à zéro polygone
+│   ├── void ClearPolygonRings(Polygon polygon) - Vidage anneaux
+│   └── bool ValidatePolygon(Polygon polygon) - Validation topologique
+├── <strong>Specialized Pools :</strong>
+│   ├── CoordinateArrayPool - Pool tableaux coordonnées
+│   ├── EnvelopePool - Pool emprises
+│   ├── TransformationPool - Pool transformations
+│   └── SpatialReferencePool - Pool références spatiales
+└── <strong>Memory Optimization :</strong>
+    ├── Coordinate arrays reuse - Réutilisation tableaux
+    ├── Geometry simplification - Simplification géométries
+    ├── Memory layout optimization - Optimisation layout
+    └── GC pressure reduction - Réduction pression GC
+
+<strong>StringPool</strong> - Pool optimisé pour chaînes de caractères
+├── <strong>Properties :</strong>
+│   ├── ConcurrentDictionary&lt;string, WeakReference&gt; InternTable { get; } - Table intern
+│   ├── int MaxStringLength { get; set; } - Longueur max chaînes poolées
+│   ├── int MaxPoolSize { get; set; } - Taille max pool
+│   ├── StringComparer Comparer { get; set; } - Comparateur chaînes
+│   ├── bool EnableStringInterning { get; set; } - Interning activé
+│   ├── StringPoolingStrategy Strategy { get; set; } - Stratégie pooling
+│   └── StringPoolStatistics Statistics { get; } - Statistiques chaînes
+├── <strong>Methods :</strong>
+│   ├── string Intern(string value) - Internalisation chaîne
+│   ├── string GetOrCreate(string value) - Récupération/création
+│   ├── bool TryGetInterned(string value, out string interned) - Tentative récup
+│   ├── void ClearInternTable() - Vidage table intern
+│   ├── void CompactInternTable() - Compactage table
+│   ├── List&lt;string&gt; GetMostUsedStrings(int count) - Chaînes plus utilisées
+│   ├── void PreInternCommonStrings() - Pré-internalisation chaînes courantes
+│   └── long CalculateMemorySavings() - Calcul économies mémoire
+├── <strong>String Categories :</strong>
+│   ├── FieldNames - Noms champs
+│   ├── LayerNames - Noms couches
+│   ├── AttributeValues - Valeurs attributs
+│   ├── FilePaths - Chemins fichiers
+│   └── ErrorMessages - Messages erreur
+└── <strong>Optimization Strategies :</strong>
+    ├── Length-based pooling - Pooling par longueur
+    ├── Frequency-based pooling - Pooling par fréquence
+    ├── Category-based pooling - Pooling par catégorie
+    └── Hybrid strategies - Stratégies hybrides
+
+<strong>ArrayPool&lt;T&gt;</strong> - Pool tableaux haute performance
+├── <strong>Properties :</strong>
+│   ├── int MaxArraysPerBucket { get; set; } - Max tableaux par bucket
+│   ├── int MaxArrayLength { get; set; } - Longueur max tableau
+│   ├── ArrayPoolStrategy Strategy { get; set; } - Stratégie pool
+│   ├── bool ZeroArraysOnReturn { get; set; } - Remise zéro au retour
+│   ├── ConcurrentQueue&lt;T[]&gt;[] Buckets { get; } - Buckets par taille
+│   └── ArrayPoolStatistics Statistics { get; } - Statistiques tableaux
+├── <strong>Methods :</strong>
+│   ├── T[] Rent(int minimumLength) - Location tableau
+│   ├── void Return(T[] array, bool clearArray = false) - Retour tableau
+│   ├── T[] RentExact(int length) - Location taille exacte
+│   ├── void ReturnToPool(T[] array) - Retour forcé au pool
+│   ├── int CalculateBucketIndex(int length) - Calcul index bucket
+│   ├── void TrimBuckets() - Réduction taille buckets
+│   ├── void WarmUpBuckets() - Préchauffage buckets
+│   └── ArrayMemoryInfo GetMemoryInfo() - Info mémoire tableaux
+├── <strong>Specialized Arrays :</strong>
+│   ├── byte[] - Tableaux bytes (I/O)
+│   ├── double[] - Tableaux coordonnées
+│   ├── int[] - Tableaux index
+│   ├── char[] - Tableaux caractères
+│   └── object[] - Tableaux objets génériques
+└── <strong>Bucket Management :</strong>
+    ├── Power-of-2 sizing - Tailles puissance 2
+    ├── Multiple size buckets - Buckets tailles multiples
+    ├── LRU eviction - Éviction LRU
+    └── Memory pressure handling - Gestion pression mémoire
+
+<strong>LazyInitializer&lt;T&gt;</strong> - Initialisation paresseuse optimisée
+├── <strong>Properties :</strong>
+│   ├── T Value { get; } - Valeur initialisée paresseusement
+│   ├── bool IsValueCreated { get; } - Valeur créée
+│   ├── Func&lt;T&gt; ValueFactory { get; } - Factory création valeur
+│   ├── LazyThreadSafetyMode ThreadSafetyMode { get; set; } - Mode thread safety
+│   ├── Exception InitializationException { get; } - Exception initialisation
+│   └── DateTime InitializationTime { get; } - Moment initialisation
+├── <strong>Methods :</strong>
+│   ├── T GetValue() - Récupération valeur (avec initialisation si nécessaire)
+│   ├── T GetValue(Func&lt;T&gt; valueFactory) - Avec factory spécifique
+│   ├── bool TryGetValue(out T value) - Tentative récupération
+│   ├── void Reset() - Remise à zéro (réinitialisation)
+│   ├── void ForceInitialization() - Initialisation forcée
+│   └── Task&lt;T&gt; GetValueAsync() - Récupération asynchrone
+├── <strong>Thread Safety Modes :</strong>
+│   ├── None - Pas thread-safe
+│   ├── PublicationOnly - Publication seulement
+│   ├── ExecutionAndPublication - Exécution et publication
+│   └── Custom - Mode personnalisé
+└── <strong>Use Cases :</strong>
+    ├── Expensive computations - Calculs coûteux
+    ├── Database connections - Connexions BD
+    ├── Configuration loading - Chargement configuration
+    └── Resource initialization - Initialisation ressources
+
+<strong>MemoryMappedFileManager</strong> - Gestionnaire fichiers mappés mémoire
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, MemoryMappedFile&gt; MappedFiles { get; } - Fichiers mappés
+│   ├── long MaxMappedFileSize { get; set; } - Taille max fichier mappé
+│   ├── int MaxConcurrentMappings { get; set; } - Mappages simultanés max
+│   ├── MemoryMappedFileAccess DefaultAccess { get; set; } - Accès par défaut
+│   ├── bool EnableLargeFiles { get; set; } - Support gros fichiers
+│   ├── TimeSpan MappingTimeout { get; set; } - Délai expiration mapping
+│   └── MemoryMappingStatistics Statistics { get; } - Statistiques mapping
+├── <strong>Methods :</strong>
+│   ├── MemoryMappedFile CreateFromFile(string filePath, long capacity) - Création depuis fichier
+│   ├── MemoryMappedViewAccessor CreateViewAccessor(string name, long offset, long size) - Création vue
+│   ├── T[] MapArray&lt;T&gt;(string filePath) where T : struct - Mapping tableau structuré
+│   ├── void UnmapFile(string name) - Démapping fichier
+│   ├── bool TryMapFile(string filePath, out MemoryMappedFile mmf) - Tentative mapping
+│   ├── void FlushMappedFile(string name) - Vidage fichier mappé
+│   ├── long GetMappedFileSize(string name) - Taille fichier mappé
+│   └── void CleanupExpiredMappings() - Nettoyage mappages expirés
+├── <strong>Large File Support :</strong>
+│   ├── 64-bit addressing - Adressage 64 bits
+│   ├── Sparse file handling - Gestion fichiers clairsemés
+│   ├── Streaming access - Accès streaming
+│   └── Progressive loading - Chargement progressif
+└── <strong>Use Cases :</strong>
+    ├── Large dataset files - Gros fichiers données
+    ├── Shared memory IPC - Mémoire partagée IPC
+    ├── Cache persistence - Persistance cache
+    └── Binary data access - Accès données binaires
+
+<strong>WeakReferenceManager</strong> - Gestionnaire références faibles
+├── <strong>Properties :</strong>
+│   ├── ConcurrentDictionary&lt;string, WeakReference&gt; WeakReferences { get; } - Références faibles
+│   ├── Timer CleanupTimer { get; } - Timer nettoyage
+│   ├── TimeSpan CleanupInterval { get; set; } - Intervalle nettoyage
+│   ├── int MaxWeakReferences { get; set; } - Max références faibles
+│   ├── bool EnableAutoCleanup { get; set; } - Nettoyage automatique
+│   └── WeakReferenceStatistics Statistics { get; } - Statistiques références
+├── <strong>Methods :</strong>
+│   ├── void RegisterWeakReference(string key, object target) - Enregistrement référence faible
+│   ├── T GetTarget&lt;T&gt;(string key) where T : class - Récupération cible
+│   ├── bool TryGetTarget&lt;T&gt;(string key, out T target) where T : class - Tentative récupération
+│   ├── bool IsAlive(string key) - Test cible vivante
+│   ├── void RemoveWeakReference(string key) - Suppression référence
+│   ├── void CleanupDeadReferences() - Nettoyage références mortes
+│   ├── int CountAliveReferences() - Comptage références vivantes
+│   └── List&lt;string&gt; GetDeadReferenceKeys() - Clés références mortes
+└── <strong>Use Cases :</strong>
+    ├── Event subscriptions - Abonnements événements
+    ├── Cache references - Références cache
+    ├── Observer patterns - Patterns observateur
+    └── Resource tracking - Suivi ressources
+
+<strong>GCOptimizer</strong> - Optimiseur Garbage Collector
+├── <strong>Properties :</strong>
+│   ├── GCSettings CurrentSettings { get; } - Paramètres actuels GC
+│   ├── GCLatencyMode LatencyMode { get; set; } - Mode latence
+│   ├── bool ServerGCEnabled { get; } - Server GC activé
+│   ├── int ProcessorCount { get; } - Nombre processeurs
+│   ├── bool ConcurrentGCEnabled { get; } - GC concurrent activé
+│   ├── GCOptimizationProfile Profile { get; set; } - Profil optimisation
+│   └── GCPerformanceCounters Counters { get; } - Compteurs performance
+├── <strong>Methods :</strong>
+│   ├── void OptimizeForThroughput() - Optimisation débit
+│   ├── void OptimizeForLatency() - Optimisation latence
+│   ├── void OptimizeForMemory() - Optimisation mémoire
+│   ├── void TuneGCSettings(GCTuningParameters parameters) - Ajustement paramètres
+│   ├── void EnableBackgroundGC() - Activation GC arrière-plan
+│   ├── void SetGCHeapCount(int heapCount) - Définition nombre heaps
+│   ├── void ConfigureLOHThreshold(int threshold) - Configuration seuil LOH
+│   └── GCRecommendations GetRecommendations() - Recommandations GC
+├── <strong>Optimization Profiles :</strong>
+│   ├── Interactive - Applications interactives
+│   ├── Batch - Traitement batch
+│   ├── Server - Applications serveur
+│   ├── LowMemory - Environnements mémoire limitée
+│   └── Custom - Profil personnalisé
+└── <strong>Tuning Parameters :</strong>
+    ├── Heap size limits - Limites taille heap
+    ├── Generation thresholds - Seuils générations
+    ├── Collection frequency - Fréquence collections
+    └── Memory pressure triggers - Déclencheurs pression mémoire</div>
+                <!-- INSERTION FICHIER 3 ICI -->
+                <!-- ui-virtualization-detail.html -->
+
+                    <h2>Virtualisation Interface Utilisateur - Rendu Adaptatif Grandes Collections</h2>
+                    
+                    <div class="file-structure"><strong>VirtualizationManager : Singleton</strong> - Gestionnaire central virtualisation UI
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;FrameworkElement, IVirtualizationStrategy&gt; VirtualizedControls { get; } - Contrôles virtualisés
+│   ├── VirtualizationConfiguration Configuration { get; set; } - Configuration globalee
+│   ├── bool IsEnabled { get; set; } - Virtualisation activée
+│   ├── double ViewportBuffer { get; set; } - Tampon viewport (défaut: 2.0)
+│   ├── int MaxRenderedItems { get; set; } - Max éléments rendus simultanément
+│   ├── VirtualizationMode DefaultMode { get; set; } - Mode par défaut
+│   ├── TimeSpan ScrollDebounceDelay { get; set; } - Délai anti-rebond scroll
+│   └── VirtualizationStatistics Statistics { get; } - Statistiques performance
+├── <strong>Properties Performance :</strong>
+│   ├── int TotalVirtualizedItems { get; } - Total éléments virtualisés
+│   ├── int CurrentlyRenderedItems { get; } - Éléments actuellement rendus
+│   ├── double AverageRenderTime { get; } - Temps rendu moyen (ms)
+│   ├── long MemorySavedByVirtualization { get; } - Mémoire économisée par virtualisation
+│   ├── double ScrollPerformanceScore { get; } - Score performance scroll
+│   ├── List&lt;PerformanceAlert&gt; PerformanceAlerts { get; } - Alertes performance
+│   └── VirtualizationHealthStatus HealthStatus { get; } - État santé virtualisation
+├── <strong>Methods - Control Management :</strong>
+│   ├── void EnableVirtualization(FrameworkElement control, IVirtualizationStrategy strategy) - Activation virtualisation
+│   ├── void DisableVirtualization(FrameworkElement control) - Désactivation virtualisation
+│   ├── IVirtualizationStrategy GetStrategy(FrameworkElement control) - Récupération stratégie
+│   ├── void UpdateStrategy(FrameworkElement control, IVirtualizationStrategy newStrategy) - Mise à jour stratégie
+│   ├── bool IsVirtualized(FrameworkElement control) - Test virtualisation active
+│   ├── VirtualizationInfo GetVirtualizationInfo(FrameworkElement control) - Informations virtualisation
+│   └── void RefreshVirtualization(FrameworkElement control) - Actualisation virtualisation
+├── <strong>Methods - Performance :</strong>
+│   ├── void OptimizeVirtualization() - Optimisation performance globalee
+│   ├── void TuneVirtualization(FrameworkElement control, VirtualizationTuningParameters parameters) - Ajustement paramètres
+│   ├── PerformanceReport GeneratePerformanceReport() - Rapport performance
+│   ├── void StartPerformanceMonitoring() - Démarrage monitoring
+│   ├── void StopPerformanceMonitoring() - Arrêt monitoring
+│   ├── List&lt;VirtualizationBottleneck&gt; IdentifyBottlenecks() - Identification goulots
+│   └── VirtualizationRecommendations GetRecommendations() - Recommandations optimisation
+├── <strong>Methods - Viewport Management :</strong>
+│   ├── Rect CalculateViewport(FrameworkElement control) - Calcul viewport
+│   ├── Range GetVisibleItemRange(FrameworkElement control) - Plage éléments visibles
+│   ├── void UpdateViewport(FrameworkElement control, Rect viewport) - Mise à jour viewport
+│   ├── bool IsItemInViewport(FrameworkElement control, int itemIndex) - Test élément visible
+│   ├── void ScrollIntoView(FrameworkElement control, int itemIndex) - Défilement vers élément
+│   └── void InvalidateViewport(FrameworkElement control) - Invalidation viewport
+└── <strong>Events :</strong>
+    ├── VirtualizationEnabled - Virtualisation activée
+    ├── VirtualizationDisabled - Virtualisation désactivée
+    ├── ViewportChanged - Viewport modifié
+    ├── ItemsRealized - Éléments réalisés
+    ├── ItemsVirtualized - Éléments virtualisés
+    ├── PerformanceThresholdExceeded - Seuil performance dépassé
+    └── ScrollingCompleted - Défilement terminé
+
+<strong>IVirtualizationStrategy</strong> - Interface stratégie virtualisation
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom stratégie
+│   ├── VirtualizationMode Mode { get; } - Mode virtualisation
+│   ├── double BufferRatio { get; set; } - Ratio tampon viewport
+│   ├── int MinRealizedItems { get; set; } - Min éléments réalisés
+│   ├── int MaxRealizedItems { get; set; } - Max éléments réalisés
+│   ├── bool EnableRecycling { get; set; } - Recyclage conteneurs activé
+│   ├── VirtualizationCachingBehavior CachingBehavior { get; set; } - Comportement cache
+│   └── VirtualizationStatistics Statistics { get; } - Statistiques stratégie
+├── <strong>Methods :</strong>
+│   ├── void Initialize(FrameworkElement control, IVirtualizationHost host) - Initialisation
+│   ├── void UpdateViewport(Rect viewport) - Mise à jour viewport
+│   ├── Range CalculateRealizedRange(Rect viewport, ItemMetrics itemMetrics) - Calcul plage réalisée
+│   ├── void RealizeItems(Range range) - Réalisation éléments
+│   ├── void VirtualizeItems(Range range) - Virtualisation éléments
+│   ├── FrameworkElement GetOrCreateContainer(int itemIndex) - Récupération/création conteneur
+│   ├── void RecycleContainer(FrameworkElement container) - Recyclage conteneur
+│   ├── void InvalidateLayout() - Invalidation layout
+│   ├── Size MeasureViewport(Size availableSize) - Mesure viewport
+│   ├── Size ArrangeViewport(Size finalSize) - Arrangement viewport
+│   └── void Dispose() - Libération ressources
+└── <strong>Strategy Types :</strong>
+    ├── ListVirtualizationStrategy - Listes verticales
+    ├── GridVirtualizationStrategy - Grilles 2D
+    ├── TreeVirtualizationStrategy - Arborescences
+    ├── MapVirtualizationStrategy - Cartes géospatiales
+    └── CustomVirtualizationStrategy - Stratégie personnalisée
+
+<strong>ListVirtualizationStrategy</strong> - Virtualisation listes verticales
+├── <strong>Properties :</strong>
+│   ├── double ItemHeight { get; set; } - Hauteur élément fixe
+│   ├── bool IsItemHeightFixed { get; set; } - Hauteur éléments fixe
+│   ├── Dictionary&lt;int, double&gt; ItemHeights { get; } - Hauteurs variables par index
+│   ├── double ScrollOffset { get; set; } - Décalage scroll
+│   ├── int FirstVisibleIndex { get; set; } - Index premier élément visible
+│   ├── int LastVisibleIndex { get; set; } - Index dernier élément visible
+│   ├── VirtualizingStackPanel StackPanel { get; } - Panel virtualisant
+│   └── ItemContainerRecycler Recycler { get; } - Recycleur conteneurs
+├── <strong>Methods :</strong>
+│   ├── Range CalculateRealizedRange(Rect viewport, ItemMetrics itemMetrics) - Calcul plage éléments
+│   ├── double GetItemOffset(int itemIndex) - Décalage élément
+│   ├── int GetItemIndexFromOffset(double offset) - Index depuis décalage
+│   ├── Size GetItemSize(int itemIndex) - Taille élément
+│   ├── void SetItemHeight(int itemIndex, double height) - Définition hauteur
+│   ├── void InvalidateItemHeights() - Invalidation hauteurs
+│   ├── void UpdateScrollInfo() - Mise à jour info scroll
+│   ├── void ScrollToItem(int itemIndex) - Défilement vers élément
+│   └── ListVirtualizationMetrics GetMetrics() - Métriques virtualisation
+├── <strong>Variable Height Support :</strong>
+│   ├── Height estimation - Estimation hauteurs
+│   ├── Progressive measurement - Mesure progressive
+│   ├── Height caching - Cache hauteurs
+│   └── Smooth scrolling - Défilement fluide
+└── <strong>Performance Optimizations :</strong>
+    ├── Container recycling - Recyclage conteneurs
+    ├── Incremental layout - Layout incrémental
+    ├── Viewport clipping - Découpage viewport
+    └── Scroll virtualization - Virtualisation défilement
+
+<strong>GridVirtualizationStrategy</strong> - Virtualisation grilles 2D
+├── <strong>Properties :</strong>
+│   ├── int ColumnsCount { get; set; } - Nombre colonnes
+│   ├── double ColumnWidth { get; set; } - Largeur colonne
+│   ├── double RowHeight { get; set; } - Hauteur rangée
+│   ├── Size CellSize { get; set; } - Taille cellule
+│   ├── Point ScrollPosition { get; set; } - Position défilement
+│   ├── GridRange VisibleRange { get; set; } - Plage visible (colonnes/rangées)
+│   ├── VirtualizingUniformGrid UniformGrid { get; } - Grille uniforme virtualisante
+│   └── GridCellRecycler CellRecycler { get; } - Recycleur cellules
+├── <strong>Methods :</strong>
+│   ├── GridRange CalculateVisibleRange(Rect viewport) - Calcul plage visible
+│   ├── Point GetCellPosition(int itemIndex) - Position cellule
+│   ├── int GetItemIndexFromPosition(Point position) - Index depuis position
+│   ├── Rect GetCellBounds(int column, int row) - Limites cellule
+│   ├── void UpdateGridLayout() - Mise à jour layout grille
+│   ├── void RealizeCell(int column, int row) - Réalisation cellule
+│   ├── void VirtualizeCell(int column, int row) - Virtualisation cellule
+│   ├── Size MeasureGrid(Size availableSize) - Mesure grille
+│   ├── Size ArrangeGrid(Size finalSize) - Arrangement grille
+│   └── GridVirtualizationMetrics GetGridMetrics() - Métriques grille
+├── <strong>Adaptive Layout :</strong>
+│   ├── Dynamic column count - Nombre colonnes dynamique
+│   ├── Responsive sizing - Tailles réactives
+│   ├── Aspect ratio preservation - Préservation ratio aspect
+│   └── Viewport-based optimization - Optimisation basée viewport
+└── <strong>2D Scrolling :</strong>
+    ├── Horizontal virtualization - Virtualisation horizontale
+    ├── Vertical virtualization - Virtualisation verticale
+    ├── Diagonal scrolling - Défilement diagonal
+    └── Zoom virtualization - Virtualisation zoom
+
+<strong>TreeVirtualizationStrategy</strong> - Virtualisation arborescences
+├── <strong>Properties :</strong>
+│   ├── TreeNode&lt;object&gt; RootNode { get; set; } - Nœud racine
+│   ├── Dictionary&lt;object, TreeNodeInfo&gt; NodeInfoCache { get; } - Cache infos nœuds
+│   ├── List&lt;TreeNode&lt;object&gt;&gt; VisibleNodes { get; } - Nœuds visibles (expansion)
+│   ├── double IndentSize { get; set; } - Taille indentation
+│   ├── bool ShowRootLines { get; set; } - Affichage lignes racine
+│   ├── VirtualizingTreeView TreeView { get; } - Vue arbre virtualisante
+│   └── TreeNodeRecycler NodeRecycler { get; } - Recycleur nœuds
+├── <strong>Methods :</strong>
+│   ├── void ExpandNode(TreeNode&lt;object&gt; node) - Expansion nœud
+│   ├── void CollapseNode(TreeNode&lt;object&gt; node) - Réduction nœud
+│   ├── void UpdateVisibleNodes() - Mise à jour nœuds visibles
+│   ├── int GetVisibleIndex(TreeNode&lt;object&gt; node) - Index visible nœud
+│   ├── TreeNode&lt;object&gt; GetNodeAtIndex(int visibleIndex) - Nœud à index
+│   ├── void InvalidateNodeHierarchy() - Invalidation hiérarchie
+│   ├── void RealizeNode(TreeNode&lt;object&gt; node, int level) - Réalisation nœud
+│   ├── void VirtualizeNode(TreeNode&lt;object&gt; node) - Virtualisation nœud
+│   ├── double CalculateNodeIndent(int level) - Calcul indentation
+│   └── TreeVirtualizationMetrics GetTreeMetrics() - Métriques arbre
+├── <strong>Hierarchy Management :</strong>
+│   ├── Dynamic loading - Chargement dynamique
+│   ├── Lazy expansion - Expansion paresseuse
+│   ├── Node caching - Cache nœuds
+│   └── Hierarchical recycling - Recyclage hiérarchique
+└── <strong>Performance Features :</strong>
+    ├── Incremental expansion - Expansion incrémentale
+    ├── Path-based indexing - Indexation par chemin
+    ├── Level-based virtualization - Virtualisation par niveau
+    └── Branch pruning - Élagage branches
+
+<strong>MapVirtualizationStrategy</strong> - Virtualisation spécialisée cartes géospatiales
+├── <strong>Properties :</strong>
+│   ├── Envelope ViewExtent { get; set; } - Emprise vue cartographique
+│   ├── double MapScale { get; set; } - Échelle carte
+│   ├── SpatialIndex&lt;MapFeature&gt; SpatialIndex { get; } - Index spatial features
+│   ├── Dictionary&lt;int, MapLayer&gt; VisibleLayers { get; } - Couches visibles par échelle
+│   ├── TileCache TileCache { get; } - Cache tuiles
+│   ├── MapRenderer Renderer { get; } - Moteur rendu cartographique
+│   ├── bool EnableLevelOfDetail { get; set; } - Niveaux détail activés
+│   └── MapVirtualizationOptions Options { get; set; } - Options cartographiques
+├── <strong>Methods - Spatial Queries :</strong>
+│   ├── List&lt;MapFeature&gt; GetFeaturesInExtent(Envelope extent) - Features dans emprise
+│   ├── void UpdateVisibleFeatures(Envelope viewExtent, double scale) - Mise à jour features visibles
+│   ├── bool IsFeatureVisible(MapFeature feature, Envelope viewExtent, double scale) - Test visibilité feature
+│   ├── void InvalidateSpatialCache() - Invalidation cache spatial
+│   ├── void RealizeMapFeature(MapFeature feature) - Réalisation feature carte
+│   ├── void VirtualizeMapFeature(MapFeature feature) - Virtualisation feature
+│   ├── LevelOfDetail CalculateLOD(double mapScale) - Calcul niveau détail
+│   └── void UpdateSpatialIndex() - Mise à jour index spatial
+├── <strong>Methods - Tile Management :</strong>
+│   ├── List&lt;MapTile&gt; GetTilesForExtent(Envelope extent, int zoomLevel) - Tuiles pour emprise
+│   ├── void RequestTile(TileCoordinate coordinate) - Requête tuile
+│   ├── void CacheTile(MapTile tile) - Cache tuile
+│   ├── void InvalidateTiles(Envelope extent) - Invalidation tuiles
+│   ├── void PreloadTiles(Envelope extent, int zoomLevel) - Préchargement tuiles
+│   └── TileLoadingStatistics GetTileStatistics() - Statistiques tuiles
+├── <strong>Level of Detail :</strong>
+│   ├── Scale-dependent rendering - Rendu dépendant échelle
+│   ├── Feature generalization - Généralisation features
+│   ├── Symbol scaling - Mise à l'échelle symboles
+│   └── Adaptive quality - Qualité adaptative
+├── <strong>Spatial Optimization :</strong>
+│   ├── R-Tree indexing - Indexation R-Tree
+│   ├── Spatial clustering - Clustering spatial
+│   ├── Extent-based culling - Élimination par emprise
+│   └── Multi-scale caching - Cache multi-échelles
+└── <strong>Rendering Pipeline :</strong>
+    ├── Frustum culling - Élimination frustum
+    ├── Back-face culling - Élimination faces arrière
+    ├── LOD selection - Sélection niveau détail
+    └── Batch rendering - Rendu par lots
+
+<strong>ItemContainerRecycler</strong> - Recycleur conteneurs d'éléments
+├── <strong>Properties :</strong>
+│   ├── Queue&lt;FrameworkElement&gt; RecycledContainers { get; } - File conteneurs recyclés
+│   ├── Dictionary&lt;Type, Stack&lt;FrameworkElement&gt;&gt; ContainersByType { get; } - Conteneurs par type
+│   ├── int MaxRecycledContainers { get; set; } - Max conteneurs recyclés
+│   ├── bool EnableTypeSpecificRecycling { get; set; } - Recyclage spécifique par type
+│   ├── TimeSpan ContainerExpirationTime { get; set; } - Délai expiration conteneurs
+│   ├── RecyclingStatistics Statistics { get; } - Statistiques recyclage
+│   └── bool IsRecyclingEnabled { get; set; } - Recyclage activé
+├── <strong>Methods :</strong>
+│   ├── FrameworkElement GetOrCreateContainer(Type containerType) - Récupération/création conteneur
+│   ├── bool TryGetRecycledContainer(Type containerType, out FrameworkElement container) - Tentative récup recyclé
+│   ├── void RecycleContainer(FrameworkElement container) - Recyclage conteneur
+│   ├── void ClearContainer(FrameworkElement container) - Nettoyage conteneur
+│   ├── bool CanRecycleContainer(FrameworkElement container) - Test recyclage possible
+│   ├── void TrimRecycledContainers() - Réduction conteneurs recyclés
+│   ├── void ClearRecycledContainers() - Vidage conteneurs recyclés
+│   ├── void CleanupExpiredContainers() - Nettoyage conteneurs expirés
+│   └── RecyclerHealthReport GetHealthReport() - Rapport santé recycleur
+├── <strong>Container Lifecycle :</strong>
+│   ├── Creation - Création conteneur
+│   ├── Initialization - Initialisation
+│   ├── Data binding - Liaison données
+│   ├── Rendering - Rendu
+│   ├── Cleanup - Nettoyage
+│   └── Recycling - Recyclage
+└── <strong>Recycling Strategies :</strong>
+    ├── LIFO recycling - Recyclage LIFO (pile)
+    ├── Type-based recycling - Recyclage par type
+    ├── Size-based recycling - Recyclage par taille
+    └── Age-based expiration - Expiration par âge
+
+<strong>ScrollVirtualizer</strong> - Virtualiseur défilement
+├── <strong>Properties :</strong>
+│   ├── ScrollViewer ScrollViewer { get; } - Contrôle défilement
+│   ├── IScrollInfo ScrollInfo { get; } - Informations défilement
+│   ├── double ViewportHeight { get; } - Hauteur viewport
+│   ├── double ViewportWidth { get; } - Largeur viewport
+│   ├── double ExtentHeight { get; } - Hauteur contenu total
+│   ├── double ExtentWidth { get; } - Largeur contenu total
+│   ├── double VerticalOffset { get; set; } - Décalage vertical
+│   ├── double HorizontalOffset { get; set; } - Décalage horizontal
+│   └── ScrollVirtualizationMode Mode { get; set; } - Mode virtualisation défilement
+├── <strong>Methods :</strong>
+│   ├── void LineUp() - Défilement ligne vers haut
+│   ├── void LineDown() - Défilement ligne vers bas
+│   ├── void LineLeft() - Défilement ligne vers gauche
+│   ├── void LineRight() - Défilement ligne vers droite
+│   ├── void PageUp() - Défilement page vers haut
+│   ├── void PageDown() - Défilement page vers bas
+│   ├── void PageLeft() - Défilement page vers gauche
+│   ├── void PageRight() - Défilement page vers droite
+│   ├── void SetHorizontalOffset(double offset) - Définition décalage horizontal
+│   ├── void SetVerticalOffset(double offset) - Définition décalage vertical
+│   ├── Rect MakeVisible(Visual visual, Rect rectangle) - Rendre visible
+│   └── void InvalidateScrollInfo() - Invalidation info défilement
+└── <strong>Scroll Modes :</strong>
+    ├── Standard - Défilement standard
+    ├── Pixel - Défilement pixel
+    ├── Item - Défilement par élément
+    └── Smooth - Défilement fluide
+
+<strong>VirtualizationStatistics</strong> - Statistiques performance virtualisation
+├── <strong>Performance Metrics :</strong>
+│   ├── long TotalItemsVirtualized { get; } - Total éléments virtualisés
+│   ├── long CurrentlyRealizedItems { get; } - Éléments actuellement réalisés
+│   ├── double VirtualizationRatio { get; } - Ratio virtualisation
+│   ├── TimeSpan AverageRealizationTime { get; } - Temps réalisation moyen
+│   ├── TimeSpan AverageVirtualizationTime { get; } - Temps virtualisation moyen
+│   ├── long MemorySaved { get; } - Mémoire économisée
+│   ├── double ScrollingFrameRate { get; } - Fréquence images défilement
+│   └── VirtualizationEfficiency Efficiency { get; } - Efficacité virtualisation
+├── <strong>Container Statistics :</strong>
+│   ├── int ContainersCreated { get; } - Conteneurs créés
+│   ├── int ContainersRecycled { get; } - Conteneurs recyclés
+│   ├── double ContainerRecyclingRatio { get; } - Ratio recyclage conteneurs
+│   ├── TimeSpan AverageContainerLifetime { get; } - Durée vie moyenne conteneur
+│   └── long ContainerMemoryUsage { get; } - Usage mémoire conteneurs
+├── <strong>Viewport Statistics :</strong>
+│   ├── Size AverageViewportSize { get; } - Taille viewport moyenne
+│   ├── double ViewportChangeFrequency { get; } - Fréquence changements viewport
+│   ├── TimeSpan ViewportUpdateTime { get; } - Temps mise à jour viewport
+│   └── int ViewportInvalidations { get; } - Invalidations viewport
+└── <strong>Methods :</strong>
+    ├── void Reset() - Remise zéro statistiques
+    ├── VirtualizationReport GenerateReport() - Génération rapport
+    ├── void StartProfiling() - Démarrage profilage
+    ├── void StopProfiling() - Arrêt profilage
+    └── PerformanceRecommendations GetRecommendations() - Recommandations performance</div>
+                <!-- INSERTION FICHIER 4 ICI -->
+                <!-- parallel-processing-detail.html -->
+
+                    <h2>Traitement Parallèle - Task Parallel Library et Async/Await</h2>
+                    
+                    <div class="file-structure"><strong>ParallelProcessingManager : Singleton</strong> - Gestionnaire central traitement parallèle
+├── <strong>Properties Core :</strong>
+│   ├── TaskScheduler DefaultScheduler { get; set; } - Planificateur tâches par défaut
+│   ├── ConcurrencyLimiter ConcurrencyLimiter { get; } - Limiteur concurrence
+│   ├── int MaxDegreeOfParallelism { get; set; } - Degré max parallélisme
+│   ├── TaskFactory TaskFactory { get; } - Factory tâches configurée
+│   ├── SemaphoreSlim GlobalSemaphore { get; } - Sémaphore global
+│   ├── CancellationTokenSource GlobalCancellationSource { get; } - Source annulation globale
+│   ├── ParallelExecutionMode ExecutionMode { get; set; } - Mode exécution parallèle
+│   └── ParallelProcessingStatistics Statistics { get; } - Statistiques traitement
+├── <strong>Properties Monitoring :</strong>
+│   ├── int ActiveTasksCount { get; } - Nombre tâches actives
+│   ├── int QueuedTasksCount { get; } - Nombre tâches en attente
+│   ├── int CompletedTasksCount { get; } - Nombre tâches terminées
+│   ├── double AverageTaskDuration { get; } - Durée moyenne tâche
+│   ├── double CpuUtilization { get; } - Utilisation CPU
+│   ├── List&lt;TaskExecutionInfo&gt; RunningTasks { get; } - Tâches en cours
+│   ├── TaskExecutionHealthStatus HealthStatus { get; } - État santé exécution
+│   └── DateTime LastOptimization { get; } - Dernière optimisation
+├── <strong>Methods - Task Management :</strong>
+│   ├── Task RunAsync(Func&lt;Task&gt; asyncAction) - Exécution action async
+│   ├── Task&lt;T&gt; RunAsync&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; asyncFunction) - Fonction async avec résultat
+│   ├── void RunParallel(IEnumerable&lt;Action&gt; actions, ParallelOptions options = null) - Actions parallèles
+│   ├── Task RunParallelAsync(IEnumerable&lt;Func&lt;Task&gt;&gt; asyncActions) - Actions async parallèles
+│   ├── ParallelLoopResult ForEach&lt;T&gt;(IEnumerable&lt;T&gt; source, Action&lt;T&gt; body) - Boucle parallèle
+│   ├── Task ForEachAsync&lt;T&gt;(IEnumerable&lt;T&gt; source, Func&lt;T, Task&gt; asyncBody) - Boucle async
+│   ├── Task&lt;T[]&gt; WhenAll&lt;T&gt;(params Task&lt;T&gt;[] tasks) - Attente toutes tâches
+│   ├── Task&lt;T&gt; WhenAny&lt;T&gt;(params Task&lt;T&gt;[] tasks) - Attente première tâche
+│   └── void CancelAllTasks() - Annulation toutes tâches
+├── <strong>Methods - Batch Processing :</strong>
+│   ├── Task ProcessBatchAsync&lt;T&gt;(IEnumerable&lt;T&gt; items, Func&lt;T, Task&gt; processor, int batchSize) - Traitement par lots
+│   ├── Task&lt;U[]&gt; ProcessBatchWithResultsAsync&lt;T, U&gt;(IEnumerable&lt;T&gt; items, Func&lt;T, Task&lt;U&gt;&gt; processor, int batchSize) - Lot avec résultats
+│   ├── Task ProcessPartitionedAsync&lt;T&gt;(IEnumerable&lt;T&gt; items, Func&lt;IEnumerable&lt;T&gt;, Task&gt; processor) - Traitement partitionné
+│   ├── Task&lt;TResult&gt; ReduceAsync&lt;T, TResult&gt;(IEnumerable&lt;T&gt; items, Func&lt;T, Task&lt;TResult&gt;&gt; mapper, Func&lt;TResult, TResult, TResult&gt; reducer) - MapReduce
+│   └── Task ProducerConsumerAsync&lt;T&gt;(IEnumerable&lt;T&gt; items, Func&lt;T, Task&gt; consumer, int maxConcurrency) - Producteur-consommateur
+├── <strong>Methods - Optimization :</strong>
+│   ├── void OptimizeParallelism() - Optimisation degré parallélisme
+│   ├── void TuneScheduler() - Ajustement planificateur
+│   ├── ParallelConfiguration GetOptimalConfiguration() - Configuration optimale
+│   ├── void AdaptToSystemLoad() - Adaptation charge système
+│   ├── void SetProcessorAffinity(ProcessorAffinity affinity) - Affinité processeurs
+│   ├── void ConfigureNUMA(NumaConfiguration config) - Configuration NUMA
+│   └── PerformanceRecommendations GetParallelismRecommendations() - Recommandations parallélisme
+└── <strong>Events :</strong>
+    ├── TaskStarted - Tâche démarrée
+    ├── TaskCompleted - Tâche terminée
+    ├── TaskFailed - Tâche échouée
+    ├── TaskCancelled - Tâche annulée
+    ├── ConcurrencyLimitReached - Limite concurrence atteinte
+    ├── OptimizationCompleted - Optimisation terminée
+    └── HealthCheckFailed - Échec contrôle santé
+
+<strong>AsyncDataProcessor&lt;T&gt;</strong> - Processeur données asynchrone générique
+├── <strong>Properties :</strong>
+│   ├── Func&lt;T, Task&lt;T&gt;&gt; ProcessorFunction { get; set; } - Fonction traitement
+│   ├── int MaxConcurrency { get; set; } - Concurrence maximale
+│   ├── int BatchSize { get; set; } - Taille lots traitement
+│   ├── TimeSpan ProcessingTimeout { get; set; } - Délai expiration traitement
+│   ├── bool EnableRetry { get; set; } - Tentatives activées
+│   ├── RetryPolicy RetryPolicy { get; set; } - Politique tentatives
+│   ├── IProgress&lt;ProcessingProgress&gt; Progress { get; set; } - Rapport progression
+│   └── CancellationToken CancellationToken { get; set; } - Token annulation
+├── <strong>Methods :</strong>
+│   ├── Task&lt;T[]&gt; ProcessAsync(IEnumerable&lt;T&gt; items) - Traitement collection
+│   ├── Task&lt;ProcessingResult&lt;T&gt;&gt; ProcessWithResultsAsync(IEnumerable&lt;T&gt; items) - Avec résultats détaillés
+│   ├── IAsyncEnumerable&lt;T&gt; ProcessStreamAsync(IAsyncEnumerable&lt;T&gt; stream) - Traitement stream
+│   ├── Task&lt;T&gt; ProcessSingleAsync(T item) - Traitement élément unique
+│   ├── Task&lt;ProcessingStatistics&gt; GetStatisticsAsync() - Statistiques traitement
+│   ├── void ConfigureRetryPolicy(int maxAttempts, TimeSpan delay) - Configuration retry
+│   └── void SetProgressCallback(Action&lt;ProcessingProgress&gt; callback) - Callback progression
+├── <strong>Error Handling :</strong>
+│   ├── Exception aggregation - Agrégation exceptions
+│   ├── Partial failure handling - Gestion échecs partiels
+│   ├── Retry mechanisms - Mécanismes tentatives
+│   └── Circuit breaker - Disjoncteur
+└── <strong>Progress Reporting :</strong>
+    ├── Real-time progress - Progression temps réel
+    ├── Batch completion - Achèvement lots
+    ├── Error reporting - Rapport erreurs
+    └── Performance metrics - Métriques performance
+
+<strong>ParallelGeometryProcessor</strong> - Processeur géométries parallèle
+├── <strong>Properties :</strong>
+│   ├── GeometryProcessingOptions Options { get; set; } - Options traitement géométriques
+│   ├── SpatialPartitioner SpatialPartitioner { get; } - Partitionneur spatial
+│   ├── GeometryOperationCache OperationCache { get; } - Cache opérations
+│   ├── int OptimalPartitionSize { get; set; } - Taille partition optimale
+│   ├── bool EnableSpatialIndexing { get; set; } - Indexation spatiale activée
+│   ├── TopologyValidationLevel ValidationLevel { get; set; } - Niveau validation topologique
+│   └── ParallelGeometryStatistics Statistics { get; } - Statistiques géométriques
+├── <strong>Methods - Geometric Operations :</strong>
+│   ├── Task&lt;Geometry[]&gt; BufferAsync(IEnumerable&lt;Geometry&gt; geometries, double distance) - Tampons parallèles
+│   ├── Task&lt;Geometry[]&gt; IntersectionAsync(IEnumerable&lt;Geometry&gt; geometries1, IEnumerable&lt;Geometry&gt; geometries2) - Intersections
+│   ├── Task&lt;Geometry[]&gt; UnionAsync(IEnumerable&lt;Geometry&gt; geometries) - Unions parallèles
+│   ├── Task&lt;Geometry[]&gt; SimplifyAsync(IEnumerable&lt;Geometry&gt; geometries, double tolerance) - Simplifications
+│   ├── Task&lt;bool[]&gt; ValidateAsync(IEnumerable&lt;Geometry&gt; geometries) - Validations parallèles
+│   ├── Task&lt;Geometry[]&gt; ProjectAsync(IEnumerable&lt;Geometry&gt; geometries, SpatialReference targetSR) - Projections
+│   └── Task&lt;SpatialRelationship[]&gt; RelateAsync(IEnumerable&lt;Geometry&gt; geometries1, IEnumerable&lt;Geometry&gt; geometries2) - Relations spatiales
+├── <strong>Methods - Spatial Indexing :</strong>
+│   ├── Task&lt;SpatialIndex&gt; BuildSpatialIndexAsync(IEnumerable&lt;Geometry&gt; geometries) - Construction index spatial
+│   ├── Task&lt;List&lt;Geometry&gt;&gt; SpatialQueryAsync(SpatialIndex index, Envelope queryExtent) - Requête spatiale
+│   ├── Task UpdateSpatialIndexAsync(SpatialIndex index, IEnumerable&lt;GeometryUpdate&gt; updates) - Mise à jour index
+│   └── Task&lt;NearestNeighborResult[]&gt; NearestNeighborAsync(SpatialIndex index, Point[] queryPoints, int k) - Plus proches voisins
+├── <strong>Spatial Partitioning :</strong>
+│   ├── Grid-based partitioning - Partitionnement grille
+│   ├── Quadtree partitioning - Partitionnement quadtree
+│   ├── Adaptive partitioning - Partitionnement adaptatif
+│   └── Load-balanced partitioning - Partitionnement équilibré
+└── <strong>Performance Optimization :</strong>
+    ├── SIMD operations - Opérations SIMD
+    ├── Memory-mapped geometry - Géométries mappées mémoire
+    ├── Batch operations - Opérations par lots
+    └── Cache-friendly algorithms - Algorithmes optimisés cache
+
+<strong>AsyncFileProcessor</strong> - Processeur fichiers asynchrone
+├── <strong>Properties :</strong>
+│   ├── int MaxConcurrentFiles { get; set; } - Max fichiers simultanés
+│   ├── int BufferSize { get; set; } - Taille tampon lecture
+│   ├── FileProcessingOptions Options { get; set; } - Options traitement fichiers
+│   ├── IProgress&lt;FileProcessingProgress&gt; Progress { get; set; } - Progression traitement
+│   ├── CancellationToken CancellationToken { get; set; } - Token annulation
+│   ├── FileProcessingStatistics Statistics { get; } - Statistiques fichiers
+│   └── Dictionary&lt;string, IFileReader&gt; FileReaders { get; } - Lecteurs par extension
+├── <strong>Methods - File Operations :</strong>
+│   ├── Task&lt;FileProcessingResult[]&gt; ProcessFilesAsync(IEnumerable&lt;string&gt; filePaths) - Traitement fichiers
+│   ├── Task&lt;T[]&gt; ReadFilesAsync&lt;T&gt;(IEnumerable&lt;string&gt; filePaths, Func&lt;Stream, Task&lt;T&gt;&gt; reader) - Lecture fichiers
+│   ├── Task WriteFilesAsync&lt;T&gt;(IEnumerable&lt;KeyValuePair&lt;string, T&gt;&gt; fileData, Func&lt;T, Stream, Task&gt; writer) - Écriture fichiers
+│   ├── Task&lt;FileValidationResult[]&gt; ValidateFilesAsync(IEnumerable&lt;string&gt; filePaths) - Validation fichiers
+│   ├── Task&lt;long[]&gt; CalculateFileSizesAsync(IEnumerable&lt;string&gt; filePaths) - Calcul tailles
+│   ├── Task&lt;string[]&gt; CalculateHashesAsync(IEnumerable&lt;string&gt; filePaths, HashAlgorithm algorithm) - Calcul hachages
+│   └── Task&lt;FileCopyResult[]&gt; CopyFilesAsync(IEnumerable&lt;FileCopyOperation&gt; operations) - Copie fichiers
+├── <strong>Methods - Shapefile Processing :</strong>
+│   ├── Task&lt;ShapeFileData[]&gt; LoadShapeFilesAsync(IEnumerable&lt;string&gt; shapefilePaths) - Chargement shapefiles
+│   ├── Task&lt;Feature[]&gt; ReadFeaturesAsync(string shapefilePath) - Lecture features
+│   ├── Task WriteShapeFileAsync(string outputPath, IEnumerable&lt;Feature&gt; features) - Écriture shapefile
+│   ├── Task&lt;ShapeFileMetadata&gt; GetMetadataAsync(string shapefilePath) - Métadonnées shapefile
+│   └── Task&lt;ValidationResult&gt; ValidateShapeFileAsync(string shapefilePath) - Validation shapefile
+├── <strong>Streaming Support :</strong>
+│   ├── Async streams - Flux asynchrones
+│   ├── Backpressure handling - Gestion contre-pression
+│   ├── Memory-efficient reading - Lecture économe mémoire
+│   └── Progress reporting - Rapport progression
+└── <strong>Error Handling :</strong>
+    ├── File access errors - Erreurs accès fichier
+    ├── Format validation - Validation format
+    ├── Partial failure recovery - Récupération échecs partiels
+    └── Retry mechanisms - Mécanismes tentatives
+
+<strong>DataPipeline&lt;TInput, TOutput&gt;</strong> - Pipeline traitement données
+├── <strong>Properties :</strong>
+│   ├── List&lt;IPipelineStage&lt;object, object&gt;&gt; Stages { get; } - Étapes pipeline
+│   ├── int MaxConcurrency { get; set; } - Concurrence maximale
+│   ├── bool EnablePipelining { get; set; } - Pipeline activé
+│   ├── PipelineExecutionMode ExecutionMode { get; set; } - Mode exécution
+│   ├── PipelineStatistics Statistics { get; } - Statistiques pipeline
+│   ├── IProgress&lt;PipelineProgress&gt; Progress { get; set; } - Progression pipeline
+│   └── CancellationToken CancellationToken { get; set; } - Token annulation
+├── <strong>Methods - Pipeline Construction :</strong>
+│   ├── DataPipeline&lt;TInput, TStage&gt; AddStage&lt;TStage&gt;(Func&lt;TOutput, Task&lt;TStage&gt;&gt; stageFunction) - Ajout étape
+│   ├── DataPipeline&lt;TInput, TStage&gt; AddParallelStage&lt;TStage&gt;(Func&lt;TOutput, Task&lt;TStage&gt;&gt; stageFunction, int concurrency) - Étape parallèle
+│   ├── DataPipeline&lt;TInput, TOutput&gt; AddFilter(Func&lt;TOutput, bool&gt; filterPredicate) - Ajout filtre
+│   ├── DataPipeline&lt;TInput, TOutput&gt; AddBatch(int batchSize) - Traitement par lots
+│   ├── DataPipeline&lt;TInput, TOutput&gt; AddBuffer(int bufferSize) - Ajout tampon
+│   └── DataPipeline&lt;TInput, TOutput&gt; AddErrorHandler(Func&lt;Exception, TOutput, Task&lt;TOutput&gt;&gt; errorHandler) - Gestion erreurs
+├── <strong>Methods - Execution :</strong>
+│   ├── Task&lt;TOutput[]&gt; ExecuteAsync(IEnumerable&lt;TInput&gt; input) - Exécution pipeline
+│   ├── IAsyncEnumerable&lt;TOutput&gt; ExecuteStreamAsync(IAsyncEnumerable&lt;TInput&gt; input) - Exécution stream
+│   ├── Task&lt;PipelineResult&lt;TOutput&gt;&gt; ExecuteWithResultsAsync(IEnumerable&lt;TInput&gt; input) - Avec résultats détaillés
+│   ├── Task&lt;TOutput&gt; ExecuteSingleAsync(TInput input) - Exécution élément unique
+│   └── void Cancel() - Annulation pipeline
+├── <strong>Pipeline Patterns :</strong>
+│   ├── Sequential - Exécution séquentielle
+│   ├── Parallel - Étapes parallèles
+│   ├── Fork-Join - Branchement-fusion
+│   ├── Map-Reduce - Mappage-réduction
+│   └── Stream processing - Traitement flux
+└── <strong>Error Strategies :</strong>
+    ├── Fail-fast - Échec rapide
+    ├── Continue on error - Continuer sur erreur
+    ├── Retry stage - Retry étape
+    └── Circuit breaker - Disjoncteur
+
+<strong>ConcurrencyLimiter</strong> - Limiteur concurrence
+├── <strong>Properties :</strong>
+│   ├── SemaphoreSlim Semaphore { get; } - Sémaphore limitation
+│   ├── int MaxConcurrency { get; set; } - Concurrence maximale
+│   ├── int CurrentConcurrency { get; } - Concurrence actuelle
+│   ├── int QueuedRequests { get; } - Requêtes en attente
+│   ├── TimeSpan MaxWaitTime { get; set; } - Temps attente max
+│   ├── ConcurrencyLimiterStatistics Statistics { get; } - Statistiques limiteur
+│   └── bool IsEnabled { get; set; } - Limiteur activé
+├── <strong>Methods :</strong>
+│   ├── Task&lt;IDisposable&gt; AcquireAsync() - Acquisition slot async
+│   ├── IDisposable Acquire() - Acquisition slot sync
+│   ├── bool TryAcquire(out IDisposable lease) - Tentative acquisition
+│   ├── Task&lt;T&gt; ExecuteAsync&lt;T&gt;(Func&lt;Task&lt;T&gt;&gt; function) - Exécution avec limitation
+│   ├── Task ExecuteAsync(Func&lt;Task&gt; action) - Action avec limitation
+│   ├── void SetMaxConcurrency(int maxConcurrency) - Définition max concurrence
+│   ├── void Reset() - Remise zéro limiteur
+│   └── ConcurrencyReport GetReport() - Rapport concurrence
+├── <strong>Adaptive Limiting :</strong>
+│   ├── CPU-based limiting - Limitation CPU
+│   ├── Memory-based limiting - Limitation mémoire
+│   ├── Response time limiting - Limitation temps réponse
+│   └── Custom metrics limiting - Limitation métriques custom
+└── <strong>Queuing Strategies :</strong>
+    ├── FIFO - Premier arrivé, premier servi
+    ├── LIFO - Dernier arrivé, premier servi
+    ├── Priority-based - Basé priorité
+    └── Adaptive - Adaptatif
+
+<strong>TaskSchedulerFactory</strong> - Factory planificateurs tâches
+├── <strong>Static Methods :</strong>
+│   ├── TaskScheduler CreateDefault() - Planificateur par défaut
+│   ├── TaskScheduler CreateCpuBound() - CPU-bound
+│   ├── TaskScheduler CreateIoBound() - I/O-bound
+│   ├── TaskScheduler CreateCustom(TaskSchedulerOptions options) - Personnalisé
+│   ├── TaskScheduler CreateThreadPool(int minThreads, int maxThreads) - Pool threads
+│   ├── TaskScheduler CreateSingleThreaded() - Thread unique
+│   ├── TaskScheduler CreateQueuedTaskScheduler(int concurrencyLevel) - Planificateur queue
+│   └── TaskScheduler CreateWorkStealingScheduler() - Work-stealing
+├── <strong>Specialized Schedulers :</strong>
+│   ├── UITaskScheduler - Thread UI
+│   ├── BackgroundTaskScheduler - Tâches arrière-plan
+│   ├── HighPriorityTaskScheduler - Haute priorité
+│   ├── LowLatencyTaskScheduler - Faible latence
+│   └── BoundedTaskScheduler - Concurrence limitée
+└── <strong>Scheduler Options :</strong>
+    ├── Thread affinity - Affinité threads
+    ├── Priority levels - Niveaux priorité
+    ├── Queue disciplines - Disciplines files
+    └── Performance tuning - Ajustement performance
+
+<strong>AsyncEventProcessor</strong> - Processeur événements asynchrone
+├── <strong>Properties :</strong>
+│   ├── ConcurrentQueue&lt;EventData&gt; EventQueue { get; } - File événements
+│   ├── int MaxConcurrentHandlers { get; set; } - Max gestionnaires simultanés
+│   ├── TimeSpan EventTimeout { get; set; } - Délai expiration événement
+│   ├── bool EnableOrdering { get; set; } - Ordre préservé
+│   ├── EventProcessingStatistics Statistics { get; } - Statistiques événements
+│   └── CancellationToken CancellationToken { get; set; } - Token annulation
+├── <strong>Methods :</strong>
+│   ├── Task PublishAsync&lt;T&gt;(T eventData) - Publication événement
+│   ├── Task&lt;bool&gt; TryPublishAsync&lt;T&gt;(T eventData, TimeSpan timeout) - Tentative publication
+│   ├── Task SubscribeAsync&lt;T&gt;(Func&lt;T, Task&gt; handler) - Abonnement gestionnaire
+│   ├── Task UnsubscribeAsync&lt;T&gt;(Func&lt;T, Task&gt; handler) - Désabonnement
+│   ├── Task ProcessEventsAsync() - Traitement événements
+│   ├── Task StartProcessingAsync() - Démarrage traitement
+│   ├── Task StopProcessingAsync() - Arrêt traitement
+│   └── Task FlushAsync() - Vidage file événements
+└── <strong>Event Patterns :</strong>
+    ├── Fire-and-forget - Tirer et oublier
+    ├── Request-response - Requête-réponse
+    ├── Pub-sub - Publication-abonnement
+    └── Event sourcing - Sourçage événements
+
+<strong>ParallelProcessingStatistics</strong> - Statistiques traitement parallèle
+├── <strong>Task Metrics :</strong>
+│   ├── long TotalTasksExecuted { get; } - Total tâches exécutées
+│   ├── long CurrentlyActiveTasks { get; } - Tâches actuellement actives
+│   ├── TimeSpan AverageTaskDuration { get; } - Durée moyenne tâche
+│   ├── TimeSpan MaxTaskDuration { get; } - Durée max tâche
+│   ├── TimeSpan MinTaskDuration { get; } - Durée min tâche
+│   ├── long TasksPerSecond { get; } - Tâches par seconde
+│   ├── double TaskFailureRate { get; } - Taux échec tâches
+│   └── Dictionary&lt;TaskStatus, long&gt; TaskStatusCounts { get; } - Compteurs par statut
+├── <strong>Resource Metrics :</strong>
+│   ├── double CpuUtilization { get; } - Utilisation CPU
+│   ├── long MemoryUsage { get; } - Usage mémoire
+│   ├── int ThreadCount { get; } - Nombre threads
+│   ├── double ThreadUtilization { get; } - Utilisation threads
+│   ├── long ContextSwitches { get; } - Commutations contexte
+│   └── TimeSpan GCTime { get; } - Temps garbage collection
+├── <strong>Performance Metrics :</strong>
+│   ├── double Throughput { get; } - Débit traitement
+│   ├── TimeSpan AverageLatency { get; } - Latence moyenne
+│   ├── TimeSpan P95Latency { get; } - Latence percentile 95
+│   ├── double EfficiencyRatio { get; } - Ratio efficacité
+│   └── ParallelismEffectiveness Effectiveness { get; } - Efficacité parallélisme
+└── <strong>Methods :</strong>
+    ├── void Reset() - Remise zéro statistiques
+    ├── ParallelPerformanceReport GenerateReport() - Génération rapport
+    ├── void StartProfiling() - Démarrage profilage
+    ├── void StopProfiling() - Arrêt profilage
+    └── PerformanceRecommendations GetRecommendations() - Recommandations performance</div>
+                <!-- INSERTION FICHIER 5 ICI -->
+                <!-- performance-monitoring-detail.html -->
+
+                    <h2>Monitoring Performance - Profiling et Métriques Temps Réel</h2>
+                    
+                    <div class="file-structure"><strong>PerformanceMonitor : Singleton</strong> - Gestionnaire central monitoring performance
+├── <strong>Properties Core :</strong>
+│   ├── Dictionary&lt;string, IPerformanceCounter&gt; Counters { get; } - Compteurs performance par nom
+│   ├── List&lt;IPerformanceCollector&gt; Collectors { get; } - Collecteurs métriques actifs
+│   ├── PerformanceConfiguration Configuration { get; set; } - Configuration monitoring
+│   ├── bool IsEnabled { get; set; } - Monitoring activé
+│   ├── TimeSpan CollectionInterval { get; set; } - Intervalle collecte (défaut: 1s)
+│   ├── int MaxSampleCount { get; set; } - Max échantillons stockés
+│   ├── PerformanceLevel MonitoringLevel { get; set; } - Niveau monitoring (Basic/Detailed/Diagnostic)
+│   └── DateTime StartTime { get; } - Heure démarrage monitoring
+├── <strong>Properties Real-time :</strong>
+│   ├── PerformanceMetrics CurrentMetrics { get; } - Métriques actuelles temps réel
+│   ├── SystemResourceUsage SystemUsage { get; } - Usage ressources système
+│   ├── ApplicationResourceUsage AppUsage { get; } - Usage ressources application
+│   ├── List&lt;PerformanceAlert&gt; ActiveAlerts { get; } - Alertes performance actives
+│   ├── PerformanceHealthStatus HealthStatus { get; } - État santé performance
+│   ├── double OverallPerformanceScore { get; } - Score performance global (0-100)
+│   └── DateTime LastUpdate { get; } - Dernière mise à jour métriques
+├── <strong>Methods - Counter Management :</strong>
+│   ├── void RegisterCounter(string name, IPerformanceCounter counter) - Enregistrement compteur
+│   ├── void UnregisterCounter(string name) - Suppression compteur
+│   ├── IPerformanceCounter GetCounter(string name) - Récupération compteur
+│   ├── void IncrementCounter(string name, long value = 1) - Incrément compteur
+│   ├── void SetCounterValue(string name, double value) - Définition valeur compteur
+│   ├── void ResetCounter(string name) - Remise zéro compteur
+│   ├── void ResetAllCounters() - Remise zéro tous compteurs
+│   └── Dictionary&lt;string, object&gt; GetAllCounterValues() - Toutes valeurs compteurs
+├── <strong>Methods - Data Collection :</strong>
+│   ├── void StartMonitoring() - Démarrage monitoring
+│   ├── void StopMonitoring() - Arrêt monitoring
+│   ├── void PauseMonitoring() - Suspension monitoring
+│   ├── void ResumeMonitoring() - Reprise monitoring
+│   ├── void CollectMetrics() - Collecte manuelle métriques
+│   ├── PerformanceSample TakeSample() - Prise échantillon performance
+│   ├── void AddCollector(IPerformanceCollector collector) - Ajout collecteur
+│   ├── void RemoveCollector(IPerformanceCollector collector) - Suppression collecteur
+│   └── void ConfigureCollection(CollectionOptions options) - Configuration collecte
+├── <strong>Methods - Analysis :</strong>
+│   ├── PerformanceReport GenerateReport(TimeSpan period) - Génération rapport période
+│   ├── PerformanceTrend AnalyzeTrend(string metricName, TimeSpan period) - Analyse tendance métrique
+│   ├── List&lt;PerformanceBottleneck&gt; IdentifyBottlenecks() - Identification goulots étranglement
+│   ├── PerformanceComparison Compare(DateTime startDate, DateTime endDate) - Comparaison périodes
+│   ├── List&lt;PerformanceAnomaly&gt; DetectAnomalies(string metricName) - Détection anomalies
+│   ├── PerformanceBaseline CreateBaseline(TimeSpan period) - Création ligne base
+│   ├── PerformanceDeviation CompareToBaseline(PerformanceBaseline baseline) - Comparaison ligne base
+│   └── PerformanceRecommendations GetRecommendations() - Recommandations optimisation
+├── <strong>Methods - Alerting :</strong>
+│   ├── void SetAlert(string metricName, AlertCondition condition, AlertAction action) - Définition alerte
+│   ├── void RemoveAlert(string alertName) - Suppression alerte
+│   ├── void TriggerAlert(PerformanceAlert alert) - Déclenchement alerte
+│   ├── void AcknowledgeAlert(string alertId) - Accusé réception alerte
+│   ├── void EscalateAlert(string alertId) - Escalade alerte
+│   ├── List&lt;PerformanceAlert&gt; GetActiveAlerts() - Alertes actives
+│   └── void ConfigureAlerting(AlertConfiguration config) - Configuration alertes
+└── <strong>Events :</strong>
+    ├── MetricCollected - Métrique collectée
+    ├── AlertTriggered - Alerte déclenchée
+    ├── AlertResolved - Alerte résolue
+    ├── BottleneckDetected - Goulot détecté
+    ├── AnomalyDetected - Anomalie détectée
+    ├── ThresholdExceeded - Seuil dépassé
+    ├── PerformanceDegraded - Performance dégradée
+    └── MonitoringFailed - Échec monitoring
+
+<strong>IPerformanceCounter</strong> - Interface compteur performance
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom compteur
+│   ├── string Category { get; } - Catégorie compteur
+│   ├── CounterType Type { get; } - Type compteur
+│   ├── object Value { get; } - Valeur actuelle
+│   ├── string Unit { get; } - Unité mesure
+│   ├── DateTime LastUpdated { get; } - Dernière mise à jour
+│   ├── bool IsEnabled { get; set; } - Compteur activé
+│   └── CounterStatistics Statistics { get; } - Statistiques compteur
+├── <strong>Methods :</strong>
+│   ├── void Increment(long value = 1) - Incrément valeur
+│   ├── void Decrement(long value = 1) - Décrément valeur
+│   ├── void Set(object value) - Définition valeur
+│   ├── void Reset() - Remise à zéro
+│   ├── object Sample() - Échantillonnage valeur
+│   ├── CounterSnapshot TakeSnapshot() - Instantané compteur
+│   ├── void AddSample(object value, DateTime timestamp) - Ajout échantillon
+│   └── CounterHistory GetHistory(TimeSpan period) - Historique période
+└── <strong>Counter Types :</strong>
+    ├── Gauge - Valeur instantanée
+    ├── Counter - Compteur cumulatif
+    ├── Rate - Taux par unité temps
+    ├── Timer - Durée temporelle
+    ├── Histogram - Distribution valeurs
+    └── Meter - Compteur avec taux
+
+<strong>SystemResourceCollector : IPerformanceCollector</strong> - Collecteur ressources système
+├── <strong>Properties :</strong>
+│   ├── PerformanceCounter CpuCounter { get; } - Compteur CPU
+│   ├── PerformanceCounter MemoryCounter { get; } - Compteur mémoire
+│   ├── PerformanceCounter DiskCounter { get; } - Compteur disque
+│   ├── PerformanceCounter NetworkCounter { get; } - Compteur réseau
+│   ├── List&lt;PerformanceCounter&gt; ProcessCounters { get; } - Compteurs processus
+│   ├── bool CollectDetailedMetrics { get; set; } - Métriques détaillées
+│   └── TimeSpan CollectionInterval { get; set; } - Intervalle collecte
+├── <strong>CPU Metrics :</strong>
+│   ├── double CpuUsagePercent { get; } - % utilisation CPU total
+│   ├── double[] CpuUsagePerCore { get; } - % utilisation par cœur
+│   ├── double CpuUserTime { get; } - Temps CPU utilisateur
+│   ├── double CpuSystemTime { get; } - Temps CPU système
+│   ├── double CpuIdleTime { get; } - Temps CPU inactif
+│   ├── long ContextSwitches { get; } - Commutations contexte
+│   ├── long Interrupts { get; } - Interruptions
+│   └── double CpuTemperature { get; } - Température CPU (si disponible)
+├── <strong>Memory Metrics :</strong>
+│   ├── long TotalPhysicalMemory { get; } - Mémoire physique totale
+│   ├── long AvailablePhysicalMemory { get; } - Mémoire physique disponible
+│   ├── long UsedPhysicalMemory { get; } - Mémoire physique utilisée
+│   ├── double MemoryUsagePercent { get; } - % utilisation mémoire
+│   ├── long TotalVirtualMemory { get; } - Mémoire virtuelle totale
+│   ├── long AvailableVirtualMemory { get; } - Mémoire virtuelle disponible
+│   ├── long PageFaults { get; } - Défauts page
+│   └── long PageFileUsage { get; } - Utilisation fichier page
+├── <strong>Disk Metrics :</strong>
+│   ├── long DiskReadBytes { get; } - Octets lus disque
+│   ├── long DiskWriteBytes { get; } - Octets écrits disque
+│   ├── double DiskReadTime { get; } - Temps lecture disque
+│   ├── double DiskWriteTime { get; } - Temps écriture disque
+│   ├── double DiskUtilizationPercent { get; } - % utilisation disque
+│   ├── long DiskQueueLength { get; } - Longueur file disque
+│   ├── double AverageDiskResponseTime { get; } - Temps réponse moyen disque
+│   └── Dictionary&lt;string, DriveMetrics&gt; DriveMetrics { get; } - Métriques par lecteur
+├── <strong>Network Metrics :</strong>
+│   ├── long NetworkBytesSent { get; } - Octets envoyés réseau
+│   ├── long NetworkBytesReceived { get; } - Octets reçus réseau
+│   ├── long NetworkPacketsSent { get; } - Paquets envoyés
+│   ├── long NetworkPacketsReceived { get; } - Paquets reçus
+│   ├── double NetworkUtilizationPercent { get; } - % utilisation réseau
+│   ├── long NetworkErrors { get; } - Erreurs réseau
+│   ├── double NetworkLatency { get; } - Latence réseau
+│   └── Dictionary&lt;string, NetworkInterfaceMetrics&gt; InterfaceMetrics { get; } - Métriques par interface
+└── <strong>Methods :</strong>
+    ├── SystemResourceSnapshot TakeSnapshot() - Instantané ressources système
+    ├── void CollectMetrics() - Collecte toutes métriques
+    ├── ResourceUsageTrend AnalyzeTrend(TimeSpan period) - Analyse tendance utilisation
+    └── List&lt;ResourceAlert&gt; CheckResourceThresholds() - Vérification seuils ressources
+
+<strong>ApplicationMetricsCollector : IPerformanceCollector</strong> - Collecteur métriques application
+├── <strong>Properties :</strong>
+│   ├── Process CurrentProcess { get; } - Processus actuel
+│   ├── ApplicationResourceUsage ResourceUsage { get; } - Usage ressources app
+│   ├── GCStatistics GCStats { get; } - Statistiques Garbage Collector
+│   ├── ThreadingMetrics ThreadingStats { get; } - Métriques threading
+│   ├── ExceptionMetrics ExceptionStats { get; } - Statistiques exceptions
+│   └── CustomMetrics CustomStats { get; } - Métriques personnalisées
+├── <strong>Process Metrics :</strong>
+│   ├── long WorkingSet { get; } - Jeu de travail (mémoire physique)
+│   ├── long PrivateMemorySize { get; } - Taille mémoire privée
+│   ├── long VirtualMemorySize { get; } - Taille mémoire virtuelle
+│   ├── double CpuUsage { get; } - % utilisation CPU processus
+│   ├── TimeSpan TotalProcessorTime { get; } - Temps processeur total
+│   ├── TimeSpan UserProcessorTime { get; } - Temps processeur utilisateur
+│   ├── int ThreadCount { get; } - Nombre threads
+│   ├── int HandleCount { get; } - Nombre handles
+│   └── DateTime StartTime { get; } - Heure démarrage processus
+├── <strong>GC Metrics :</strong>
+│   ├── long TotalMemoryAllocated { get; } - Mémoire totale allouée
+│   ├── long Gen0Collections { get; } - Collections génération 0
+│   ├── long Gen1Collections { get; } - Collections génération 1
+│   ├── long Gen2Collections { get; } - Collections génération 2
+│   ├── long TotalBytesInAllHeaps { get; } - Octets total tous heaps
+│   ├── TimeSpan TimeInGC { get; } - Temps passé dans GC
+│   ├── double GCPressure { get; } - Pression GC
+│   └── long LargeObjectHeapSize { get; } - Taille Large Object Heap
+├── <strong>Threading Metrics :</strong>
+│   ├── int ActiveThreads { get; } - Threads actifs
+│   ├── int ThreadPoolThreads { get; } - Threads pool
+│   ├── int CompletionPortThreads { get; } - Threads completion port
+│   ├── int WorkerThreads { get; } - Threads workers
+│   ├── int QueuedWorkItems { get; } - Éléments travail en file
+│   ├── double ThreadContentionRate { get; } - Taux contention threads
+│   ├── long LockContentions { get; } - Contentions verrous
+│   └── TimeSpan AverageLockWaitTime { get; } - Temps attente verrous moyen
+├── <strong>Exception Metrics :</strong>
+│   ├── long TotalExceptions { get; } - Total exceptions
+│   ├── long ExceptionsPerSecond { get; } - Exceptions par seconde
+│   ├── Dictionary&lt;Type, long&gt; ExceptionsByType { get; } - Exceptions par type
+│   ├── long UnhandledExceptions { get; } - Exceptions non gérées
+│   ├── double ExceptionRate { get; } - Taux exceptions
+│   └── List&lt;ExceptionSummary&gt; TopExceptions { get; } - Top exceptions
+└── <strong>Methods :</strong>
+    ├── ApplicationMetricsSnapshot TakeSnapshot() - Instantané métriques app
+    ├── void TrackException(Exception exception) - Suivi exception
+    ├── void TrackCustomMetric(string name, double value) - Suivi métrique custom
+    └── ApplicationPerformanceReport GenerateReport() - Rapport performance app
+
+<strong>UIPerformanceCollector : IPerformanceCollector</strong> - Collecteur performance interface
+├── <strong>Properties :</strong>
+│   ├── FrameRateMonitor FrameRateMonitor { get; } - Moniteur fréquence images
+│   ├── RenderingMetrics RenderingStats { get; } - Métriques rendu
+│   ├── InputResponseMetrics InputStats { get; } - Métriques réactivité entrée
+│   ├── LayoutMetrics LayoutStats { get; } - Métriques layout
+│   ├── DataBindingMetrics BindingStats { get; } - Métriques data binding
+│   └── MemoryLeakDetector LeakDetector { get; } - Détecteur fuites mémoire
+├── <strong>Frame Rate Metrics :</strong>
+│   ├── double CurrentFPS { get; } - FPS actuel
+│   ├── double AverageFPS { get; } - FPS moyen
+│   ├── double MinFPS { get; } - FPS minimum
+│   ├── double MaxFPS { get; } - FPS maximum
+│   ├── int DroppedFrames { get; } - Images perdues
+│   ├── TimeSpan FrameTime { get; } - Temps par image
+│   ├── double JankRatio { get; } - Ratio saccades (frames > 16ms)
+│   └── FrameTimingDistribution TimingDistribution { get; } - Distribution temps images
+├── <strong>Rendering Metrics :</strong>
+│   ├── TimeSpan RenderTime { get; } - Temps rendu
+│   ├── TimeSpan LayoutTime { get; } - Temps layout
+│   ├── TimeSpan PaintTime { get; } - Temps peinture
+│   ├── long VisualElementsRendered { get; } - Éléments visuels rendus
+│   ├── long TextureMemoryUsage { get; } - Usage mémoire textures
+│   ├── int RenderBatches { get; } - Lots rendu
+│   ├── double FillRate { get; } - Taux remplissage
+│   └── int OverdrawFactor { get; } - Facteur redessinage
+├── <strong>Input Response Metrics :</strong>
+│   ├── TimeSpan InputLatency { get; } - Latence entrée
+│   ├── TimeSpan ClickResponseTime { get; } - Temps réponse clic
+│   ├── TimeSpan ScrollResponseTime { get; } - Temps réponse défilement
+│   ├── double InputEventRate { get; } - Taux événements entrée
+│   ├── int QueuedInputEvents { get; } - Événements entrée en file
+│   └── Dictionary&lt;InputEventType, ResponseTimeMetrics&gt; ResponseTimes { get; } - Temps réponse par type
+├── <strong>Data Binding Metrics :</strong>
+│   ├── int ActiveBindings { get; } - Liaisons actives
+│   ├── TimeSpan BindingUpdateTime { get; } - Temps mise à jour liaisons
+│   ├── long BindingUpdatesPerSecond { get; } - Mises à jour liaisons/sec
+│   ├── int FailedBindings { get; } - Liaisons échouées
+│   ├── double BindingEfficiency { get; } - Efficacité liaisons
+│   └── List&lt;BindingPerformanceIssue&gt; BindingIssues { get; } - Problèmes performance liaisons
+└── <strong>Methods :</strong>
+    ├── UIPerformanceSnapshot TakeSnapshot() - Instantané performance UI
+    ├── void StartFrameRateMonitoring() - Démarrage monitoring FPS
+    ├── void StopFrameRateMonitoring() - Arrêt monitoring FPS
+    ├── void MeasureInputLatency(InputEventType eventType) - Mesure latence entrée
+    ├── void TrackBindingUpdate(BindingExpression binding, TimeSpan updateTime) - Suivi mise à jour liaison
+    └── UIPerformanceReport GenerateUIReport() - Rapport performance UI
+
+<strong>ProfilerManager</strong> - Gestionnaire profiling performance
+├── <strong>Properties :</strong>
+│   ├── Dictionary&lt;string, IProfiler&gt; Profilers { get; } - Profilers par nom
+│   ├── bool IsProfilingEnabled { get; set; } - Profiling activé
+│   ├── ProfilingLevel ProfilingLevel { get; set; } - Niveau profiling
+│   ├── TimeSpan ProfilingDuration { get; set; } - Durée profiling
+│   ├── ProfilingConfiguration Configuration { get; set; } - Configuration profiling
+│   └── List&lt;ProfilingSession&gt; ActiveSessions { get; } - Sessions profiling actives
+├── <strong>Methods :</strong>
+│   ├── IProfiler CreateProfiler(string name, ProfilerType type) - Création profiler
+│   ├── void StartProfiling(string profilerName) - Démarrage profiling
+│   ├── void StopProfiling(string profilerName) - Arrêt profiling
+│   ├── ProfilingResult GetProfilingResults(string profilerName) - Résultats profiling
+│   ├── void StartGlobalProfiling() - Démarrage profiling global
+│   ├── void StopGlobalProfiling() - Arrêt profiling global
+│   ├── GlobalProfilingReport GenerateGlobalReport() - Rapport profiling global
+│   └── void ExportProfilingData(string filePath, ExportFormat format) - Export données profiling
+├── <strong>Profiler Types :</strong>
+│   ├── CPUProfiler - Profiler CPU
+│   ├── MemoryProfiler - Profiler mémoire
+│   ├── IOProfiler - Profiler entrées/sorties
+│   ├── NetworkProfiler - Profiler réseau
+│   ├── DatabaseProfiler - Profiler base données
+│   └── CustomProfiler - Profiler personnalisé
+└── <strong>Export Formats :</strong>
+    ├── JSON - Format JSON
+    ├── XML - Format XML  
+    ├── CSV - Format CSV
+    ├── Binary - Format binaire
+    └── PerfView - Format PerfView ETW
+
+<strong>PerformanceDashboard</strong> - Tableau bord performance temps réel
+├── <strong>Properties :</strong>
+│   ├── List&lt;DashboardWidget&gt; Widgets { get; } - Widgets tableau bord
+│   ├── TimeSpan RefreshInterval { get; set; } - Intervalle actualisation
+│   ├── bool AutoRefresh { get; set; } - Actualisation automatique
+│   ├── DashboardLayout Layout { get; set; } - Disposition tableau bord
+│   ├── List&lt;PerformanceChart&gt; Charts { get; } - Graphiques performance
+│   └── DashboardConfiguration Configuration { get; set; } - Configuration tableau bord
+├── <strong>Widget Types :</strong>
+│   ├── GaugeWidget - Jauge valeur unique
+│   ├── LineChartWidget - Graphique linéaire
+│   ├── BarChartWidget - Graphique barres
+│   ├── PieChartWidget - Graphique secteurs
+│   ├── TableWidget - Tableau données
+│   ├── AlertWidget - Widget alertes
+│   ├── LogWidget - Widget logs
+│   └── CustomWidget - Widget personnalisé
+├── <strong>Methods :</strong>
+│   ├── void AddWidget(DashboardWidget widget) - Ajout widget
+│   ├── void RemoveWidget(string widgetId) - Suppression widget
+│   ├── void UpdateWidget(string widgetId, object data) - Mise à jour widget
+│   ├── void RefreshDashboard() - Actualisation tableau bord
+│   ├── void SaveLayout(string layoutName) - Sauvegarde disposition
+│   ├── void LoadLayout(string layoutName) - Chargement disposition
+│   ├── void ExportDashboard(string filePath) - Export tableau bord
+│   └── DashboardSnapshot TakeSnapshot() - Instantané tableau bord
+└── <strong>Real-time Features :</strong>
+    ├── Live data streaming - Flux données temps réel
+    ├── Interactive charts - Graphiques interactifs
+    ├── Drill-down analysis - Analyse détaillée
+    ├── Custom time ranges - Plages temps personnalisées
+    ├── Alert integration - Intégration alertes
+    └── Mobile responsive - Interface responsive
+
+<strong>PerformanceBaseline</strong> - Ligne base performance
+├── <strong>Properties :</strong>
+│   ├── string Name { get; } - Nom ligne base
+│   ├── DateTime CreatedAt { get; } - Date création
+│   ├── TimeSpan Period { get; } - Période échantillonnage
+│   ├── Dictionary&lt;string, MetricBaseline&gt; MetricBaselines { get; } - Lignes base par métrique
+│   ├── SystemConfiguration SystemConfig { get; } - Configuration système
+│   ├── ApplicationConfiguration AppConfig { get; } - Configuration application
+│   └── BaselineStatistics Statistics { get; } - Statistiques ligne base
+├── <strong>Methods :</strong>
+│   ├── void AddMetricBaseline(string metricName, MetricBaseline baseline) - Ajout ligne base métrique
+│   ├── MetricBaseline GetMetricBaseline(string metricName) - Récupération ligne base
+│   ├── PerformanceDeviation Compare(PerformanceMetrics currentMetrics) - Comparaison métriques actuelles
+│   ├── bool IsWithinBaseline(string metricName, double value, double tolerance) - Test dans ligne base
+│   ├── void UpdateBaseline(string metricName, IEnumerable&lt;double&gt; newValues) - Mise à jour ligne base
+│   ├── BaselineValidationResult Validate() - Validation ligne base
+│   ├── void Save(string filePath) - Sauvegarde ligne base
+│   └── static PerformanceBaseline Load(string filePath) - Chargement ligne base
+└── <strong>Baseline Types :</strong>
+    ├── StaticBaseline - Ligne base statique
+    ├── AdaptiveBaseline - Ligne base adaptative
+    ├── SeasonalBaseline - Ligne base saisonnière
+    └── DynamicBaseline - Ligne base dynamique
+
+<strong>PerformanceAlert</strong> - Alerte performance
+├── <strong>Properties :</strong>
+│   ├── string Id { get; } - Identifiant unique alerte
+│   ├── string Name { get; } - Nom alerte
+│   ├── AlertSeverity Severity { get; } - Gravité alerte
+│   ├── string MetricName { get; } - Nom métrique surveillée
+│   ├── AlertCondition Condition { get; } - Condition déclenchement
+│   ├── object ThresholdValue { get; } - Valeur seuil
+│   ├── DateTime TriggeredAt { get; } - Moment déclenchement
+│   ├── DateTime? AcknowledgedAt { get; set; } - Moment accusé réception
+│   ├── DateTime? ResolvedAt { get; set; } - Moment résolution
+│   ├── AlertStatus Status { get; set; } - Statut alerte
+│   ├── string Message { get; } - Message alerte
+│   ├── List&lt;AlertAction&gt; Actions { get; } - Actions alerte
+│   └── Dictionary&lt;string, object&gt; Context { get; } - Contexte alerte
+├── <strong>Methods :</strong>
+│   ├── void Acknowledge(string userId, string note) - Accusé réception
+│   ├── void Resolve(string resolution) - Résolution alerte
+│   ├── void Escalate(AlertEscalation escalation) - Escalade alerte
+│   ├── void AddAction(AlertAction action) - Ajout action
+│   ├── void ExecuteActions() - Exécution actions
+│   ├── AlertHistory GetHistory() - Historique alerte
+│   └── void UpdateContext(string key, object value) - Mise à jour contexte
+├── <strong>Alert Conditions :</strong>
+│   ├── GreaterThan - Supérieur à
+│   ├── LessThan - Inférieur à
+│   ├── Equals - Égal à
+│   ├── NotEquals - Différent de
+│   ├── Range - Dans plage
+│   ├── OutOfRange - Hors plage
+│   ├── PercentageChange - Changement pourcentage
+│   └── Trend - Tendance
+├── <strong>Alert Actions :</strong>
+│   ├── EmailAction - Action email
+│   ├── LogAction - Action log
+│   ├── ScriptAction - Action script
+│   ├── RestartAction - Action redémarrage
+│   ├── NotificationAction - Action notification
+│   └── CustomAction - Action personnalisée
+└── <strong>Severity Levels :</strong>
+    ├── Info - Information
+    ├── Warning - Avertissement
+    ├── Error - Erreur
+    ├── Critical - Critique
+    └── Fatal - Fatal</div>
+</div>
+                <div class="card">
+                    <h2>Architecture Performance</h2>
+                    
+                    <div class="flow-diagram">
+                        <h3>Pipeline Optimisation</h3>
+                        <div class="code-block">Requête Données
+    ↓
+Cache L1 (Mémoire Rapide)
+    ↓ (Miss)
+Cache L2 (Disque SSD)
+    ↓ (Miss)  
+Chargement Source + Parallélisation
+    ↓
+Optimisation Mémoire (Pooling/GC)
+    ↓
+Virtualisation UI (Rendu Adaptatif)
+    ↓
+Monitoring Performance (Métriques)</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Stratégies d'Optimisation</h2>
+                    
+                    <div class="features-grid">
+                        <div class="pattern-card">
+                            <h4>Cache Intelligent</h4>
+                            <ul>
+                                <li><strong>Prédiction usage</strong> - Pré-chargement données probables</li>
+                                <li><strong>Éviction LRU/LFU</strong> - Gestion optimale capacité</li>
+                                <li><strong>Cache géospatial</strong> - Index spatial pour requêtes</li>
+                                <li><strong>Invalidation sélective</strong> - Mise à jour granulaire</li>
+                            </ul>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Optimisation Mémoire</h4>
+                            <ul>
+                                <li><strong>Object pooling</strong> - Réutilisation instances</li>
+                                <li><strong>Lazy loading</strong> - Chargement à la demande</li>
+                                <li><strong>Memory mapping</strong> - Fichiers volumineux</li>
+                                <li><strong>GC optimization</strong> - Tuning garbage collector</li>
+                            </ul>
+                        </div>
+                        <div class="recommendation-card">
+                            <h4>Performance UI</h4>
+                            <ul>
+                                <li><strong>Virtualisation</strong> - Rendu éléments visibles uniquement</li>
+                                <li><strong>Binding async</strong> - UI non-bloquante</li>
+                                <li><strong>Progressive rendering</strong> - Affichage incrémental</li>
+                                <li><strong>Background processing</strong> - Calculs en arrière-plan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Métriques Performance Critiques</h2>
+                    
+                    <div class="mapping-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Métrique</th>
+                                    <th>Cible Performance</th>
+                                    <th>Valeur Actuelle</th>
+                                    <th>Optimisation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Temps chargement shapefile</td>
+                                    <td>&lt; 2s pour 10k features</td>
+                                    <td>5-8s</td>
+                                    <td><span style="color: #f59e0b">Cache + Parallel</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Réactivité UI</td>
+                                    <td>&lt; 16ms (60 FPS)</td>
+                                    <td>25-50ms</td>
+                                    <td><span style="color: #f59e0b">Virtualisation</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Utilisation mémoire</td>
+                                    <td>&lt; 1GB pour 100k features</td>
+                                    <td>2-3GB</td>
+                                    <td><span style="color: #ef4444">Object pooling</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Communication Unity</td>
+                                    <td>60 FPS stable</td>
+                                    <td>30-45 FPS</td>
+                                    <td><span style="color: #f59e0b">Buffer MMF</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Temps requête spatiale</td>
+                                    <td>&lt; 100ms</td>
+                                    <td>300-500ms</td>
+                                    <td><span style="color: #f59e0b">Index spatial</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="schema-transaction-system.html">← Gestion Transactions</a></h4>
+                            <p>Système transactionnel complet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="flux-donnees.html">← Flux de Données</a></h4>
+                            <p>Pipeline traitement données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="patterns-anti-patterns.html">→ Patterns Architecturaux</a></h4>
+                            <p>Bonnes pratiques et anti-patterns</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="recommandations.html">→ Recommandations</a></h4>
+                            <p>Plan optimisation performance</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

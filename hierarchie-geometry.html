@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes Géométriques - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>📐 Classes Géométriques (GISMind.Geometry)</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Namespace</h2>
+                    <p>Le namespace <strong>GISMind.Geometry</strong> constitue le cœur géométrique de Trifide 360. Il fournit une hiérarchie de classes robuste pour la manipulation de géométries spatiales 2D/3D avec support complet des opérations géodésiques.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>🔺 Geometry</h4>
+                            <p>Classe abstraite de base</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📍 Point</h4>
+                            <p>Géométrie ponctuelle 3D+M</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>📏 Polyline</h4>
+                            <p>Géométrie linéaire</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🔷 Polygon</h4>
+                            <p>Géométrie surfacique</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>🎯 Collections</h4>
+                            <p>Multi-géométries</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>⚡ Engine</h4>
+                            <p>Moteur de calculs</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Hiérarchie Complète des Classes Géométriques</h2>
+                    
+                    <div class="file-structure">🔺 <strong>Geometry</strong> (abstract class) <em>- Classe de base abstraite</em>
+├── <strong>Properties communes :</strong>
+│   ├── SpatialReference SpatialRef { get; set; }
+│   ├── Envelope Extent { get; }
+│   ├── GeometryType Type { get; }
+│   ├── bool IsEmpty { get; }
+│   └── bool IsValid { get; }
+├── <strong>Methods abstraites :</strong>
+│   ├── Geometry Clone()
+│   ├── bool Equals(Geometry other)
+│   ├── string ToWKT()
+│   └── byte[] ToBinary()
+└── <strong>Operators :</strong>
+    ├── bool operator ==(Geometry a, Geometry b)
+    └── bool operator !=(Geometry a, Geometry b)
+
+├─ 📍 <strong>Point : Geometry</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── double X { get; set; }
+│  │   ├── double Y { get; set; }
+│  │   ├── double Z { get; set; }  <em># Coordonnée altimétrique</em>
+│  │   ├── double M { get; set; }  <em># Mesure linéaire</em>
+│  │   ├── bool HasZ { get; }
+│  │   └── bool HasM { get; }
+│  ├── <strong>Constructors :</strong>
+│  │   ├── Point()  <em># Point vide</em>
+│  │   ├── Point(double x, double y)
+│  │   ├── Point(double x, double y, double z)
+│  │   └── Point(double x, double y, double z, double m)
+│  ├── <strong>Methods :</strong>
+│  │   ├── double Distance(Point other)
+│  │   ├── Point MidPoint(Point other)
+│  │   ├── double Bearing(Point other)
+│  │   ├── Point Project(double distance, double bearing)
+│  │   └── Point Transform(SpatialReference target)
+│  ├── <strong>Operators surchargés :</strong>
+│  │   ├── Point operator +(Point a, Point b)
+│  │   ├── Point operator -(Point a, Point b)
+│  │   ├── Point operator *(Point p, double scalar)
+│  │   ├── Point operator /(Point p, double scalar)
+│  │   └── double operator |(Point a, Point b)  <em># Produit scalaire</em>
+│  └── <strong>Static Members :</strong>
+│      ├── Point Origin { get; }  <em># (0, 0, 0)</em>
+│      ├── Point Empty { get; }
+│      └── Point Parse(string wkt)
+
+├─ 📏 <strong>Polyline : Geometry, IEnumerable&lt;Point&gt;</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── List&lt;Point&gt; Points { get; }
+│  │   ├── int PointCount { get; }
+│  │   ├── int PartCount { get; }
+│  │   ├── bool IsClosed { get; }
+│  │   ├── double Length { get; }
+│  │   ├── Point StartPoint { get; }
+│  │   └── Point EndPoint { get; }
+│  ├── <strong>Constructors :</strong>
+│  │   ├── Polyline()
+│  │   ├── Polyline(IEnumerable&lt;Point&gt; points)
+│  │   └── Polyline(Point[] points)
+│  ├── <strong>Methods :</strong>
+│  │   ├── void AddPoint(Point point)
+│  │   ├── void InsertPoint(int index, Point point)
+│  │   ├── void RemovePoint(int index)
+│  │   ├── Point GetPoint(int index)
+│  │   ├── void SetPoint(int index, Point point)
+│  │   ├── Polyline Reverse()
+│  │   ├── Polyline Simplify(double tolerance)
+│  │   ├── Polyline Smooth(int iterations)
+│  │   ├── Point[] GetPoints()
+│  │   ├── double LengthBetween(int startIndex, int endIndex)
+│  │   └── Point InterpolatePoint(double distance)
+│  ├── <strong>Indexer :</strong>
+│  │   └── Point this[int index] { get; set; }
+│  └── <strong>IEnumerable :</strong>
+│      ├── IEnumerator&lt;Point&gt; GetEnumerator()
+│      └── IEnumerator IEnumerable.GetEnumerator()
+
+├─ 🔷 <strong>Polygon : Geometry</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── List&lt;Polyline&gt; Rings { get; }
+│  │   ├── Polyline ExteriorRing { get; }
+│  │   ├── List&lt;Polyline&gt; InteriorRings { get; }
+│  │   ├── int RingCount { get; }
+│  │   ├── double Area { get; }
+│  │   ├── double Perimeter { get; }
+│  │   └── Point Centroid { get; }
+│  ├── <strong>Constructors :</strong>
+│  │   ├── Polygon()
+│  │   ├── Polygon(Polyline exteriorRing)
+│  │   └── Polygon(Polyline exterior, IEnumerable&lt;Polyline&gt; holes)
+│  ├── <strong>Methods :</strong>
+│  │   ├── void SetExteriorRing(Polyline ring)
+│  │   ├── void AddInteriorRing(Polyline ring)
+│  │   ├── void RemoveInteriorRing(int index)
+│  │   ├── bool ContainsPoint(Point point)
+│  │   ├── bool IsGeometryValid()
+│  │   ├── bool Intersects(Geometry other)
+│  │   ├── Geometry Union(Polygon other)
+│  │   ├── Geometry Intersection(Polygon other)
+│  │   ├── Geometry Difference(Polygon other)
+│  │   ├── Polygon Buffer(double distance)
+│  │   ├── Point LabelPoint()
+│  │   ├── Polygon ConvexHull()
+│  │   └── Polygon[] Split(Polyline splitter)
+│  └── <strong>Validation :</strong>
+│      ├── bool HasSelfIntersections()
+│      ├── bool RingsAreValid()
+│      └── ValidationResult ValidateTopology()
+
+├─ 🎯 <strong>MultiPoint : Geometry, ICollection&lt;Point&gt;</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── List&lt;Point&gt; Points { get; }
+│  │   ├── int Count { get; }
+│  │   └── Envelope ConvexHull { get; }
+│  ├── <strong>Methods :</strong>
+│  │   ├── void Add(Point point)
+│  │   ├── bool Remove(Point point)
+│  │   ├── bool Contains(Point point)
+│  │   ├── void Clear()
+│  │   ├── Point[] ToArray()
+│  │   └── Envelope BoundingBox()
+│  └── <strong>Indexer :</strong>
+│      └── Point this[int index] { get; set; }
+
+├─ 🔗 <strong>MultiLineString : Geometry, ICollection&lt;Polyline&gt;</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── List&lt;Polyline&gt; Lines { get; }
+│  │   ├── int Count { get; }
+│  │   └── double TotalLength { get; }
+│  ├── <strong>Methods :</strong>
+│  │   ├── void Add(Polyline line)
+│  │   ├── bool Remove(Polyline line)
+│  │   ├── bool Contains(Polyline line)
+│  │   ├── void Clear()
+│  │   ├── Polyline Merge()
+│  │   └── MultiLineString Split(Point splitPoint)
+│  └── <strong>Indexer :</strong>
+│      └── Polyline this[int index] { get; set; }
+
+├─ 🏢 <strong>MultiPolygon : Geometry, ICollection&lt;Polygon&gt;</strong>
+│  ├── <strong>Properties :</strong>
+│  │   ├── List&lt;Polygon&gt; Polygons { get; }
+│  │   ├── int Count { get; }
+│  │   └── double TotalArea { get; }
+│  ├── <strong>Methods :</strong>
+│  │   ├── void Add(Polygon polygon)
+│  │   ├── bool Remove(Polygon polygon)
+│  │   ├── bool Contains(Polygon polygon)
+│  │   ├── void Clear()
+│  │   ├── Polygon Union()
+│  │   └── MultiPolygon Dissolve()
+│  └── <strong>Indexer :</strong>
+│      └── Polygon this[int index] { get; set; }
+
+└─ 🎲 <strong>MultiPatch : Geometry</strong> <em>(Géométries 3D Complexes)</em>
+   ├── <strong>Properties :</strong>
+   │   ├── List&lt;Triangle&gt; Triangles { get; }
+   │   ├── List&lt;Surface&gt; Surfaces { get; }
+   │   ├── SurfaceType Type { get; set; }
+   │   ├── bool HasTextures { get; }
+   │   ├── double Volume { get; }
+   │   └── double SurfaceArea { get; }
+   ├── <strong>Methods :</strong>
+   │   ├── void AddTriangle(Triangle triangle)
+   │   ├── void AddSurface(Surface surface)
+   │   ├── double CalculateVolume()
+   │   ├── double CalculateSurfaceArea()
+   │   ├── void ApplyTexture(Texture texture)
+   │   ├── Mesh ExportToMesh()
+   │   └── bool IsWatertight()
+   └── <strong>Enums :</strong>
+       ├── SurfaceType { TriangleStrip, TriangleFan, Triangles, Ring }
+       └── TextureType { Diffuse, Normal, Specular, Ambient }</div>
+                </div>
+
+                <div class="card">
+                    <h2>Classes Support et Utilitaires</h2>
+                    
+                    <div class="file-structure">📦 <strong>Envelope : IEquatable&lt;Envelope&gt;</strong> <em>- Boîte englobante</em>
+├── <strong>Properties :</strong>
+│   ├── double XMin, XMax { get; set; }
+│   ├── double YMin, YMax { get; set; }
+│   ├── double ZMin, ZMax { get; set; }  <em># Support 3D</em>
+│   ├── Point Center { get; }
+│   ├── double Width { get; }
+│   ├── double Height { get; }
+│   └── bool IsEmpty { get; }
+├── <strong>Constructors :</strong>
+│   ├── Envelope()
+│   ├── Envelope(double xMin, double yMin, double xMax, double yMax)
+│   └── Envelope(Point min, Point max)
+├── <strong>Methods :</strong>
+│   ├── bool Contains(Point point)
+│   ├── bool Contains(Envelope other)
+│   ├── bool Intersects(Envelope other)
+│   ├── Envelope Union(Envelope other)
+│   ├── Envelope Intersection(Envelope other)
+│   ├── void Expand(double distance)
+│   ├── void ExpandToInclude(Point point)
+│   └── Point[] GetCorners()
+└── <strong>Static :</strong>
+    ├── Envelope Empty { get; }
+    └── Envelope CreateFrom(IEnumerable&lt;Point&gt; points)
+
+⚡ <strong>GeometryEngine : static class</strong> <em>- Moteur de calculs géométriques</em>
+├── <strong>Mesures et Calculs :</strong>
+│   ├── double Distance(Geometry geom1, Geometry geom2, SpatialReference sref)
+│   ├── double Area(Geometry geometry, AreaUnit unit)
+│   ├── double Length(Geometry geometry, LinearUnit unit)
+│   ├── double Volume(Geometry geometry, VolumeUnit unit)
+│   └── Point Centroid(Geometry geometry)
+├── <strong>Opérations Topologiques :</strong>
+│   ├── bool Intersects(Geometry geom1, Geometry geom2)
+│   ├── bool Contains(Geometry container, Geometry contained)
+│   ├── bool Within(Geometry inner, Geometry outer)
+│   ├── bool Overlaps(Geometry geom1, Geometry geom2)
+│   ├── bool Touches(Geometry geom1, Geometry geom2)
+│   ├── bool Crosses(Geometry geom1, Geometry geom2)
+│   └── bool Disjoint(Geometry geom1, Geometry geom2)
+├── <strong>Opérations de Construction :</strong>
+│   ├── Geometry Union(Geometry[] geometries)
+│   ├── Geometry Intersection(Geometry geom1, Geometry geom2)
+│   ├── Geometry Difference(Geometry minuend, Geometry subtrahend)
+│   ├── Geometry SymmetricDifference(Geometry geom1, Geometry geom2)
+│   ├── Geometry Buffer(Geometry geometry, double distance, SpatialReference sref)
+│   ├── Geometry ConvexHull(Geometry geometry)
+│   └── Point LabelPoint(Polygon polygon)
+├── <strong>Transformation et Projection :</strong>
+│   ├── Geometry Project(Geometry geometry, SpatialReference source, SpatialReference target)
+│   ├── Geometry Simplify(Geometry geometry, double tolerance)
+│   ├── Geometry Generalize(Geometry geometry, double maxDeviation)
+│   └── Geometry DensifyByLength(Geometry geometry, double maxLength)
+├── <strong>Validation :</strong>
+│   ├── bool IsValid(Geometry geometry)
+│   ├── ValidationResult ValidateGeometry(Geometry geometry)
+│   ├── Geometry CorrectGeometry(Geometry geometry)
+│   └── string[] GetValidationErrors(Geometry geometry)
+└── <strong>Utilitaires :</strong>
+    ├── Envelope GetExtent(Geometry[] geometries)
+    ├── GeometryType GetGeometryType(Geometry geometry)
+    ├── int GetPointCount(Geometry geometry)
+    └── Point[] ExtractPoints(Geometry geometry)
+
+🎯 <strong>SpatialReference : IEquatable&lt;SpatialReference&gt;</strong> <em>- Système de référence spatiale</em>
+├── <strong>Properties :</strong>
+│   ├── int WKID { get; }  <em># Well-Known ID</em>
+│   ├── string WKText { get; }  <em># Well-Known Text</em>
+│   ├── string Name { get; }
+│   ├── Unit Unit { get; }
+│   ├── GeographicTransformation Transformation { get; set; }
+│   ├── bool IsGeographic { get; }
+│   └── bool IsProjected { get; }
+├── <strong>Methods :</strong>
+│   ├── Point Transform(Point point, SpatialReference target)
+│   ├── Envelope Transform(Envelope envelope, SpatialReference target)
+│   ├── bool CanTransformTo(SpatialReference target)
+│   └── GeographicTransformation GetTransformation(SpatialReference target)
+├── <strong>Static Factory :</strong>
+│   ├── SpatialReference CreateFromWKID(int wkid)
+│   ├── SpatialReference CreateFromWKText(string wktext)
+│   └── SpatialReference CreateFromEPSG(int epsgCode)
+└── <strong>Common Systems :</strong>
+    ├── static SpatialReference WGS84 { get; }
+    ├── static SpatialReference WebMercator { get; }
+    ├── static SpatialReference NAD83 { get; }
+    └── static SpatialReference UTMZone(int zone, bool northern)</div>
+                </div>
+
+                <div class="card">
+                    <h2>Enums et Types de Support</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📏 GeometryType Enum</h4>
+                            <ul>
+                                <li><strong>Point :</strong> Géométrie ponctuelle</li>
+                                <li><strong>Polyline :</strong> Géométrie linéaire</li>
+                                <li><strong>Polygon :</strong> Géométrie surfacique</li>
+                                <li><strong>MultiPoint :</strong> Collection de points</li>
+                                <li><strong>MultiLineString :</strong> Collection de lignes</li>
+                                <li><strong>MultiPolygon :</strong> Collection de polygones</li>
+                                <li><strong>MultiPatch :</strong> Géométrie 3D complexe</li>
+                                <li><strong>Unknown :</strong> Type indéterminé</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📐 Unit Types</h4>
+                            <ul>
+                                <li><strong>LinearUnit :</strong> Meter, Foot, Kilometer, Mile</li>
+                                <li><strong>AreaUnit :</strong> SquareMeter, Hectare, Acre, SquareFoot</li>
+                                <li><strong>AngularUnit :</strong> Degree, Radian, Grad</li>
+                                <li><strong>VolumeUnit :</strong> CubicMeter, Liter, CubicFoot</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔍 ValidationResult</h4>
+                            <ul>
+                                <li><strong>IsValid :</strong> bool - Géométrie valide</li>
+                                <li><strong>Errors :</strong> string[] - Liste des erreurs</li>
+                                <li><strong>Warnings :</strong> string[] - Avertissements</li>
+                                <li><strong>CanCorrect :</strong> bool - Correction possible</li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 SpatialRelation Enum</h4>
+                            <ul>
+                                <li><strong>Intersects :</strong> Géométries se croisent</li>
+                                <li><strong>Contains :</strong> Une contient l'autre</li>
+                                <li><strong>Within :</strong> Une est dans l'autre</li>
+                                <li><strong>Touches :</strong> Géométries se touchent</li>
+                                <li><strong>Overlaps :</strong> Chevauchement partiel</li>
+                                <li><strong>Crosses :</strong> Intersection sans inclusion</li>
+                                <li><strong>Disjoint :</strong> Aucune intersection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="code-block">// Création et manipulation de géométries
+Point p1 = new Point(10.5, 20.3, 100.0);
+Point p2 = new Point(15.7, 25.1, 110.5);
+
+// Utilisation des opérateurs surchargés
+Point midPoint = (p1 + p2) / 2.0;
+double distance = p1 | p2;  // Produit scalaire
+
+// Création d'une polyligne
+Polyline line = new Polyline();
+line.AddPoint(p1);
+line.AddPoint(p2);
+line.AddPoint(new Point(20.1, 30.5));
+
+// Calculs avec GeometryEngine
+double lineLength = GeometryEngine.Length(line, LinearUnit.Meter);
+bool isValid = GeometryEngine.IsValid(line);
+
+// Création d'un polygone avec trou
+Polygon polygon = new Polygon();
+polygon.SetExteriorRing(outerRing);
+polygon.AddInteriorRing(innerRing);
+
+// Validation topologique
+ValidationResult validation = GeometryEngine.ValidateGeometry(polygon);
+if (!validation.IsValid)
+{
+    foreach (string error in validation.Errors)
+    {
+        Console.WriteLine($"Erreur: {error}");
+    }
+}
+
+// Opérations spatiales
+if (GeometryEngine.Intersects(polygon, line))
+{
+    Geometry intersection = GeometryEngine.Intersection(polygon, line);
+    Console.WriteLine($"Intersection trouvée: {intersection.Type}");
+}
+
+// Transformation de projection
+SpatialReference utm = SpatialReference.UTMZone(18, true);
+Point projectedPoint = utm.Transform(p1, SpatialReference.WGS84);</div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">⬅️ Retour Hiérarchie Principale</a></h4>
+                            <p>Vue d'ensemble de toutes les classes</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">➡️ Classes de Données</a></h4>
+                            <p>Gestion des données spatiales</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="donnees-geospatiales.html">🌍 Données Géospatiales</a></h4>
+                            <p>Fonctionnalités métier associées</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="catalogue-methodes.html">📋 Catalogue des Méthodes</a></h4>
+                            <p>Référence complète des méthodes</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

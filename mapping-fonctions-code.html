@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Fonctions ↔ Code - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link active">Mapping Fonctions ↔ Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>🔗 Mapping Fonctionnalités ↔ Code C#</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble des Correspondances</h2>
+                    <p>Cette section établit les liens directs entre les fonctionnalités utilisateur visibles et leur implémentation technique dans le code source C# de Trifide 360.</p>
+                    
+                    <div class="flow-diagram">
+                        <h3>Pipeline Fonctionnel Complet</h3>
+                        <div class="code-block">
+Interface Utilisateur → Gestionnaire d'Événement → Logique Métier → Composants ArcGIS → Rendu Final
+        ↓                      ↓                        ↓                   ↓                ↓
+    WPF Controls          Event Handlers           Business Logic      Runtime API        Visual Output
+   (XAML + C#)           (Main.xaml.cs)          (Core Classes)     (Graphics/Map)      (User Feedback)
+                                                                                           
+Validation Input ← Error Handling ← Exception Management ← Try/Catch Blocks ← Robust Code
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🗂️ Gestion des Fichiers et Import</h2>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Action Utilisateur</th>
+                                <th>Méthode C# Principale</th>
+                                <th>Chaîne de Traitement</th>
+                                <th>Composants Impliqués</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Menu Fichier → Ouvrir</strong></td>
+                                <td><code>MnuOpenFile_Click()</code></td>
+                                <td><code>ShowDialog() → AddFile() → LoadShapeFile()</code></td>
+                                <td>OpenFileDialog, ShapeFileReader</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Glisser-Déposer fichier</strong></td>
+                                <td><code>DockSolutionExplorer_Drop()</code></td>
+                                <td><code>ValidateFiles() → AddFile() → ProcessDirectory()</code></td>
+                                <td>DragDrop Events, FileValidator</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Import Shapefile (.shp)</strong></td>
+                                <td><code>LoadShapeFile(string path)</code></td>
+                                <td><code>ShapeFileReader.Read() → ValidateGeometry() → DrawShapeFile()</code></td>
+                                <td>ShapeFileReader, GeometryEngine</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Import nuage points LAS</strong></td>
+                                <td><code>LoadLASFile(string path)</code></td>
+                                <td><code>LASReader.Parse() → CreatePointCloud() → DisplayPoints()</code></td>
+                                <td>LASReader, PointCloudManager</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Import données CSV</strong></td>
+                                <td><code>ParallelAddData(string[] files)</code></td>
+                                <td><code>CSVReader.Parse() → ToData() → FeatureTables.Add()</code></td>
+                                <td>CSVReader, DataConverter</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Import Mobile Mapping MX</strong></td>
+                                <td><code>AddMXData(string path)</code></td>
+                                <td><code>MXReader.Read() → ParseTrajectory() → GPSTracking()</code></td>
+                                <td>MXReader, GPSManager</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>🗺️ Visualisation et Rendu Cartographique</h2>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Fonctionnalité Visuelle</th>
+                                <th>Méthode C# Responsable</th>
+                                <th>Composants ArcGIS</th>
+                                <th>Paramètres Clés</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Affichage couche sur carte</strong></td>
+                                <td><code>DrawShapeFile(FeatureTable table)</code></td>
+                                <td><code>GraphicsOverlay, FeatureLayer</code></td>
+                                <td>Symbology, Renderer, Visibility</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Configuration symbologie</strong></td>
+                                <td><code>CreateRenderer(SymbologyType type)</code></td>
+                                <td><code>UniqueValueRenderer, SimpleRenderer</code></td>
+                                <td>FieldName, Symbol, ColorRamp</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sélection entités sur carte</strong></td>
+                                <td><code>Map_Click(MapViewInputEventArgs e)</code></td>
+                                <td><code>IdentifyLayersAsync(), SelectionSet</code></td>
+                                <td>ScreenPoint, Tolerance, LayerList</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zoom sur étendue couche</strong></td>
+                                <td><code>ctxZoomTo_Click(object sender)</code></td>
+                                <td><code>MapView.SetViewpoint(), Envelope</code></td>
+                                <td>Geometry.Extent, AnimationDuration</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Outils de mesure interactifs</strong></td>
+                                <td><code>ShowMeasure(GeometryType type)</code></td>
+                                <td><code>GeometryEngine.Distance(), Area()</code></td>
+                                <td>Unit, SpatialReference, Precision</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Changement fond de carte</strong></td>
+                                <td><code>SetBasemap(BasemapType type)</code></td>
+                                <td><code>Map.Basemap, BasemapStyle</code></td>
+                                <td>BasemapStyle Enum, Online/Offline</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>✏️ Création et Édition Interactive</h2>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Action d'Édition</th>
+                                <th>Séquence de Méthodes C#</th>
+                                <th>États Intermédiaires</th>
+                                <th>Résultat Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Créer nouveau point</strong></td>
+                                <td><code>BtnCreatePoint_Click() → BtnCreateShapePosition_Click() → BtnCreateShapeAddFeature_Click()</code></td>
+                                <td>EditingMode = Point, TemporaryGraphic</td>
+                                <td>Feature ajouté à FeatureTable</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Créer nouvelle ligne</strong></td>
+                                <td><code>BtnCreateLine_Click() → CollectVertices() → BtnCreateShapeAddFeature_Click()</code></td>
+                                <td>VertexCollection, RubberBand Display</td>
+                                <td>Polyline Feature créée</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Créer nouveau polygone</strong></td>
+                                <td><code>BtnCreatePolygon_Click() → ValidateTopology() → ClosePath() → AddFeature()</code></td>
+                                <td>Ring Validation, SelfIntersection Check</td>
+                                <td>Polygon Feature valide</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Éditer attributs entité</strong></td>
+                                <td><code>ShowAttributeEditor() → ValidateAttributes() → UpdateFeature()</code></td>
+                                <td>AttributeForm Display, Field Validation</td>
+                                <td>Feature Attributes Updated</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Supprimer entité sélectionnée</strong></td>
+                                <td><code>DeleteSelectedFeature() → ConfirmDialog() → RemoveFromTable()</code></td>
+                                <td>User Confirmation, Backup Creation</td>
+                                <td>Feature Deleted + Undo Available</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Déplacer entité existante</strong></td>
+                                <td><code>StartMoveOperation() → TrackMouseMove() → CommitMove()</code></td>
+                                <td>Ghost Geometry, Snapping Active</td>
+                                <td>Feature Geometry Updated</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>🎮 Intégration Unity 3D</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>🚀 Communication Inter-Processus</h4>
+                            <table class="mapping-table">
+                                <thead>
+                                    <tr>
+                                        <th>Action Utilisateur</th>
+                                        <th>Méthode WPF</th>
+                                        <th>Message Unity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Pan/Zoom carte 2D</td>
+                                        <td><code>MapView_ViewpointChanged()</code></td>
+                                        <td><code>UPDATE_CAMERA_POSITION</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sélection entité</td>
+                                        <td><code>OnFeatureSelected()</code></td>
+                                        <td><code>HIGHLIGHT_OBJECT_3D</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Création géométrie</td>
+                                        <td><code>OnGeometryCreated()</code></td>
+                                        <td><code>ADD_GEOMETRY_3D</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💾 Transfert de Données</h4>
+                            <ul>
+                                <li><strong>Memory-Mapped Files :</strong> <code>UnityDataExchange.UpdateGeometry()</code></li>
+                                <li><strong>Matrices transformation :</strong> <code>TransformationMatrix.Serialize()</code></li>
+                                <li><strong>Positions GPS :</strong> <code>GPSData.StreamToUnity()</code></li>
+                                <li><strong>Nuages de points :</strong> <code>PointCloudStreamer.SendChunk()</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>⚙️ Gestion des Projets et Configuration</h2>
+                    
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Fonctionnalité Projet</th>
+                                <th>Méthode Principal</th>
+                                <th>Données Persistées</th>
+                                <th>Format Stockage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Nouveau projet</strong></td>
+                                <td><code>CreateNewProject(string name)</code></td>
+                                <td>ProjectMetadata, LayerConfiguration</td>
+                                <td>XML + Binary blobs</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sauvegarde projet</strong></td>
+                                <td><code>SaveProject(string path)</code></td>
+                                <td>FeatureTables, Symbology, ViewState</td>
+                                <td>Compressed ZIP archive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ouverture projet</strong></td>
+                                <td><code>LoadProject(string path)</code></td>
+                                <td>Full Application State Restore</td>
+                                <td>Deserialized from ZIP</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Export données</strong></td>
+                                <td><code>ExportToFormat(ExportType type)</code></td>
+                                <td>Selected FeatureTables Only</td>
+                                <td>Shapefile, CSV, KML, etc.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Configuration utilisateur</strong></td>
+                                <td><code>SaveUserPreferences()</code></td>
+                                <td>UI Layout, Default Settings</td>
+                                <td>Registry + Config files</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>🔍 Outils d'Analyse Spatiale</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📐 Calculs Géométriques</h4>
+                            <ul>
+                                <li><strong>Distance :</strong> <code>GeometryEngine.Distance(geom1, geom2, spatialRef)</code></li>
+                                <li><strong>Surface :</strong> <code>GeometryEngine.Area(polygon, unit)</code></li>
+                                <li><strong>Buffer :</strong> <code>GeometryEngine.Buffer(geometry, distance)</code></li>
+                                <li><strong>Intersection :</strong> <code>GeometryEngine.Intersect(geom1, geom2)</code></li>
+                                <li><strong>Centroïde :</strong> <code>GeometryEngine.LabelPoint(polygon)</code></li>
+                            </ul>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🗺️ Analyses Spatiales</h4>
+                            <ul>
+                                <li><strong>Sélection spatiale :</strong> <code>SelectByLocation(geometry, method)</code></li>
+                                <li><strong>Jointure spatiale :</strong> <code>SpatialJoin(sourceLayer, joinLayer)</code></li>
+                                <li><strong>Proximité :</strong> <code>FindNearestFeatures(point, distance)</code></li>
+                                <li><strong>Topologie :</strong> <code>ValidateTopology(featureSet)</code></li>
+                                <li><strong>Statistiques :</strong> <code>CalculateStatistics(fieldName, features)</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Exemple Détaillé : Workflow Création Point</h2>
+                    
+                    <div class="flow-diagram">
+                        <h4>Séquence Complète Création Point</h4>
+                        <div class="code-block">
+1. User Click "Create Point" Button
+   ↓ BtnCreatePoint_Click(object sender, EventArgs e)
+   
+2. Enable Point Creation Mode  
+   ↓ SetEditingMode(EditingMode.CreatePoint)
+   ↓ ChangeCursor(Cursors.Cross)
+   
+3. User Click on Map
+   ↓ MapView_Click(object sender, MapViewInputEventArgs e)
+   ↓ if (editingMode == CreatePoint)
+   
+4. Get Map Coordinates
+   ↓ MapPoint mapPoint = e.Location
+   ↓ ProjectToDataSpatialReference(mapPoint)
+   
+5. Validate Point Location
+   ↓ ValidatePointInBounds(mapPoint)
+   ↓ CheckSpatialConstraints(mapPoint)
+   
+6. Show Attribute Form
+   ↓ ShowAttributeEditor(pointFeatureClass)
+   ↓ User fills required fields
+   
+7. Create Feature
+   ↓ Feature newFeature = pointFeatureTable.CreateFeature()
+   ↓ newFeature.Geometry = mapPoint
+   ↓ newFeature.Attributes = userAttributes
+   
+8. Add to Map
+   ↓ pointFeatureTable.AddFeature(newFeature)
+   ↓ RefreshGraphicsOverlay()
+   ↓ CreateUndoOperation("Create Point")
+
+Result: Point Feature successfully created and displayed on map
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
+                            <p>Organisation des fichiers source</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="flux-donnees.html">➡️ Flux de Données</a></h4>
+                            <p>Architecture des flux</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="catalogue-methodes.html">➡️ Catalogue des Méthodes</a></h4>
+                            <p>Référence complète des méthodes</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="fonctionnalites-metier.html">⬅️ Fonctionnalités Métier</a></h4>
+                            <p>Vue d'ensemble capacités</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

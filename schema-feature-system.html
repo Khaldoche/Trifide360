@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système Feature - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item">
+                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <ul class="nav-submenu">
+                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1>1. Système Feature - Entités Géographiques</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble du Système Feature</h2>
+                    <p>Le système Feature constitue le cœur de la représentation des entités géographiques dans Trifide 360. Il encapsule la géométrie spatiale et les attributs descriptifs dans une structure cohérente, permettant la manipulation unifiée des données cartographiques.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <h4>Feature</h4>
+                            <p>Entité géographique de base</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>FeatureCollection</h4>
+                            <p>Collections d'entités</p>
+                        </div>
+                        <div class="tech-item">
+                            <h4>AttributeTable</h4>
+                            <p>Table attributaire</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Classe Feature - Entité Géographique Fondamentale</h2>
+                    
+                    <div class="file-structure"><strong>Feature : INotifyPropertyChanged, IDisposable</strong> - Entité géographique fondamentale
+├── <strong>Properties Core :</strong>
+│   ├── long ObjectID { get; } - Identifiant unique auto-généré
+│   ├── Geometry Geometry { get; set; } - Géométrie spatiale (Point/Line/Polygon)
+│   ├── IDictionary&lt;string, object&gt; Attributes { get; } - Attributs descriptifs
+│   ├── FeatureTable Table { get; } - Table parent (readonly)
+│   ├── FeatureState State { get; } - État de la feature (Added/Modified/Deleted)
+│   └── bool IsSelected { get; set; } - État de sélection
+├── <strong>Properties Metadata :</strong>
+│   ├── DateTime CreatedDate { get; } - Date de création
+│   ├── DateTime ModifiedDate { get; } - Dernière modification
+│   ├── string CreatedBy { get; set; } - Utilisateur créateur
+│   ├── string ModifiedBy { get; set; } - Dernière modification par
+│   ├── int Version { get; } - Numéro de version (optimistic locking)
+│   └── Dictionary&lt;string, object&gt; ExtendedProperties { get; } - Propriétés étendues
+├── <strong>Constructors :</strong>
+│   ├── Feature() - Feature vide avec ID généré
+│   ├── Feature(Geometry geometry) - Avec géométrie initiale
+│   ├── Feature(Geometry geometry, IDictionary&lt;string, object&gt; attributes)
+│   └── Feature(FeatureTable table, IDictionary&lt;string, object&gt; row) - Depuis table existante
+├── <strong>Methods - Accès Attributs :</strong>
+│   ├── object GetAttribute(string fieldName) - Lecture attribut typé
+│   ├── T GetAttribute&lt;T&gt;(string fieldName) - Lecture générique typée
+│   ├── void SetAttribute(string fieldName, object value) - Écriture attribut
+│   ├── bool HasAttribute(string fieldName) - Test existence attribut
+│   ├── string[] GetAttributeNames() - Liste des noms d'attributs
+│   ├── void ClearAttributes() - Suppression de tous les attributs
+│   └── IDictionary&lt;string, object&gt; GetAttributes() - Copie de tous les attributs
+├── <strong>Methods - Gestion État :</strong>
+│   ├── void MarkAsModified() - Marquer comme modifié
+│   ├── void MarkAsDeleted() - Marquer pour suppression
+│   ├── void AcceptChanges() - Valider les changements
+│   ├── void RejectChanges() - Annuler les changements
+│   ├── Feature Clone() - Copie profonde de la feature
+│   ├── Feature CloneWithoutGeometry() - Copie attributs uniquement
+│   └── bool HasPendingChanges() - Test modifications en attente
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult Validate() - Validation complète
+│   ├── ValidationResult ValidateGeometry() - Validation géométrie seule
+│   ├── ValidationResult ValidateAttributes() - Validation attributs seuls
+│   ├── bool IsValid { get; } - État validation global
+│   └── string[] GetValidationErrors() - Liste erreurs validation
+├── <strong>Methods - Spatial :</strong>
+│   ├── double DistanceTo(Feature other) - Distance vers autre feature
+│   ├── bool Intersects(Feature other) - Test intersection géométrique
+│   ├── bool Contains(Point point) - Test containment point
+│   ├── Envelope GetExtent() - Emprise géométrique
+│   └── Feature Buffer(double distance) - Buffer autour géométrie
+├── <strong>Events :</strong>
+│   ├── PropertyChanged - Notification changement propriété
+│   ├── AttributeChanged - Changement attribut spécifique
+│   ├── GeometryChanged - Changement géométrie
+│   ├── StateChanged - Changement d'état
+│   └── ValidationStateChanged - Changement état validation
+└── <strong>IDisposable :</strong>
+    └── void Dispose() - Libération ressources</div>
+                </div>
+
+                <div class="card">
+                    <h2>Classe FeatureCollection - Gestion Collections</h2>
+                    
+                    <div class="file-structure"><strong>FeatureCollection : ICollection&lt;Feature&gt;, INotifyCollectionChanged</strong>
+├── <strong>Properties :</strong>
+│   ├── int Count { get; } - Nombre de features
+│   ├── bool IsReadOnly { get; } - Collection en lecture seule
+│   ├── FeatureTable ParentTable { get; } - Table parente
+│   ├── SpatialReference SpatialReference { get; } - Référence spatiale commune
+│   ├── Envelope Extent { get; } - Emprise globale calculée
+│   ├── GeometryType GeometryType { get; } - Type géométrique dominant
+│   └── SelectionManager Selection { get; } - Gestionnaire sélection
+├── <strong>Constructors :</strong>
+│   ├── FeatureCollection() - Collection vide
+│   ├── FeatureCollection(IEnumerable&lt;Feature&gt; features) - Depuis énumération
+│   ├── FeatureCollection(FeatureTable table) - Liée à une table
+│   └── FeatureCollection(int capacity) - Avec capacité initiale
+├── <strong>Methods - Collection Standard :</strong>
+│   ├── void Add(Feature feature) - Ajout avec validation
+│   ├── bool Remove(Feature feature) - Suppression avec nettoyage
+│   ├── void Clear() - Vidage complet collection
+│   ├── bool Contains(Feature feature) - Test appartenance
+│   ├── void CopyTo(Feature[] array, int arrayIndex) - Copie vers tableau
+│   ├── IEnumerator&lt;Feature&gt; GetEnumerator() - Énumération typée
+│   └── Feature[] ToArray() - Conversion tableau
+├── <strong>Methods - Collection Avancée :</strong>
+│   ├── void AddRange(IEnumerable&lt;Feature&gt; features) - Ajout multiple optimisé
+│   ├── void RemoveRange(IEnumerable&lt;Feature&gt; features) - Suppression multiple
+│   ├── void InsertAt(int index, Feature feature) - Insertion position
+│   ├── void RemoveAt(int index) - Suppression position
+│   ├── int IndexOf(Feature feature) - Index de feature
+│   └── void Sort(IComparer&lt;Feature&gt; comparer) - Tri personnalisé
+├── <strong>Methods - Requêtes :</strong>
+│   ├── Feature FindByObjectID(long objectId) - Recherche par ID
+│   ├── IEnumerable&lt;Feature&gt; Where(Func&lt;Feature, bool&gt; predicate) - Filtrage LINQ
+│   ├── IEnumerable&lt;Feature&gt; GetFeaturesInExtent(Envelope extent) - Requête spatiale
+│   ├── IEnumerable&lt;Feature&gt; GetSelectedFeatures() - Features sélectionnées
+│   ├── Feature GetNearestFeature(Point point) - Plus proche voisin
+│   └── int CountWhere(Func&lt;Feature, bool&gt; predicate) - Comptage conditionnel
+├── <strong>Methods - Statistiques :</strong>
+│   ├── Dictionary&lt;string, object&gt; GetStatistics(string fieldName) - Stats champ
+│   ├── double GetSum(string fieldName) - Somme numérique
+│   ├── double GetAverage(string fieldName) - Moyenne
+│   ├── object GetMin(string fieldName) - Minimum
+│   ├── object GetMax(string fieldName) - Maximum
+│   └── int GetUniqueValueCount(string fieldName) - Valeurs distinctes
+├── <strong>Methods - Export :</strong>
+│   ├── DataTable ToDataTable() - Conversion DataTable
+│   ├── string ToGeoJSON() - Export GeoJSON
+│   ├── string ToCSV(bool includeGeometry) - Export CSV
+│   └── XDocument ToKML() - Export KML
+├── <strong>Events :</strong>
+│   ├── CollectionChanged - Changements collection
+│   ├── FeatureAdded, FeatureRemoved - Modifications individuelles
+│   ├── ExtentChanged - Changement emprise globale
+│   └── SelectionChanged - Changement sélection
+└── <strong>Indexer :</strong>
+    └── Feature this[int index] { get; set; } - Accès indexé</div>
+                </div>
+
+                <div class="card">
+                    <h2>Classe AttributeTable - Gestion Attributs</h2>
+                    
+                    <div class="file-structure"><strong>AttributeTable : INotifyPropertyChanged</strong> - Gestion centralisée attributs
+├── <strong>Properties :</strong>
+│   ├── FeatureSchema Schema { get; } - Schéma de la table
+│   ├── int RowCount { get; } - Nombre de lignes
+│   ├── int ColumnCount { get; } - Nombre de colonnes
+│   ├── string TableName { get; set; } - Nom de la table
+│   ├── bool HasUnsavedChanges { get; } - Modifications en attente
+│   └── Dictionary&lt;string, FieldStatistics&gt; Statistics { get; } - Stats par colonne
+├── <strong>Constructors :</strong>
+│   ├── AttributeTable(FeatureSchema schema) - Depuis schéma
+│   ├── AttributeTable(string tableName, FieldInfo[] fields) - Construction directe
+│   └── AttributeTable() - Table vide
+├── <strong>Methods - Accès Données :</strong>
+│   ├── object GetValue(int rowIndex, string fieldName) - Lecture cellule
+│   ├── T GetValue&lt;T&gt;(int rowIndex, string fieldName) - Lecture typée
+│   ├── void SetValue(int rowIndex, string fieldName, object value) - Écriture cellule
+│   ├── object[] GetRow(int rowIndex) - Ligne complète
+│   ├── void SetRow(int rowIndex, object[] values) - Écriture ligne
+│   ├── Dictionary&lt;string, object&gt; GetRowAsDictionary(int rowIndex) - Ligne comme dictionnaire
+│   └── void SetRowFromDictionary(int rowIndex, Dictionary&lt;string, object&gt; values)
+├── <strong>Methods - Structure :</strong>
+│   ├── void AddColumn(FieldInfo field) - Ajout colonne
+│   ├── void RemoveColumn(string fieldName) - Suppression colonne
+│   ├── void RenameColumn(string oldName, string newName) - Renommage
+│   ├── FieldInfo GetFieldInfo(string fieldName) - Info colonne
+│   ├── string[] GetFieldNames() - Noms de colonnes
+│   └── void ReorderColumns(string[] fieldOrder) - Réorganisation colonnes
+├── <strong>Methods - Lignes :</strong>
+│   ├── int AddRow() - Ajout ligne vide
+│   ├── int AddRow(object[] values) - Ajout avec valeurs
+│   ├── int AddRow(Dictionary&lt;string, object&gt; values) - Ajout depuis dictionnaire
+│   ├── void DeleteRow(int rowIndex) - Suppression ligne
+│   ├── void InsertRow(int index, object[] values) - Insertion ligne
+│   └── void ClearRows() - Suppression toutes lignes
+├── <strong>Methods - Validation :</strong>
+│   ├── ValidationResult ValidateRow(int rowIndex) - Validation ligne
+│   ├── ValidationResult ValidateColumn(string fieldName) - Validation colonne
+│   ├── ValidationResult ValidateTable() - Validation table complète
+│   ├── void CorrectDataTypes() - Correction types automatique
+│   └── Dictionary&lt;int, string[]&gt; GetAllErrors() - Erreurs par ligne
+├── <strong>Methods - Recherche :</strong>
+│   ├── int[] FindRows(string fieldName, object value) - Recherche valeur exacte
+│   ├── int[] FindRowsLike(string fieldName, string pattern) - Recherche pattern
+│   ├── int[] FindRowsInRange(string fieldName, object min, object max) - Recherche plage
+│   └── int FindFirstRow(Func&lt;Dictionary&lt;string, object&gt;, bool&gt; predicate) - Recherche conditionnelle
+├── <strong>Methods - Export/Import :</strong>
+│   ├── DataTable ToDataTable() - Conversion .NET DataTable
+│   ├── void FromDataTable(DataTable dataTable) - Import depuis DataTable
+│   ├── string ToCSV(char separator) - Export CSV
+│   ├── void FromCSV(string csvContent, char separator, bool hasHeaders)
+│   ├── XDocument ToXML() - Export XML
+│   └── void FromXML(XDocument xmlDoc) - Import XML
+└── <strong>Events :</strong>
+    ├── RowAdded, RowDeleted, RowModified - Changements lignes
+    ├── ColumnAdded, ColumnRemoved, ColumnRenamed - Changements structure
+    ├── CellValueChanged - Changement cellule individuelle
+    └── ValidationStateChanged - Changement état validation</div>
+                </div>
+
+                <div class="card">
+                    <h2>Exemples d'Utilisation</h2>
+                    
+                    <div class="code-block">// Création d'une feature avec géométrie et attributs
+Point location = new Point(45.5017, -73.5673); // Montréal
+Feature feature = new Feature(location);
+feature.SetAttribute("Name", "Bureau Montréal");
+feature.SetAttribute("Type", "Commercial");
+feature.SetAttribute("Area", 1250.5);
+feature.SetAttribute("Employees", 25);
+
+// Validation de la feature
+ValidationResult validation = feature.Validate();
+if (!validation.IsValid)
+{
+    foreach (string error in validation.Errors)
+    {
+        Console.WriteLine($"Erreur: {error}");
+    }
+}
+
+// Création d'une collection de features
+FeatureCollection buildings = new FeatureCollection();
+buildings.Add(feature);
+
+// Ajout multiple de features
+List&lt;Feature&gt; newFeatures = CreateBuildingsFromCSV("buildings.csv");
+buildings.AddRange(newFeatures);
+
+// Recherche dans la collection
+var commercialBuildings = buildings
+    .Where(f => f.GetAttribute&lt;string&gt;("Type") == "Commercial")
+    .ToList();
+
+// Sélection spatiale
+Envelope searchArea = new Envelope(-73.6, 45.4, -73.5, 45.6);
+var featuresInArea = buildings.GetFeaturesInExtent(searchArea);
+
+// Travail avec AttributeTable
+AttributeTable table = new AttributeTable();
+table.AddColumn(new FieldInfo("ID", FieldType.Integer, true)); // Primary key
+table.AddColumn(new FieldInfo("Name", FieldType.Text, 100));
+table.AddColumn(new FieldInfo("Value", FieldType.Double));
+
+// Ajout de données
+int rowIndex = table.AddRow();
+table.SetValue(rowIndex, "ID", 1);
+table.SetValue(rowIndex, "Name", "Test");
+table.SetValue(rowIndex, "Value", 123.45);
+
+// Recherche dans la table
+int[] foundRows = table.FindRows("Name", "Test");
+Console.WriteLine($"Trouvé {foundRows.Length} lignes correspondantes");
+
+// Validation de la table
+ValidationResult tableValidation = table.ValidateTable();
+if (tableValidation.IsValid)
+{
+    Console.WriteLine("Table valide");
+}
+
+// Statistiques sur les features
+var statistics = buildings.GetStatistics("Area");
+Console.WriteLine($"Surface moyenne: {statistics["Average"]}");
+Console.WriteLine($"Surface totale: {statistics["Sum"]}");
+
+// Opérations spatiales sur features
+Feature building1 = buildings.First();
+Feature building2 = buildings.Skip(1).First();
+double distance = building1.DistanceTo(building2);
+bool intersects = building1.Intersects(building2);
+
+// Création d'un buffer autour d'une feature
+Feature bufferedFeature = building1.Buffer(100.0); // 100 mètres</div>
+                </div>
+
+                <div class="card">
+                    <h2>Patterns de Conception Utilisés</h2>
+                    <div class="features-grid">
+                        <div class="pattern-card">
+                            <h4>Repository Pattern</h4>
+                            <p><strong>Implementation:</strong> FeatureCollection agit comme repository</p>
+                            <p><strong>Avantage:</strong> Abstraction accès données, requêtes unifiées</p>
+                            <p><strong>Usage:</strong> GetFeaturesInExtent(), FindByObjectID()</p>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Observer Pattern</h4>
+                            <p><strong>Implementation:</strong> INotifyPropertyChanged sur Feature</p>
+                            <p><strong>Avantage:</strong> Synchronisation automatique UI</p>
+                            <p><strong>Usage:</strong> Binding WPF, notifications changements</p>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>State Pattern</h4>
+                            <p><strong>Implementation:</strong> FeatureState enum</p>
+                            <p><strong>Avantage:</strong> Gestion cycle de vie features</p>
+                            <p><strong>Usage:</strong> Tracking modifications, undo/redo</p>
+                        </div>
+                        <div class="pattern-card">
+                            <h4>Composite Pattern</h4>
+                            <p><strong>Implementation:</strong> FeatureCollection contient Features</p>
+                            <p><strong>Avantage:</strong> Traitement uniforme individuel/collection</p>
+                            <p><strong>Usage:</strong> Opérations batch, statistiques globales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Navigation</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-data.html">← Retour Données</a></h4>
+                            <p>Hiérarchie complète des classes données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="feature-system-support.html">→ Classes Support</a></h4>
+                            <p>FeatureSet, SelectionManager, utilitaires</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="schema-renderers.html">→ Moteurs de Rendu</a></h4>
+                            <p>Système de rendu cartographique</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="donnees-geospatiales.html">→ Fonctionnalités Métier</a></h4>
+                            <p>Usage des features dans l'application</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
