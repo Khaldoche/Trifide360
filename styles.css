@@ -31,6 +31,10 @@ body {
     background: var(--background);
 }
 
+.small-gap {
+  margin-bottom: 24px; /* espace interligne après un paragraphe */
+}
+
 .container {
     display: flex;
     min-height: 100vh;
@@ -46,6 +50,36 @@ body {
     overflow-y: auto;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
+
+.nav-submenu {
+  display: none;
+  margin-left: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-item.open > .nav-submenu {
+  display: block;
+}
+
+.submenu-toggle {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+}
+
+/* Flèche tournée */
+.nav-item.open .arrow {
+  transform: rotate(90deg);
+}
+
+
 
 .main-content {
     margin-left: 280px;
@@ -185,6 +219,13 @@ h3 {
     margin-bottom: 10px;
 }
 
+.h3-ok {
+    color: var(--accent-ok-color);
+    font-size: 1.3rem;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
 .card {
     background: var(--card-bg);
     border-radius: 12px;
@@ -213,6 +254,18 @@ h3 {
     margin-bottom: 5px;
 }
 
+.tech-item-ok {
+    background: linear-gradient(135deg, var(--ok-color), var(--accent-ok-color));
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.tech-item-ok h4 {
+    margin-bottom: 5px;
+}
+
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -230,6 +283,19 @@ h3 {
 
 .feature-card h4 {
     color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.feature-card-ok {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.feature-card-ok h4 {
+    color: var(--ok-color);
     margin-bottom: 10px;
 }
 
@@ -321,6 +387,15 @@ h3 {
     margin: 20px 0;
     border-left: 4px solid var(--primary-color);
 }
+
+.flow-diagram-ok {
+    background: linear-gradient(45deg, #f0f9ff, #dbeafe);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 4px solid var(--ok-color);
+}
+
 
 .pattern-card {
     border-left: 4px solid var(--success-color);
