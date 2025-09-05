@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils Métier - Trifide 360</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Trifide 360</h1>
+                <p>Documentation Architecture</p>
+            </div>
+            
+            <input type="text" class="search-box" placeholder="Rechercher..." id="searchBox">
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link-ok">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="vue-ensemble.html" class="nav-link-ok">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item has-submenu open">
+                <a href="fonctionnalites-metier.html" class="nav-link-ok submenu-toggle">
+                    Fonctionnalités Métier <span class="arrow">▼</span>
+                </a>
+                <ul class="nav-submenu">
+                    <li><a href="donnees-geospatiales.html" class="nav-link-ok">Données Géospatiales</a></li>
+                    <li><a href="visualisation-2d-3d.html" class="nav-link-ok">Visualisation 2D/3D</a></li>
+                    <li><a href="creation-interactive.html" class="nav-link-ok">Création Interactive</a></li>
+                    <li><a href="outils-metier.html" class="nav-link-ok active">Outils Métier</a></li>
+                </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions → Code</a>
+                </li>
+                <li class="nav-item">
+                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
+                </li>
+                <li class="nav-item">
+                    <a href="catalogue-methodes.html" class="nav-link">Catalogue des Méthodes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-data-binding.html" class="nav-link">Data Binding & MVVM</a>
+                </li>
+                <li class="nav-item">
+                    <a href="schema-transaction-system.html" class="nav-link">Gestion des Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a href="cache-performance-system.html" class="nav-link">Cache et Performance</a>
+                </li>
+                <li class="nav-item">
+                    <a href="patterns-anti-patterns-system.html" class="nav-link">Patterns & Anti-Patterns</a>
+                </li>
+                <li class="nav-item">
+                    <a href="recommandations.html" class="nav-link">Recommandations</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section class="section active">
+                <h1 class="h1-ok">Outils Métier Spécialisés</h1>
+                
+                <div class="card">
+                    <h2>Vue d'Ensemble des Outils Métier</h2>
+                    <p>Trifide 360 intègre une suite d'outils métier spécialisés pour les professionnels de l'arpentage, de la topographie et de la cartographie. Ces outils couvrent les calculs géodésiques, les transformations de coordonnées, l'analyse spatiale avancée, et les workflows métier spécifiques aux domaines de la géomatique professionnelle.</p>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-item-ok">
+                            <h4>Calculs Géodésiques</h4>
+                            <p>Distances, azimuts, projections</p>
+                        </div>
+                        <div class="tech-item-ok">
+                            <h4>Transformations</h4>
+                            <p>Systèmes coordonnées, datums</p>
+                        </div>
+                        <div class="tech-item-ok">
+                            <h4>Analyse Spatiale</h4>
+                            <p>Topologie, proximité, overlay</p>
+                        </div>
+                        <div class="tech-item-ok">
+                            <h4>Outils Arpentage</h4>
+                            <p>Polygonation, nivellement</p>
+                        </div>
+                        <div class="tech-item-ok">
+                            <h4>Validation Qualité</h4>
+                            <p>Contrôles topologiques</p>
+                        </div>
+                        <div class="tech-item-ok">
+                            <h4>Workflows Métier</h4>
+                            <p>Processus automatisés</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Calculatrice Géodésique</h2>
+
+                    <div class="feature-card-ok">
+                        <h4>Calculs de Distance et Azimut</h4>
+                        <div class="code-block">// Calcul distance géodésique entre deux points
+private void BtnCalculateDistance_Click(object sender, RoutedEventArgs e)
+{
+    try 
+    {
+        // Récupération coordonnées points
+        var point1 = new Point(
+            double.Parse(txtLat1.Text), 
+            double.Parse(txtLon1.Text)
+        );
+        var point2 = new Point(
+            double.Parse(txtLat2.Text), 
+            double.Parse(txtLon2.Text)
+        );
+        
+        // Calcul distance orthodromique
+        var distance = GeometryEngine.Distance(point1, point2);
+        var azimuth = GeometryEngine.Azimuth(point1, point2);
+        
+        // Affichage résultats
+        lblDistance.Content = $"Distance: {distance:F3} m";
+        lblAzimuth.Content = $"Azimut: {azimuth:F6}°";
+        
+        // Calcul inverse optionnel
+        if (chkInverse.IsChecked == true)
+        {
+            var backAzimuth = (azimuth + 180) % 360;
+            lblBackAzimuth.Content = $"Azimut inverse: {backAzimuth:F6}°";
+        }
+    }
+    catch (Exception ex)
+    {
+        ShowError($"Erreur calcul: {ex.Message}");
+    }
+}</div>
+                        
+                        <ul>
+                            <li><strong>Distance orthodromique</strong> - Calcul distance la plus courte sur ellipsoïde</li>
+                            <li><strong>Azimut direct/inverse</strong> - Direction géodésique entre points</li>
+                            <li><strong>Problème direct</strong> - Point destination depuis point origine + distance + azimut</li>
+                            <li><strong>Problème inverse</strong> - Distance et azimut entre deux points connus</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Transformations de Coordonnées</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card-ok">
+                            <h4>Transformations de Datum</h4>
+                            <div class="code-block">// Transformation NAD83 → WGS84
+private Point TransformDatum(Point inputPoint, string sourceDatum, string targetDatum)
+{
+    var sourceRef = SpatialReference.Create(sourceDatum);
+    var targetRef = SpatialReference.Create(targetDatum);
+    
+    // Application transformation 7 paramètres
+    var transformation = GeometryEngine.Project(
+        inputPoint, sourceRef, targetRef
+    );
+    
+    return transformation as Point;
+}</div>
+                            <ul>
+                                <li>NAD83(CSRS) ↔ WGS84</li>
+                                <li>NAD27 → NAD83</li>
+                                <li>Transformations locales</li>
+                                <li>Paramètres Helmert 7</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card-ok">
+                            <h4>Projections Cartographiques</h4>
+                            <div class="code-block">// Conversion géographique → UTM
+private Point ConvertToUTM(Point geoPoint)
+{
+    // Détermination zone UTM automatique
+    int zone = (int)Math.Floor((geoPoint.X + 180) / 6) + 1;
+    bool isNorth = geoPoint.Y >= 0;
+    
+    // Création référence UTM
+    var utmRef = SpatialReference.Create(
+        $"EPSG:{(isNorth ? 32600 : 32700) + zone}"
+    );
+    
+    return GeometryEngine.Project(geoPoint, 
+        SpatialReferences.Wgs84, utmRef) as Point;
+}</div>
+                            <ul>
+                                <li>UTM (zones 17-22 Canada)</li>
+                                <li>MTM (Modified Transverse Mercator)</li>
+                                <li>Lambert Conformal Conic</li>
+                                <li>Stéréographique polaire</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Outils d'Analyse Spatiale</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card-ok">
+                            <h4>Analyse de Proximité</h4>
+                            <div class="code-block">// Zone tampon et analyse proximité
+private void AnalyzeProximity()
+{
+    var selectedFeatures = GetSelectedFeatures();
+    var bufferDistance = double.Parse(txtBufferDistance.Text);
+    
+    foreach (var feature in selectedFeatures)
+    {
+        // Création zone tampon
+        var buffer = GeometryEngine.Buffer(
+            feature.Geometry, bufferDistance
+        );
+        
+        // Recherche features dans tampon
+        var nearbyFeatures = spatialIndex.Query(buffer.Extent)
+            .Where(f => GeometryEngine.Intersects(f.Geometry, buffer))
+            .ToList();
+            
+        // Analyse densité
+        var density = nearbyFeatures.Count / buffer.Area;
+        
+        // Mise à jour attributs
+        feature.SetAttribute("NEARBY_COUNT", nearbyFeatures.Count);
+        feature.SetAttribute("DENSITY", density);
+    }
+}</div>
+                            <ul>
+                                <li><strong>Zones tampons</strong> - Distances fixes/variables</li>
+                                <li><strong>Plus proches voisins</strong> - K-NN spatial</li>
+                                <li><strong>Analyse densité</strong> - Points par unité surface</li>
+                                <li><strong>Clusters spatiaux</strong> - Détection agrégation</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card-ok">
+                            <h4>Opérations Topologiques</h4>
+                            <div class="code-block">// Intersection et analyse overlay
+private void PerformOverlayAnalysis()
+{
+    var layer1 = GetLayerByName("Parcelles");
+    var layer2 = GetLayerByName("Zones_Inondables");
+    
+    var results = new List&lt;Feature&gt;();
+    
+    foreach (var parcel in layer1.Features)
+    {
+        foreach (var floodZone in layer2.Features)
+        {
+            // Test intersection
+            if (GeometryEngine.Intersects(parcel.Geometry, floodZone.Geometry))
+            {
+                // Calcul intersection précise
+                var intersection = GeometryEngine.Intersection(
+                    parcel.Geometry, floodZone.Geometry
+                );
+                
+                if (intersection != null && !intersection.IsEmpty)
+                {
+                    // Création feature résultat
+                    var result = new Feature(intersection);
+                    result.CopyAttributesFrom(parcel, "PARCEL_");
+                    result.CopyAttributesFrom(floodZone, "FLOOD_");
+                    
+                    // Calcul pourcentage intersection
+                    var percentage = (intersection.Area / parcel.Geometry.Area) * 100;
+                    result.SetAttribute("FLOOD_PERCENTAGE", percentage);
+                    
+                    results.Add(result);
+                }
+            }
+        }
+    }
+    
+    // Création couche résultat
+    CreateResultLayer("Parcelles_Inondables", results);
+}</div>
+                            <ul>
+                                <li><strong>Intersection</strong> - Zones communes</li>
+                                <li><strong>Union</strong> - Fusion géométries</li>
+                                <li><strong>Différence</strong> - Soustraction zones</li>
+                                <li><strong>Découpage</strong> - Clip par masque</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Outils Arpentage Spécialisés</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card-ok">
+                            <h4>Calculs de Polygonation</h4>
+                            <div class="code-block">// Calcul polygonale fermée
+private PolygonationResult CalculateClosedTraverse()
+{
+    var traverse = GetTraversePoints();
+    var result = new PolygonationResult();
+    
+    double totalAngleSum = 0;
+    double totalDistance = 0;
+    double linearMisclosure = 0;
+    
+    // Calcul somme angles
+    for (int i = 0; i &lt; traverse.Count; i++)
+    {
+        var angle = CalculateInternalAngle(
+            traverse[i-1], traverse[i], traverse[i+1]
+        );
+        totalAngleSum += angle;
+    }
+    
+    // Erreur angulaire
+    var theoreticalSum = (traverse.Count - 2) * 180;
+    var angularError = totalAngleSum - theoreticalSum;
+    
+    // Distribution correction angulaire
+    var angularCorrection = angularError / traverse.Count;
+    
+    // Calcul coordonnées corrigées
+    var correctedPoints = DistributeAngularError(traverse, angularCorrection);
+    
+    // Fermeture linéaire
+    linearMisclosure = CalculateLinearMisclosure(correctedPoints);
+    
+    result.AngularError = angularError;
+    result.LinearMisclosure = linearMisclosure;
+    result.Precision = totalDistance / linearMisclosure;
+    result.CorrectedPoints = correctedPoints;
+    
+    return result;
+}</div>
+                            <ul>
+                                <li><strong>Polygonale fermée</strong> - Contrôle fermeture angulaire/linéaire</li>
+                                <li><strong>Polygonale ouverte</strong> - Rattachement points connus</li>
+                                <li><strong>Compensation</strong> - Distribution erreurs</li>
+                                <li><strong>Précision</strong> - Calcul indicateurs qualité</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card-ok">
+                            <h4>Nivellement et Altimétrie</h4>
+                            <div class="code-block">// Calcul cheminement altimétrique
+private LevelingResult CalculateLeveling()
+{
+    var levelingPoints = GetLevelingSequence();
+    var result = new LevelingResult();
+    
+    double cumulativeDistance = 0;
+    double heightDifference = 0;
+    
+    for (int i = 0; i &lt; levelingPoints.Count - 1; i++)
+    {
+        var point1 = levelingPoints[i];
+        var point2 = levelingPoints[i + 1];
+        
+        // Distance horizontale
+        var distance = GeometryEngine.Distance(point1, point2);
+        cumulativeDistance += distance;
+        
+        // Dénivelée observée
+        var deltaH = point2.Z - point1.Z;
+        heightDifference += deltaH;
+        
+        // Correction courbure/réfraction
+        var correction = CalculateCurvatureCorrection(distance);
+        var correctedDeltaH = deltaH + correction;
+        
+        point2.CorrectedElevation = point1.CorrectedElevation + correctedDeltaH;
+    }
+    
+    // Erreur fermeture (si circuit fermé)
+    if (IsClosedCircuit(levelingPoints))
+    {
+        result.ClosureError = heightDifference;
+        result.TolerableError = CalculateTolerableError(cumulativeDistance);
+        result.IsAcceptable = Math.Abs(result.ClosureError) &lt;= result.TolerableError;
+    }
+    
+    return result;
+}</div>
+                            <ul>
+                                <li><strong>Nivellement géométrique</strong> - Haute précision</li>
+                                <li><strong>Nivellement trigonométrique</strong> - Longues distances</li>
+                                <li><strong>Correction courbure</strong> - Réfraction atmosphérique</li>
+                                <li><strong>Compensation altimétrique</strong> - Distribution erreurs</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Validation et Contrôle Qualité</h2>
+
+                    <div class="feature-card-ok">
+                        <h4>Contrôles Topologiques Automatisés</h4>
+                        <div class="code-block">// Validation topologique complète
+private TopologyValidationReport ValidateTopology(FeatureLayer layer)
+{
+    var report = new TopologyValidationReport();
+    var features = layer.GetAllFeatures();
+    
+    // Contrôle 1: Géométries valides
+    foreach (var feature in features)
+    {
+        if (!GeometryEngine.IsValid(feature.Geometry))
+        {
+            var error = new TopologyError
+            {
+                Type = TopologyErrorType.InvalidGeometry,
+                Feature = feature,
+                Description = "Géométrie invalide (auto-intersection, etc.)",
+                Severity = ErrorSeverity.High
+            };
+            report.Errors.Add(error);
+        }
+    }
+    
+    // Contrôle 2: Doublons géométriques
+    for (int i = 0; i &lt; features.Count; i++)
+    {
+        for (int j = i + 1; j &lt; features.Count; j++)
+        {
+            if (GeometryEngine.Equals(features[i].Geometry, features[j].Geometry))
+            {
+                report.Errors.Add(new TopologyError
+                {
+                    Type = TopologyErrorType.DuplicateGeometry,
+                    Features = new[] { features[i], features[j] },
+                    Description = $"Géométries identiques: {features[i].ObjectID} et {features[j].ObjectID}",
+                    Severity = ErrorSeverity.Medium
+                });
+            }
+        }
+    }
+    
+    // Contrôle 3: Chevauchements (polygones)
+    if (layer.GeometryType == GeometryType.Polygon)
+    {
+        var overlaps = FindPolygonOverlaps(features);
+        foreach (var overlap in overlaps)
+        {
+            report.Errors.Add(new TopologyError
+            {
+                Type = TopologyErrorType.Overlap,
+                Features = overlap.Features,
+                Geometry = overlap.OverlapGeometry,
+                Description = $"Chevauchement détecté (surface: {overlap.OverlapGeometry.Area:F2} m²)",
+                Severity = ErrorSeverity.Medium
+            });
+        }
+    }
+    
+    // Contrôle 4: Écarts (gaps) entre polygones adjacents
+    var gaps = FindGapsBetweenPolygons(features);
+    foreach (var gap in gaps)
+    {
+        if (gap.Area > minGapThreshold)
+        {
+            report.Errors.Add(new TopologyError
+            {
+                Type = TopologyErrorType.Gap,
+                Geometry = gap,
+                Description = $"Écart détecté (surface: {gap.Area:F2} m²)",
+                Severity = ErrorSeverity.Low
+            });
+        }
+    }
+    
+    return report;
+}</div>
+                        
+                        <ul>
+                            <li><strong>Géométries invalides</strong> - Auto-intersections, nœuds pendants</li>
+                            <li><strong>Doublons</strong> - Détection géométries identiques</li>
+                            <li><strong>Chevauchements</strong> - Zones communes non autorisées</li>
+                            <li><strong>Écarts (gaps)</strong> - Espaces entre polygones adjacents</li>
+                            <li><strong>Connectivité</strong> - Vérification continuité réseaux</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Workflows Métier Automatisés</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card-ok">
+                            <h4>Workflow Import et Validation</h4>
+                            <div class="code-block">// Processus automatisé import/validation
+private async Task&lt;ImportWorkflowResult&gt; ExecuteImportWorkflow(string filePath)
+{
+    var workflow = new ImportWorkflow();
+    var result = new ImportWorkflowResult();
+    
+    try
+    {
+        // Étape 1: Validation format fichier
+        workflow.AddStep("Validation Format", () =&gt; 
+        {
+            return ValidateFileFormat(filePath);
+        });
+        
+        // Étape 2: Import données
+        workflow.AddStep("Import Données", () =&gt; 
+        {
+            return ImportGeospatialData(filePath);
+        });
+        
+        // Étape 3: Validation géométrique
+        workflow.AddStep("Validation Géométrique", (data) =&gt; 
+        {
+            return ValidateGeometries(data as FeatureCollection);
+        });
+        
+        // Étape 4: Validation attributaire
+        workflow.AddStep("Validation Attributaire", (data) =&gt; 
+        {
+            return ValidateAttributes(data as FeatureCollection);
+        });
+        
+        // Étape 5: Correction automatique
+        workflow.AddStep("Correction Automatique", (data) =&gt; 
+        {
+            return AutoCorrectIssues(data as FeatureCollection);
+        });
+        
+        // Étape 6: Génération rapport
+        workflow.AddStep("Génération Rapport", (data) =&gt; 
+        {
+            return GenerateQualityReport(data as FeatureCollection);
+        });
+        
+        // Exécution workflow
+        result = await workflow.ExecuteAsync();
+        
+    }
+    catch (Exception ex)
+    {
+        result.Success = false;
+        result.ErrorMessage = ex.Message;
+    }
+    
+    return result;
+}</div>
+                        </div>
+
+                        <div class="feature-card-ok">
+                            <h4>Workflow Analyse et Export</h4>
+                            <div class="code-block">// Processus analyse spatiale automatisée
+private async Task&lt;AnalysisWorkflowResult&gt; ExecuteSpatialAnalysisWorkflow()
+{
+    var workflow = new SpatialAnalysisWorkflow();
+    
+    // Configuration paramètres
+    workflow.SetParameter("BufferDistance", 100.0);
+    workflow.SetParameter("DensityThreshold", 0.005);
+    workflow.SetParameter("ExportFormat", "Shapefile");
+    
+    // Étapes analyse
+    workflow.AddStep("Sélection Données", () =&gt; SelectDataLayers());
+    workflow.AddStep("Création Tampons", (data) =&gt; CreateBufferZones(data));
+    workflow.AddStep("Analyse Intersection", (buffers) =&gt; PerformIntersectionAnalysis(buffers));
+    workflow.AddStep("Calcul Statistiques", (results) =&gt; CalculateStatistics(results));
+    workflow.AddStep("Génération Cartes", (stats) =&gt; GenerateMaps(stats));
+    workflow.AddStep("Export Résultats", (maps) =&gt; ExportResults(maps));
+    
+    return await workflow.ExecuteAsync();
+}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Navigation</h2>
+                    <div class="features-grid">
+
+                        <div class="feature-card-ok">
+                            <h4><a href="donnees-geospatiales.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">⬅️ Données Géospatiales</a></h4>
+                            <p>Formats et projections supportés</p>
+                        </div>
+                        <div class="feature-card-ok">
+                            <h4><a href="visualisation-2d-3d.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">⬅️ Visualisation 2D/3D</a></h4>
+                            <p>Rendu cartographique et 3D</p>
+                        </div>
+                        <div class="feature-card-ok">
+                            <h4><a href="creation-interactive.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">⬅️ Création Interactive</a></h4>
+                            <p>Outils d'édition avancés</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
