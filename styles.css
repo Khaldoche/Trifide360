@@ -346,7 +346,7 @@ h3 {
     background: var(--code-bg);
     padding: 25px;
     border-radius: 8px;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--ok-color);
     margin: 15px 0;
     line-height: 1.6;
     white-space: pre-wrap; /* MODIFIÉ: était 'pre' */
@@ -365,7 +365,7 @@ h3 {
 }
 
 .mapping-table th {
-    background: var(--primary-color);
+    background: var(--ok-color);
     color: white;
     padding: 15px;
     text-align: left;
