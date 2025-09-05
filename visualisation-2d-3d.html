@@ -18,18 +18,21 @@
             
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                    <a href="index.html" class="nav-link-ok">🏠 Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                    <a href="vue-ensemble.html" class="nav-link-ok">Vue d'Ensemble</a>
                 </li>
-                <li class="nav-item">
-                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
-                    <ul class="nav-submenu">
-                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
-                        <li><a href="visualisation-2d-3d.html" class="nav-link active">Visualisation 2D/3D</a></li>
-                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
-                    </ul>
+                <li class="nav-item has-submenu open">
+                <a href="fonctionnalites-metier.html" class="nav-link-ok submenu-toggle">
+                    Fonctionnalités Métier <span class="arrow">▼</span>
+                </a>
+                <ul class="nav-submenu">
+                    <li><a href="donnees-geospatiales.html" class="nav-link-ok ">Données Géospatiales</a></li>
+                    <li><a href="visualisation-2d-3d.html" class="nav-link-ok active">Visualisation 2D/3D</a></li>
+                    <li><a href="creation-interactive.html" class="nav-link-ok">Création Interactive</a></li>
+                    <li><a href="outils-metier.html" class="nav-link-ok">Outils Métier</a></li>
+                </ul>
                 </li>
                 <li class="nav-item">
                     <a href="structure-code.html" class="nav-link">Structure du Code</a>
@@ -60,14 +63,14 @@
 
         <main class="main-content">
             <section class="section active">
-                <h1>🎨 Visualisation Cartographique 2D/3D</h1>
-                
+                <h1 class="h1-ok">🎨 Visualisation Cartographique 2D/3D</h1>
+
                 <div class="card">
                     <h2>Rendu 2D Multi-Couches ArcGIS</h2>
-                    
-                    <h3>Organisation Hiérarchique des Couches</h3>
+
+                    <h3 class="h3-ok">Organisation Hiérarchique des Couches</h3>
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🎯 Points d'Intérêt</h4>
                             <ul>
                                 <li><strong>Symbologie personnalisée :</strong> Icônes, couleurs, tailles variables</li>
@@ -76,7 +79,7 @@
                                 <li><strong>Clustering :</strong> Regroupement automatique selon zoom</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🛣️ Réseaux Linéaires</h4>
                             <ul>
                                 <li><strong>Rendu vectoriel :</strong> Routes, conduites, câbles</li>
@@ -85,7 +88,7 @@
                                 <li><strong>Continuité :</strong> Raccords aux intersections</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📡 Données GPS Temps Réel</h4>
                             <ul>
                                 <li><strong>Tracks actives :</strong> Suivi en temps réel</li>
@@ -94,7 +97,7 @@
                                 <li><strong>Historique :</strong> Traces avec dégradé temporel</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>✏️ Créations Interactives</h4>
                             <ul>
                                 <li><strong>Couches d'édition :</strong> Géométries temporaires</li>
@@ -105,21 +108,21 @@
                         </div>
                     </div>
 
-                    <h3>Fonds Cartographiques</h3>
+                    <h3 class="h3-ok">Fonds Cartographiques</h3>
                     <div class="tech-stack">
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>Orthophotos</h4>
                             <p>Images aériennes haute résolution</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>Cartes Topographiques</h4>
                             <p>Cartes vectorielles détaillées</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>Imagerie Satellite</h4>
                             <p>Couverture mondiale récente</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>Cartes Thématiques</h4>
                             <p>Spécialisées par domaine</p>
                         </div>
@@ -130,7 +133,7 @@
                     <h2>Symbologie et Rendu Avancé</h2>
                     
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🎨 Renderers Dynamiques</h4>
                             <ul>
                                 <li><strong>Simple Renderer :</strong> Style unique pour toutes les entités</li>
@@ -140,7 +143,7 @@
                                 <li><strong>Heat Map :</strong> Cartes de densité avec dégradés</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🏷️ Étiquetage Intelligent</h4>
                             <ul>
                                 <li><strong>Placement optimal :</strong> Algorithmes de positionnement</li>
@@ -149,7 +152,7 @@
                                 <li><strong>Multi-échelles :</strong> Visibilité selon zoom</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🖱️ Interactions Utilisateur</h4>
                             <ul>
                                 <li><strong>Sélection avancée :</strong> Rectangle, polygone, attributs</li>
@@ -158,7 +161,7 @@
                                 <li><strong>Mesures interactives :</strong> Distances, surfaces, angles</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>⚡ Performance et Optimisation</h4>
                             <ul>
                                 <li><strong>Généralisation :</strong> Simplification selon échelle</li>
@@ -169,7 +172,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-diagram">
+                    <div class="flow-diagram-ok">
                         <h4>Pipeline de Rendu ArcGIS</h4>
                         <div class="code-block">
 Feature Data → Feature Table → Graphics Overlay → Renderer → Symbology Engine → GPU → Display
@@ -182,8 +185,8 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
 
                 <div class="card">
                     <h2>Intégration Unity 3D Haute Performance</h2>
-                    
-                    <h3>Architecture de Communication IPC</h3>
+
+                    <h3 class="h3-ok">Architecture de Communication IPC</h3>
                     <div class="pattern-card">
                         <h4>🚀 Communication Multi-Canal 60 FPS</h4>
                         <ul>
@@ -194,9 +197,9 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                         </ul>
                     </div>
 
-                    <h3>Fonctionnalités 3D Immersives</h3>
+                    <h3 class="h3-ok">Fonctionnalités 3D Immersives</h3>
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🌐 Navigation Panoramique 360°</h4>
                             <ul>
                                 <li><strong>Vues sphériques :</strong> Images panoramiques complètes</li>
@@ -206,7 +209,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Mode Street View :</strong> Navigation au niveau du sol</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🏔️ Modèles Numériques de Terrain</h4>
                             <ul>
                                 <li><strong>MNT haute résolution :</strong> Précision sub-métrique</li>
@@ -216,7 +219,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Relief 3D :</strong> Exagération verticale configurable</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📐 Overlay Géométrique 3D</h4>
                             <ul>
                                 <li><strong>Projection données SIG :</strong> Sur surfaces 3D</li>
@@ -226,7 +229,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Transparence :</strong> Couches semi-transparentes</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🎮 Contrôles Immersifs</h4>
                             <ul>
                                 <li><strong>Navigation FPS :</strong> Déplacement libre WASD</li>
@@ -239,7 +242,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                     </div>
 
                     <div class="recommendation-card">
-                        <h4>⚡ Optimisations Performance Unity</h4>
+                        <h4 class="h4-ok">⚡ Optimisations Performance Unity</h4>
                         <ul>
                             <li><strong>LOD System :</strong> Niveaux de détail adaptatifs selon distance</li>
                             <li><strong>Frustum Culling :</strong> Élimination des objets hors vue</li>
@@ -252,10 +255,10 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
 
                 <div class="card">
                     <h2>Traitement LiDAR Professionnel</h2>
-                    
-                    <h3>Gestion Nuages de Points Massifs</h3>
+
+                    <h3 class="h3-ok">Gestion Nuages de Points Massifs</h3>
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📊 Capacités de Traitement</h4>
                             <ul>
                                 <li><strong>Volume :</strong> Millions de points simultanés</li>
@@ -265,7 +268,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Filtrage :</strong> Par retours, intensité, classe</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🎨 Modes de Visualisation</h4>
                             <ul>
                                 <li><strong>Altitude :</strong> Dégradé coloré par élévation</li>
@@ -275,7 +278,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Temps :</strong> Animation temporelle des acquisitions</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>⚡ Accélération GPU</h4>
                             <ul>
                                 <li><strong>Compute Shaders :</strong> Calculs parallèles massifs</li>
@@ -285,7 +288,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                                 <li><strong>Compression temps réel :</strong> Réduction mémoire</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📈 Outils d'Analyse</h4>
                             <ul>
                                 <li><strong>Profils altimétriques :</strong> Coupes transversales</li>
@@ -297,29 +300,29 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                         </div>
                     </div>
 
-                    <h3>Formats LiDAR Supportés</h3>
+                    <h3 class="h3-ok">Formats LiDAR Supportés</h3>
                     <div class="tech-stack">
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>LAS 1.4</h4>
                             <p>Standard ASPRS complet</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>LAZ</h4>
                             <p>Compression avancée</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>E57</h4>
                             <p>Format ASTM 3D</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>PTS</h4>
                             <p>Leica Cyclone</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>PTX</h4>
                             <p>Points avec positions</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>PLY</h4>
                             <p>Stanford Triangle</p>
                         </div>
@@ -329,7 +332,7 @@ Validation    Classification   Layer Stack    Style Rules   Symbol Cache    Hard
                 <div class="card">
                     <h2>Synchronisation 2D ↔ 3D</h2>
                     
-                    <div class="flow-diagram">
+                    <div class="flow-diagram-ok">
                         <h4>Exemple : Navigation Synchronisée</h4>
                         <div class="code-block">
 User Pan/Zoom (WPF MapView)
@@ -343,7 +346,7 @@ User Pan/Zoom (WPF MapView)
                     </div>
 
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🔄 Synchronisation Temps Réel</h4>
                             <ul>
                                 <li><strong>Position caméra :</strong> Coordination parfaite 2D/3D</li>
@@ -352,7 +355,7 @@ User Pan/Zoom (WPF MapView)
                                 <li><strong>Mesures :</strong> Outils partagés entre vues</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>⚡ Performance IPC</h4>
                             <ul>
                                 <li><strong>60 FPS garantis :</strong> Fluidité maximale</li>
@@ -367,21 +370,18 @@ User Pan/Zoom (WPF MapView)
                 <div class="card">
                     <h2>🔗 Navigation</h2>
                     <div class="features-grid">
-                        <div class="feature-card">
-                            <h4><a href="donnees-geospatiales.html">⬅️ Données Géospatiales</a></h4>
+
+                        <div class="feature-card-ok">
+                            <h4><a href="donnees-geospatiales.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">⬅️ Données Géospatiales</a></h4>
                             <p>Formats et projections supportés</p>
                         </div>
-                        <div class="feature-card">
-                            <h4><a href="creation-interactive.html">➡️ Création Interactive</a></h4>
+                        <div class="feature-card-ok">
+                            <h4><a href="creation-interactive.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">➡️ Création Interactive</a></h4>
                             <p>Outils d'édition avancés</p>
                         </div>
-                        <div class="feature-card">
-                            <h4><a href="fonctionnalites-metier.html">⬅️ Retour Fonctionnalités Métier</a></h4>
-                            <p>Vue d'ensemble des capacités</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
-                            <p>Architecture technique IPC</p>
+                        <div class="feature-card-ok">
+                            <h4><a href="outils-metier.html" class="nav-link-ok" style="margin-top: 10px; display: inline-block;">➡️ Outils Métier</a></h4>
+                            <p>Fonctionnalités spécifiques aux métiers</p>
                         </div>
                     </div>
                 </div>
