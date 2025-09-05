@@ -495,7 +495,7 @@ code {
     border: 1px solid var(--border-color);
 }
 
-/* NOUVEAU: Sections repliables */
+/* NOUVEAU: Sections repliables */ 
 .collapsible {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
