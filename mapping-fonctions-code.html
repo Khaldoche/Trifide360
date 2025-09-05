@@ -18,24 +18,24 @@
             
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                    <a href="index.html" class="nav-link-ok">🏠 Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                    <a href="vue-ensemble.html" class="nav-link-ok">Vue d'Ensemble</a>
                 </li>
                 <li class="nav-item">
-                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
+                    <a href="fonctionnalites-metier.html" class="nav-link-ok">Fonctionnalités Métier</a>
                     <ul class="nav-submenu">
-                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
-                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
-                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
+                        <li><a href="donnees-geospatiales.html" class="nav-link-ok">Données Géospatiales</a></li>
+                        <li><a href="visualisation-2d-3d.html" class="nav-link-ok">Visualisation 2D/3D</a></li>
+                        <li><a href="creation-interactive.html" class="nav-link-ok">Création Interactive</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
+                    <a href="structure-code.html" class="nav-link-ok">Structure du Code</a>
                 </li>
                 <li class="nav-item">
-                    <a href="mapping-fonctions-code.html" class="nav-link active">Mapping Fonctions ↔ Code</a>
+                    <a href="mapping-fonctions-code.html" class="nav-link-ok active">Mapping Fonctions ↔ Code</a>
                 </li>
                 <li class="nav-item">
                     <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
@@ -60,14 +60,14 @@
 
         <main class="main-content">
             <section class="section active">
-                <h1>🔗 Mapping Fonctionnalités ↔ Code C#</h1>
-                
+                <h1 class="h1-ok">🔗 Mapping Fonctionnalités ↔ Code C#</h1>
+
                 <div class="card">
                     <h2>Vue d'Ensemble des Correspondances</h2>
                     <p>Cette section établit les liens directs entre les fonctionnalités utilisateur visibles et leur implémentation technique dans le code source C# de Trifide 360.</p>
                     
-                    <div class="flow-diagram">
-                        <h3>Pipeline Fonctionnel Complet</h3>
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Pipeline Fonctionnel Complet</h3>
                         <div class="code-block">
 Interface Utilisateur → Gestionnaire d'Événement → Logique Métier → Composants ArcGIS → Rendu Final
         ↓                      ↓                        ↓                   ↓                ↓
@@ -242,7 +242,7 @@ Validation Input ← Error Handling ← Exception Management ← Try/Catch Block
                     <h2>🎮 Intégration Unity 3D</h2>
                     
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🚀 Communication Inter-Processus</h4>
                             <table class="mapping-table">
                                 <thead>
@@ -271,7 +271,7 @@ Validation Input ← Error Handling ← Exception Management ← Try/Catch Block
                                 </tbody>
                             </table>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>💾 Transfert de Données</h4>
                             <ul>
                                 <li><strong>Memory-Mapped Files :</strong> <code>UnityDataExchange.UpdateGeometry()</code></li>
@@ -334,7 +334,7 @@ Validation Input ← Error Handling ← Exception Management ← Try/Catch Block
                     <h2>🔍 Outils d'Analyse Spatiale</h2>
                     
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📐 Calculs Géométriques</h4>
                             <ul>
                                 <li><strong>Distance :</strong> <code>GeometryEngine.Distance(geom1, geom2, spatialRef)</code></li>
@@ -344,7 +344,7 @@ Validation Input ← Error Handling ← Exception Management ← Try/Catch Block
                                 <li><strong>Centroïde :</strong> <code>GeometryEngine.LabelPoint(polygon)</code></li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🗺️ Analyses Spatiales</h4>
                             <ul>
                                 <li><strong>Sélection spatiale :</strong> <code>SelectByLocation(geometry, method)</code></li>
@@ -360,7 +360,7 @@ Validation Input ← Error Handling ← Exception Management ← Try/Catch Block
                 <div class="card">
                     <h2>Exemple Détaillé : Workflow Création Point</h2>
                     
-                    <div class="flow-diagram">
+                    <div class="flow-diagram-ok">
                         <h4>Séquence Complète Création Point</h4>
                         <div class="code-block">
 1. User Click "Create Point" Button
@@ -402,23 +402,47 @@ Result: Point Feature successfully created and displayed on map
                 </div>
 
                 <div class="card">
-                    <h2>🔗 Navigation</h2>
+                    <h2> Navigation Rapide</h2>
                     <div class="features-grid">
-                        <div class="feature-card">
-                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
-                            <p>Organisation des fichiers source</p>
+                        <div class="feature-card-ok">
+                            <h4><a href="index.html">⬅️ Accueil</a></h4>
+                            <p>Informations générales sur le projet</p>
                         </div>
                         <div class="feature-card">
-                            <h4><a href="flux-donnees.html">➡️ Flux de Données</a></h4>
-                            <p>Architecture des flux</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4><a href="catalogue-methodes.html">➡️ Catalogue des Méthodes</a></h4>
-                            <p>Référence complète des méthodes</p>
+                            <h4><a href="vue-ensemble.html">⬅️ Vue d'Ensemble</a></h4>
+                            <p>Architecture générale, technologies utilisées et domaines d'application</p>
                         </div>
                         <div class="feature-card">
                             <h4><a href="fonctionnalites-metier.html">⬅️ Fonctionnalités Métier</a></h4>
-                            <p>Vue d'ensemble capacités</p>
+                            <p>Capacités géomatiques, données, visualisation et édition</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
+                            <p>Organisation des fichiers, responsabilités et dépendances</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="flux-donnees.html">➡️ Flux de Données</a></h4>
+                            <p>Architecture des flux de données</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="hierarchie-classes.html">➡️ Hiérarchie des Classes</a></h4>
+                            <p>Organisation orientée objet</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
+                            <p>Architecture IPC détaillée</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="catalogue-methodes.html">➡️ Catalogue des méthodes</a></h4>
+                            <p>Liste des principales méthodes de la plateforme</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="patterns-anti-patterns-system.html">➡️ Patterns & Anti-Patterns</a></h4>
+                            <p>Meilleures pratiques et pièges à éviter</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="recommendations.html">➡️ Recommandations</a></h4>
+                            <p>Refactoring Prioritaires - Architecture Cible - Séparation des Responsabilités</p>
                         </div>
                     </div>
                 </div>

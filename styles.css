@@ -491,7 +491,7 @@ code {
     border-radius: 4px;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.9em;
-    color: var(--primary-color);
+    color: var(--ok-color);
     border: 1px solid var(--border-color);
 }
 
