@@ -23,13 +23,16 @@
                 <li class="nav-item">
                     <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
                 </li>
-                <li class="nav-item">
-                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
-                    <ul class="nav-submenu">
-                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
-                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
-                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
-                    </ul>
+                <li class="nav-item has-submenu">
+                <a href="fonctionnalites-metier.html" class="nav-link-ok submenu-toggle">
+                    Fonctionnalités Métier <span class="arrow">▼</span>
+                </a>
+                <ul class="nav-submenu">
+                    <li><a href="donnees-geospatiales.html" class="nav-link-ok">Données Géospatiales</a></li>
+                    <li><a href="visualisation-2d-3d.html" class="nav-link-ok">Visualisation 2D/3D</a></li>
+                    <li><a href="creation-interactive.html" class="nav-link-ok">Création Interactive</a></li>
+                    <li><a href="outils-metier.html" class="nav-link-ok">Outils Métier</a></li>
+                </ul>
                 </li>
                 <li class="nav-item">
                     <a href="structure-code.html" class="nav-link">Structure du Code</a>
@@ -40,8 +43,18 @@
                 <li class="nav-item">
                     <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
                 </li>
-                <li class="nav-item">
-                    <a href="hierarchie-classes.html" class="nav-link active">Hiérarchie des Classes</a>
+                <li class="nav-item has-submenu">
+                <a href="hierarchie-classes.html"  class="nav-link-ok active submenu-toggle">
+                    Hiérarchie des Classes<span class="arrow">▼</span>
+                </a>
+                <ul class="nav-submenu">
+                    <li><a href="hierarchie-geometry.html" class="nav-link">Classes Géométriques</a></li>
+                    <li><a href="hierarchie-data.html" class="nav-link">Gestion des Données</a></li>
+                    <li><a href="hierarchie-ui.html" class="nav-link">Interface Utilisateur</a></li>
+                    <li><a href="hierarchie-io.html" class="nav-link">Entrées/Sorties</a></li>
+                    <li><a href="hierarchie-unity.html" class="nav-link">Communication Unity</a></li>
+                    <li><a href="hierarchie-utilities.html" class="nav-link">Utilitaires</a></li>
+                </ul>
                 </li>
                 <li class="nav-item">
                     <a href="communication-inter-modules.html" class="nav-link">Communication Inter-Modules</a>
@@ -216,11 +229,11 @@
                     <h2>🔗 Navigation</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <h4><a href="flux-donnees.html">⬅️ Flux de Données</a></h4>
+                            <h4><a href="flux-donnees.html" class="nav-link-ok">⬅️ Flux de Données</a></h4>
                             <p>Architecture des flux</p>
                         </div>
                         <div class="feature-card">
-                            <h4><a href="communication-inter-modules.html">➡️ Communication Inter-Modules</a></h4>
+                            <h4><a href="communication-inter-modules.html" class="nav-link">➡️ Communication Inter-Modules</a></h4>
                             <p>IPC et communication détaillée</p>
                         </div>
                         <div class="feature-card">
@@ -236,5 +249,20 @@
             </section>
         </main>
     </div>
+<script>
+document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function(e) {
+    // Seulement empêcher la navigation si le clic est sur la flèche
+    if (e.target.classList.contains('arrow')) {
+      e.preventDefault();
+      const item = this.closest('.nav-item');
+      item.classList.toggle('open');
+    }
+    // Sinon, laisser le lien fonctionner normalement
+  });
+});
+</script>
+
+
 </body>
 </html>

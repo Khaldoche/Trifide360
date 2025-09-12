@@ -18,27 +18,29 @@
             
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">🏠 Accueil</a>
+                    <a href="index.html" class="nav-link-ok">🏠 Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="vue-ensemble.html" class="nav-link">Vue d'Ensemble</a>
+                    <a href="vue-ensemble.html" class="nav-link-ok">Vue d'Ensemble</a>
+                </li>
+                <li class="nav-item has-submenu">
+                <a href="fonctionnalites-metier.html" class="nav-link-ok submenu-toggle">
+                    Fonctionnalités Métier <span class="arrow">▼</span>
+                </a>
+                <ul class="nav-submenu">
+                    <li><a href="donnees-geospatiales.html" class="nav-link-ok">Données Géospatiales</a></li>
+                    <li><a href="visualisation-2d-3d.html" class="nav-link-ok">Visualisation 2D/3D</a></li>
+                    <li><a href="creation-interactive.html" class="nav-link-ok">Création Interactive</a></li>
+                    <li><a href="outils-metier.html" class="nav-link-ok">Outils Métier</a></li>
+                </ul>
+                <li class="nav-item">
+                    <a href="structure-code.html" class="nav-link-ok">Structure du Code</a>
                 </li>
                 <li class="nav-item">
-                    <a href="fonctionnalites-metier.html" class="nav-link">Fonctionnalités Métier</a>
-                    <ul class="nav-submenu">
-                        <li><a href="donnees-geospatiales.html" class="nav-link">Données Géospatiales</a></li>
-                        <li><a href="visualisation-2d-3d.html" class="nav-link">Visualisation 2D/3D</a></li>
-                        <li><a href="creation-interactive.html" class="nav-link">Création Interactive</a></li>
-                    </ul>
+                    <a href="mapping-fonctions-code.html" class="nav-link-ok">Mapping Fonctions ↔ Code</a>
                 </li>
                 <li class="nav-item">
-                    <a href="structure-code.html" class="nav-link">Structure du Code</a>
-                </li>
-                <li class="nav-item">
-                    <a href="mapping-fonctions-code.html" class="nav-link">Mapping Fonctions ↔ Code</a>
-                </li>
-                <li class="nav-item">
-                    <a href="flux-donnees.html" class="nav-link active">Flux de Données</a>
+                    <a href="flux-donnees.html" class="nav-link-ok active">Flux de Données</a>
                 </li>
                 <li class="nav-item">
                     <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
@@ -67,27 +69,27 @@
                     <p>Trifide 360 implémente une architecture de flux de données multi-niveaux optimisée pour les performances et la scalabilité des données géospatiales volumineuses. L'architecture privilégie le streaming temps réel et la minimisation des transferts de données.</p>
                     
                     <div class="tech-stack">
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>📥 Ingestion</h4>
                             <p>Readers spécialisés multi-formats</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>🔄 Transformation</h4>
                             <p>Pipeline de traitement et validation</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>💾 Stockage</h4>
                             <p>FeatureTables ArcGIS en mémoire</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>🎨 Rendu</h4>
                             <p>Graphics Overlays haute performance</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>🌐 Distribution</h4>
                             <p>IPC vers Unity 3D temps réel</p>
                         </div>
-                        <div class="tech-item">
+                        <div class="tech-item-ok">
                             <h4>📤 Export</h4>
                             <p>Writers universels multi-destinations</p>
                         </div>
@@ -97,8 +99,8 @@
                 <div class="card">
                     <h2>Pipeline Principal de Chargement</h2>
                     
-                    <div class="flow-diagram">
-                        <h3>Flux Complet d'Import de Données</h3>
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Flux Complet d'Import de Données</h3>
                         <div class="code-block">
 📁 Fichier Source (SHP, LAS, CSV, MX, E57)
     ↓
@@ -128,7 +130,7 @@
                     </div>
 
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🚀 Optimisations Performance</h4>
                             <ul>
                                 <li><strong>Parsing parallèle :</strong> Multi-threading pour gros fichiers</li>
@@ -138,7 +140,7 @@
                                 <li><strong>Cache intelligent :</strong> Données fréquemment accédées</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🔒 Contrôles Qualité</h4>
                             <ul>
                                 <li><strong>Validation format :</strong> Structure fichier correcte</li>
@@ -153,9 +155,9 @@
 
                 <div class="card">
                     <h2>Pipeline d'Édition Interactive</h2>
-                    
-                    <div class="flow-diagram">
-                        <h3>Flux de Création/Modification d'Entités</h3>
+
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Flux de Création/Modification d'Entités</h3>
                         <div class="code-block">
 👆 User Input (Mouse/Keyboard/Touch)
     ↓
@@ -201,8 +203,8 @@
                 <div class="card">
                     <h2>Communication Inter-Processus (WPF ↔ Unity)</h2>
                     
-                    <div class="flow-diagram">
-                        <h3>Architecture Dual-Channel Haute Performance</h3>
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Architecture Dual-Channel Haute Performance</h3>
                         <div class="code-block">
 🖥️ WPF Main Process                    🎮 Unity 3D Process
         ↓                                        ↑
@@ -226,7 +228,7 @@
                     </div>
 
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🚀 Canal TCP - Commandes</h4>
                             <ul>
                                 <li><strong>Port :</strong> 8888 (configurable)</li>
@@ -236,7 +238,7 @@
                                 <li><strong>Fiabilité :</strong> TCP garantit livraison</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>💾 Memory-Mapped Files - Données</h4>
                             <ul>
                                 <li><strong>Taille :</strong> 64MB buffer circulaire</li>
@@ -251,9 +253,9 @@
 
                 <div class="card">
                     <h2>Gestion des Données Volumineuses (LiDAR)</h2>
-                    
-                    <div class="flow-diagram">
-                        <h3>Pipeline Traitement Nuages de Points Massifs</h3>
+
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Pipeline Traitement Nuages de Points Massifs</h3>
                         <div class="code-block">
 📁 Large Point Cloud File (LAS/LAZ - GB size)
     ↓
@@ -299,8 +301,8 @@ Optimizations Applied:
                 <div class="card">
                     <h2>Pipeline d'Export et Persistance</h2>
                     
-                    <div class="flow-diagram">
-                        <h3>Flux de Sauvegarde Projet et Export Données</h3>
+                    <div class="flow-diagram-ok">
+                        <h3 class="h3-ok">Flux de Sauvegarde Projet et Export Données</h3>
                         <div class="code-block">
 📊 Active Project State (FeatureTables + UI State + Settings)
     ↓
@@ -335,7 +337,7 @@ Project Archive Contents:
                     <h2>Gestion Mémoire et Cache</h2>
                     
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>💾 Stratégie de Cache Multi-Niveaux</h4>
                             <ul>
                                 <li><strong>L1 - RAM Cache :</strong> Géométries actives (512MB)</li>
@@ -345,7 +347,7 @@ Project Archive Contents:
                                 <li><strong>Prédiction :</strong> Préchargement données probables</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🗑️ Garbage Collection Optimization</h4>
                             <ul>
                                 <li><strong>Object pooling :</strong> Réutilisation Geometry objects</li>
@@ -355,7 +357,7 @@ Project Archive Contents:
                                 <li><strong>GC monitoring :</strong> Métriques temps réel</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📊 Monitoring des Ressources</h4>
                             <ul>
                                 <li><strong>Memory usage :</strong> RAM + GPU tracking</li>
@@ -365,7 +367,7 @@ Project Archive Contents:
                                 <li><strong>Performance counters :</strong> Métriques Windows</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>⚠️ Gestion Situations Critiques</h4>
                             <ul>
                                 <li><strong>Memory pressure :</strong> Libération automatique cache</li>
@@ -382,7 +384,7 @@ Project Archive Contents:
                     <h2>Patterns d'Architecture Appliqués</h2>
                     
                     <div class="features-grid">
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🏗️ Producer-Consumer</h4>
                             <ul>
                                 <li><strong>File readers :</strong> Producteurs de données</li>
@@ -391,7 +393,7 @@ Project Archive Contents:
                                 <li><strong>Backpressure handling :</strong> Gestion surcharge</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🔄 Pipeline Pattern</h4>
                             <ul>
                                 <li><strong>Étapes séquentielles :</strong> Parse → Validate → Transform → Display</li>
@@ -400,7 +402,7 @@ Project Archive Contents:
                                 <li><strong>Error handling :</strong> Gestion échecs par étape</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>📡 Publish-Subscribe</h4>
                             <ul>
                                 <li><strong>Data change events :</strong> Notifications modifications</li>
@@ -409,7 +411,7 @@ Project Archive Contents:
                                 <li><strong>Loose coupling :</strong> Modules indépendants</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
+                        <div class="feature-card-ok">
                             <h4>🎯 Command Pattern</h4>
                             <ul>
                                 <li><strong>Undo/Redo :</strong> Historique opérations réversibles</li>
@@ -422,12 +424,28 @@ Project Archive Contents:
                 </div>
 
                 <div class="card">
-                    <h2>🔗 Navigation</h2>
+                    <h2> Navigation Rapide</h2>
                     <div class="features-grid">
-                        <div class="feature-card">
-                            <h4><a href="mapping-fonctions-code.html">⬅️ Mapping Fonctions ↔ Code</a></h4>
-                            <p>Correspondances détaillées</p>
+                        <div class="feature-card-ok">
+                            <h4><a href="index.html">⬅️ Accueil</a></h4>
+                            <p>Informations générales sur le projet</p>
                         </div>
+                        <div class="feature-card">
+                            <h4><a href="vue-ensemble.html">⬅️ Vue d'Ensemble</a></h4>
+                            <p>Architecture générale, technologies utilisées et domaines d'application</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="fonctionnalites-metier.html">⬅️ Fonctionnalités Métier</a></h4>
+                            <p>Capacités géomatiques, données, visualisation et édition</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
+                            <p>Organisation des fichiers, responsabilités et dépendances</p>
+                        </div>                        <div class="feature-card">
+                            <h4><a href="mapping-fonctions-code.html">⬅️ Mapping Fonctions ↔ Code</a></h4>
+                            <p>Correspondances entre fonctionnalités utilisateur et code source</p>
+                        </div>
+
                         <div class="feature-card">
                             <h4><a href="hierarchie-classes.html">➡️ Hiérarchie des Classes</a></h4>
                             <p>Organisation orientée objet</p>
@@ -437,8 +455,16 @@ Project Archive Contents:
                             <p>Architecture IPC détaillée</p>
                         </div>
                         <div class="feature-card">
-                            <h4><a href="structure-code.html">⬅️ Structure du Code</a></h4>
-                            <p>Organisation fichiers source</p>
+                            <h4><a href="catalogue-methodes.html">➡️ Catalogue des méthodes</a></h4>
+                            <p>Liste des principales méthodes de la plateforme</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="patterns-anti-patterns-system.html">➡️ Patterns & Anti-Patterns</a></h4>
+                            <p>Meilleures pratiques et pièges à éviter</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><a href="recommendations.html">➡️ Recommandations</a></h4>
+                            <p>Refactoring Prioritaires - Architecture Cible - Séparation des Responsabilités</p>
                         </div>
                     </div>
                 </div>

@@ -43,7 +43,7 @@
                     <a href="mapping-fonctions-code.html" class="nav-link-ok">Mapping Fonctions ↔ Code</a>
                 </li>
                 <li class="nav-item">
-                    <a href="flux-donnees.html" class="nav-link">Flux de Données</a>
+                    <a href="flux-donnees.html" class="nav-link-ok">Flux de Données</a>
                 </li>
                 <li class="nav-item">
                     <a href="hierarchie-classes.html" class="nav-link">Hiérarchie des Classes</a>
@@ -178,14 +178,28 @@ Import Données → Validation Qualité → Visualisation 2D/3D → Édition Int
         </main>
     </div>
 <script>
-  document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+
+document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function(e) {
+    // Seulement empêcher la navigation si le clic est sur la flèche
+    if (e.target.classList.contains('arrow')) {
+      e.preventDefault();
+      const item = this.closest('.nav-item');
+      item.classList.toggle('open');
+    }
+    // Sinon, laisser le lien fonctionner normalement
+  });
+});
+
+
+/*  document.querySelectorAll('.submenu-toggle').forEach(toggle => {
     toggle.addEventListener('click', function(e) {
       e.preventDefault();
       const item = this.closest('.nav-item');
       item.classList.toggle('open');
     });
   });
-console.log("Script chargé !");
+console.log("Script chargé !");*/
 </script>
 </body>
 </html>
